@@ -64,7 +64,7 @@ FUPopupMenuDelegate
     /* 道具切信号 */
     signal = dispatch_semaphore_create(1);
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGestureView) name:FUConfigControllerUpdateNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSubView) name:FUConfigControllerUpdateNotification object:nil];
     
     fuHumanProcessorSetMaxHumans(1);
 }
@@ -223,7 +223,7 @@ FUPopupMenuDelegate
 
 #pragma  mark -  FUConfigControllerUpdateNotification
 
--(void)updateGestureView{
+-(void)updateSubView{
      _mGestureView.hidden = YES;
     _mActionView.hidden = YES;
     _mPerView.hidden = YES;
@@ -235,12 +235,12 @@ FUPopupMenuDelegate
         if (modle.moudleType == FUMoudleTypeAction && modle.aiMenu[0].state == FUAICellstateSel ) {//动作选中
             _mActionView.hidden = NO;
         }
+        
         if(modle.aiMenu.count > 1){//是否有骨骼
             if (modle.moudleType == FUMoudleTypeBody && modle.aiMenu[1].state == FUAICellstateSel ) {//动作选中
                 _mPerView.hidden = NO;
             }
         }
-
     }
 }
 

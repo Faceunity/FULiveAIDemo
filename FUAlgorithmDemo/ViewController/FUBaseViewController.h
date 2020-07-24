@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 /* 子类重载，实现差异逻辑 */
 -(void)takePhotoToSave:(UIImage *)image;//拍照保存
 -(void)didOutputVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer;
-
+-(void)updateSubView;
 
 @end
 

@@ -25,6 +25,8 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>获取mic权限</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>获取添加相册权限</string>
+	<key>NSPhotoLibraryUsageDescription</key>
 	<string>获取相册权限</string>
 	<key>Status Bar Style</key>
 	<string>Light</string>

@@ -12,6 +12,8 @@
 #import "FUGestureModel.h"
 #import "MJExtension.h"
 #import <SVProgressHUD.h>
+#import <libCNamaSDK/FURenderer.h>
+#import "FUManager.h"
 
 @interface FUShotViewController ()<FUCameraDelegate,
 FUCameraDataSource,FUPhotoButtonDelegate>{
@@ -82,6 +84,13 @@ FUCameraDataSource,FUPhotoButtonDelegate>{
     
 }
 
+-(void)updateSubView{
+    [super updateSubView];
+    _photoBtn.hidden = [[FUManager shareManager] isRuningAitype:FUNamaAITypeBodySkeleton] ? YES:NO;
+}
+
+
+
 #pragma  mark -  FUHeadButtonViewDelegate
 
 
@@ -104,8 +113,9 @@ FUCameraDataSource,FUPhotoButtonDelegate>{
      sender.selected = !sender.selected ;
      [self.mCamera changeCameraInputDeviceisFront:sender.selected];
      
+    fuHumanProcessorReset();
     /**切换摄像头要调用此函数*/
-//    [[FUManager shareManager] onCameraChange];
+    [FURenderer onCameraChange];
 }
 
 
