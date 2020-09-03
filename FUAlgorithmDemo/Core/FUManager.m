@@ -138,8 +138,7 @@ static int cunt;
     }else if (model.aiType == FUNamaAITypeBodySkeleton) {//骨骼
             _currentToast = model.mToasts[model.footSelInde];
             items[*index] = [self loadItemwWithItemName:model.bundleNames[0]];
-            [FURenderer itemSetParam:items[*index] withName:@"use_human_processor" value:@(1)];
-            [FURenderer itemSetParam:items[*index] withName:@"enter_human_pose_track_mode" value:@(1)];
+            [FURenderer itemSetParam:items[*index] withName:@"enable_human_processor" value:@(1)];
         for (NSString *strName in model.bindItemNames) {
             int subHandel = [self loadItemwWithItemName:strName];
             [FURenderer bindItems:items[*index] items:&subHandel itemsCount:1];

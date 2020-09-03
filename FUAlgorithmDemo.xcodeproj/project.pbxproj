@@ -10,11 +10,11 @@
 		E306CB472477A10900BECA3F /* AIConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = E306CB462477A10900BECA3F /* AIConfig.json */; };
 		E3127C69249352EE0096306C /* empty_aitpye_2d.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3127C68249352EE0096306C /* empty_aitpye_2d.bundle */; };
 		E3127C6F24936E760096306C /* default_bg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3127C6E24936E760096306C /* default_bg.bundle */; };
+		E313887224F742AB00A3AFDF /* ai_gesture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E313887124F742AB00A3AFDF /* ai_gesture.bundle */; };
 		E332E6A024AF5CCB00232C4A /* bodyLandmarks_selife.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */; };
 		E332E6A124AF5CCB00232C4A /* bodyLandmarks_dance.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */; };
 		E332E6BC24AFC5F500232C4A /* libCNamaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E332E6B624AFC35500232C4A /* libCNamaSDK.framework */; };
 		E332E6BD24AFC5F500232C4A /* libCNamaSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E332E6B624AFC35500232C4A /* libCNamaSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		E332E71824AFCB3A00232C4A /* ai_gesture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70C24AFCB3A00232C4A /* ai_gesture.bundle */; };
 		E332E71924AFCB3A00232C4A /* ai_face_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */; };
 		E332E71A24AFCB3A00232C4A /* ai_face_processor_lite.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */; };
 		E332E71B24AFCB3A00232C4A /* ai_human_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */; };
@@ -100,21 +100,21 @@
 		E306CB462477A10900BECA3F /* AIConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AIConfig.json; sourceTree = "<group>"; };
 		E3127C68249352EE0096306C /* empty_aitpye_2d.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = empty_aitpye_2d.bundle; sourceTree = "<group>"; };
 		E3127C6E24936E760096306C /* default_bg.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = default_bg.bundle; sourceTree = "<group>"; };
+		E313887124F742AB00A3AFDF /* ai_gesture.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_gesture.bundle; sourceTree = "<group>"; };
 		E332E5F624AF35CE00232C4A /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
 		E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = bodyLandmarks_selife.bundle; sourceTree = "<group>"; };
 		E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = bodyLandmarks_dance.bundle; sourceTree = "<group>"; };
 		E332E6B624AFC35500232C4A /* libCNamaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = libCNamaSDK.framework; sourceTree = "<group>"; };
-		E332E70C24AFCB3A00232C4A /* ai_gesture.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_gesture.bundle; sourceTree = "<group>"; };
-		E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_face_processor.bundle; sourceTree = "<group>"; };
-		E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_face_processor_lite.bundle; sourceTree = "<group>"; };
-		E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_human_processor.bundle; sourceTree = "<group>"; };
-		E332E71124AFCB3A00232C4A /* tongue.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = tongue.bundle; sourceTree = "<group>"; };
-		E332E71224AFCB3A00232C4A /* fxaa.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fxaa.bundle; sourceTree = "<group>"; };
-		E332E71324AFCB3A00232C4A /* face_makeup.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = face_makeup.bundle; sourceTree = "<group>"; };
-		E332E71424AFCB3A00232C4A /* controller.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = controller.bundle; sourceTree = "<group>"; };
-		E332E71524AFCB3A00232C4A /* body_slim.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = body_slim.bundle; sourceTree = "<group>"; };
-		E332E71624AFCB3A00232C4A /* fuzzytoonfilter.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fuzzytoonfilter.bundle; sourceTree = "<group>"; };
-		E332E71724AFCB3A00232C4A /* face_beautification.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = face_beautification.bundle; sourceTree = "<group>"; };
+		E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_face_processor.bundle; sourceTree = "<group>"; };
+		E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_face_processor_lite.bundle; sourceTree = "<group>"; };
+		E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_human_processor.bundle; sourceTree = "<group>"; };
+		E332E71124AFCB3A00232C4A /* tongue.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = tongue.bundle; sourceTree = "<group>"; };
+		E332E71224AFCB3A00232C4A /* fxaa.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = fxaa.bundle; sourceTree = "<group>"; };
+		E332E71324AFCB3A00232C4A /* face_makeup.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = face_makeup.bundle; sourceTree = "<group>"; };
+		E332E71424AFCB3A00232C4A /* controller.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = controller.bundle; sourceTree = "<group>"; };
+		E332E71524AFCB3A00232C4A /* body_slim.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = body_slim.bundle; sourceTree = "<group>"; };
+		E332E71624AFCB3A00232C4A /* fuzzytoonfilter.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = fuzzytoonfilter.bundle; sourceTree = "<group>"; };
+		E332E71724AFCB3A00232C4A /* face_beautification.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = face_beautification.bundle; sourceTree = "<group>"; };
 		E340571F2475334E003AAE2C /* FUHomeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUHomeController.h; sourceTree = "<group>"; };
 		E34057202475334E003AAE2C /* FUHomeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUHomeController.m; sourceTree = "<group>"; };
 		E340572224754AF2003AAE2C /* FUBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUBaseViewController.h; sourceTree = "<group>"; };
@@ -277,7 +277,7 @@
 		E332E70B24AFCB3A00232C4A /* model */ = {
 			isa = PBXGroup;
 			children = (
-				E332E70C24AFCB3A00232C4A /* ai_gesture.bundle */,
+				E313887124F742AB00A3AFDF /* ai_gesture.bundle */,
 				E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */,
 				E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */,
 				E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */,
@@ -544,7 +544,6 @@
 				E3AD31BA24752D4E00B45264 /* Main.storyboard in Resources */,
 				E39CF942249896F4003A6C14 /* anim_hold.bundle in Resources */,
 				E37A8739248A22EB006D900C /* fakeman.bundle in Resources */,
-				E332E71824AFCB3A00232C4A /* ai_gesture.bundle in Resources */,
 				E39CF939249896F4003A6C14 /* anim_ok.bundle in Resources */,
 				E39CF93C249896F4003A6C14 /* anim_rock.bundle in Resources */,
 				E39CF935249896F4003A6C14 /* anim_korheart.bundle in Resources */,
@@ -561,6 +560,7 @@
 				E35DC6BD24762679005B4EED /* human_mask.bundle in Resources */,
 				E35DC6BE24762679005B4EED /* head_mask.bundle in Resources */,
 				E332E72124AFCB3A00232C4A /* fuzzytoonfilter.bundle in Resources */,
+				E313887224F742AB00A3AFDF /* ai_gesture.bundle in Resources */,
 				E39CF93D249896F4003A6C14 /* anim_two.bundle in Resources */,
 				E332E72224AFCB3A00232C4A /* face_beautification.bundle in Resources */,
 			);
@@ -797,7 +797,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -833,7 +833,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
