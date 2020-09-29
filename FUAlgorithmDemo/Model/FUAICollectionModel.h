@@ -21,21 +21,25 @@ typedef NS_ENUM(NSUInteger, FUAICellState) {
 };
 
 typedef NS_ENUM(NSUInteger, FUMoudleType) {
-    FUMoudleTypeBody    = 0,//人体
-    FUMoudleTypeGesture = 1,//手势
-    FUMoudleTypeSeg     = 2,//分割
-    FUMoudleTypeAction  = 3,//动作
+    FUMoudleTypeFace    = 0,
+    FUMoudleTypeBody    = 1,//人体
+    FUMoudleTypeGesture = 2,//手势
+    FUMoudleTypeSeg     = 3,//分割
+    FUMoudleTypeAction  = 4,//动作
 };
 
 typedef NS_ENUM(NSUInteger, FUNamaAIType) {
-    FUNamaAITypeBodyDetection = 0,
-    FUNamaAITypeBodyKeyPoints = 1,
-    FUNamaAITypeBodySkeleton = 2,
-    FUNamaAITypegestureRecognition = 3,
-    FUNamaAITypePortraitSegmentation = 4,
-    FUNamaAITypeHeadSplit = 5,
-    FUNamaAITypeHairSplit = 6,
-    FUNamaAITypeActionRecognition = 7,
+    FUNamaAITypeKeypoint = 0,
+    FUNamaAITypeTongue = 1,
+    FUNamaAITypeExpression= 2,
+    FUNamaAITypeBodyDetection = 3,
+    FUNamaAITypeBodyKeyPoints = 4,
+    FUNamaAITypeBodySkeleton = 5,
+    FUNamaAITypegestureRecognition = 6,
+    FUNamaAITypePortraitSegmentation = 7,
+    FUNamaAITypeHeadSplit = 8,
+    FUNamaAITypeHairSplit = 9,
+    FUNamaAITypeActionRecognition = 10,
 };
 
 
@@ -49,6 +53,12 @@ typedef NS_ENUM(NSUInteger, FUNamaAIType) {
 @property (nonatomic, copy) NSString* sectionImageName;
 @property (assign, nonatomic) FUAICellState state;
 @property (assign, nonatomic) FUNamaAIType aiType;
+
+/* 最大识别数 */
+@property (assign, nonatomic) int maxNum;
+
+/* 设置加载道具的参数，针对单个道具 */
+@property (nonatomic, strong) NSDictionary* parms;
 
 @property (assign, nonatomic) int footSelInde;
 @property (nonatomic, copy) NSArray <NSString*>* subFootes;

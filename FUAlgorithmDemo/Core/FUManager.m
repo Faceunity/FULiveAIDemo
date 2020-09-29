@@ -29,6 +29,8 @@
 
 @property (nonatomic, copy) NSMutableDictionary* runCache;
 
+@property(nonatomic,strong) NSMutableArray *runingItems;
+
 
 @property (nonatomic, strong) FURotatedImage *mRotatedImage;
 
@@ -71,7 +73,10 @@ static FUManager *shareManager = NULL;
 //        FUAI_VLogSetLevel(3);
         
         _mRotatedImage = [[FURotatedImage alloc] init];
-
+        _runingItems = [NSMutableArray array];
+        
+        [FURenderer setMaxFaces:8];
+        
     }
     
     return self;
@@ -80,7 +85,7 @@ static FUManager *shareManager = NULL;
 
 -(void)loadAIModle{
     
-    NSData *ai_gesture = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ai_gesture.bundle" ofType:nil]];
+    NSData *ai_gesture = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ai_hand_processor.bundle" ofType:nil]];
     [FURenderer loadAIModelFromPackage:(void *)ai_gesture.bytes size:(int)ai_gesture.length aitype:FUAITYPE_HANDGESTURE];
 
     NSData *ai_face_processor = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ai_face_processor.bundle" ofType:nil]];
@@ -89,6 +94,11 @@ static FUManager *shareManager = NULL;
     NSData *ai_human_processor = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ai_human_processor.bundle" ofType:nil]];
     [FURenderer loadAIModelFromPackage:(void *)ai_human_processor.bytes size:(int)ai_human_processor.length aitype:FUAITYPE_HUMAN_PROCESSOR];
 
+    NSData *tongueData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tongue.bundle" ofType:nil]];
+    int ret0 = fuLoadTongueModel((void *)tongueData.bytes, (int)tongueData.length) ;
+    NSLog(@"fuLoadTongueModel %@",ret0 == 0 ? @"failure":@"success" );
+    
+    
 }
 
 -(void)loadBoudleWithConfig:(FUAISectionModel *)config{
@@ -107,18 +117,32 @@ static int cunt;
 -(void)setNeedRenderHandle{
     _currentToast = nil;
     cunt = 0;
-    for (int i = 0; i < sizeof(items)/sizeof(int); i ++) {
+    for (int i = 1; i < sizeof(items)/sizeof(int); i ++) {
         items[i] = 0;
     }
-    items[0] = [self loadItemwWithItemName:@"fxaa"];
+    
+    /* 默认加载人脸道具 */
+    items[0]  = [self loadItemwWithItemName:@"aitype"];
+    [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(FUAITYPE_FACEPROCESSOR)];
+    
+    /* 动态加载的道具 */
     int index = 1;
+    [_runingItems removeAllObjects];
     for (FUAISectionModel *config in self.config) {
         for (FUAIConfigCellModel *model in config.aiMenu) {
             if (model.state == FUAICellstateSel) {// 选中的道具
                 [self addHandleItems:model index:&index];
+                [_runingItems addObject:@(model.aiType)];
             }
         }
-
+    }
+    
+    if ([_runingItems containsObject:@(FUNamaAITypeBodyKeyPoints)] && [_runingItems containsObject:@(FUNamaAITypeActionRecognition)]){
+        _currentToast = @"未检测到人体";
+    }
+    
+    if ([_runingItems containsObject:@(FUNamaAITypeExpression)] || [_runingItems containsObject:@(FUNamaAITypeKeypoint)] || [_runingItems containsObject:@(FUNamaAITypeTongue)]) {
+        _currentToast = @"未检测到人脸";
     }
 }
 
@@ -157,7 +181,13 @@ static int cunt;
               [FURenderer itemSetParam:items[*index] withName:@"reset_all" value:@(3)];
           }
             *index = *index + 1;
-    }else{
+    }else if(model.aiType == FUNamaAITypeKeypoint){
+        _currentToast = model.mToasts[0];
+        items[*index] = [self loadItemwWithItemName:model.bundleNames[0]];
+        [FURenderer itemSetParam:items[*index] withName:@"landmarks_type" value:@(FUAITYPE_FACELANDMARKS239)];
+        *index = *index + 1;
+    }
+    else{
         _currentToast = model.mToasts[0];
         for (int i = 0; i < model.bundleNames.count; i ++) {
            items[*index] = [self loadItemwWithItemName:model.bundleNames[i]];
@@ -182,23 +212,16 @@ static int cunt;
         [self setCacheBundleName:bundleName value:handel];
     }
     
-    NSLog(@"use---%@(%d)",bundleName,handel);
+    NSLog(@"run add ---%@(%d)",bundleName,handel);
     
     return handel;
 }
 
 
 -(BOOL)isRuningAitype:(FUNamaAIType)aiType{
-    for (FUAISectionModel *config in self.config) {
-        for (FUAIConfigCellModel *model in config.aiMenu) {
-            if (model.aiType == aiType) {
-                if (model.state == FUAICellstateSel){
-                    return YES;
-                }else{
-                    return NO;
-                }
-            }
-        }
+   
+    if ([_runingItems containsObject:@(aiType)]) {
+        return YES;
     }
     return NO;
 }
@@ -213,7 +236,7 @@ static int cunt;
             for(int i = 0;i < config.aiMenu.count;i ++){
                 FUAIConfigCellModel *model = config.aiMenu[i];
                 if(model.aiType == FUNamaAITypeBodySkeleton){
-                    int controlHandle = [self loadItemwWithItemName:model.bundleNames[0]];
+                    int controlHandle = [self getHandleWithName:model.bundleNames[0]];
                     [FURenderer unbindAllItems:controlHandle];
                 }
         }
@@ -224,22 +247,9 @@ static int cunt;
     [FURenderer onCameraChange];
     [FURenderer OnDeviceLost];
     
-    /* 销毁道具缓存 */
-    [_handleCache removeAllObjects];
-    
-    /* 重置配置模型 */
-    for (FUAISectionModel *config in _config) {
-            for(int i = 0;i < config.aiMenu.count;i ++){
-            FUAIConfigCellModel *model = config.aiMenu[i];
-            model.state = FUAICellstateNol;
-            model.footSelInde = 0;
-        }
-    }
-    
     for (int i = 0; i < sizeof(items)/sizeof(int); i ++) {
         items[i] = 0;
     }
-    
 }
 
 /* 缓存 */
@@ -256,6 +266,22 @@ static int cunt;
         return 0;
     }
     return [_handleCache[bundleName] intValue];
+}
+
+-(void)clearManagerCache{
+    [_runingItems removeAllObjects];
+    /* 销毁道具缓存 */
+    [_handleCache removeAllObjects];
+    
+    /* 重置配置模型 */
+    for (FUAISectionModel *config in _config) {
+            for(int i = 0;i < config.aiMenu.count;i ++){
+            FUAIConfigCellModel *model = config.aiMenu[i];
+            model.state = FUAICellstateNol;
+            model.footSelInde = 0;
+        }
+    }
+    
 }
 
 
@@ -467,7 +493,6 @@ static int cunt;
     float z =  atan2(2*(q0*q1 + q2 * q3), 1 - 2*(q1 * q1 + q2 * q2)) * 180 / M_PI;
     float y =  asin(2 *(q0*q2 - q1*q3)) * 180 / M_PI;
     float x = atan(2*(q0*q3 + q1*q2)/(1 - 2*(q2*q2 + q3*q3))) * 180 / M_PI;
-    NSLog(@"x=%lf  y=%lf z=%lf",x,y,z);
     if (x > DetectionAngle || x < - 5 || fabs(y) > DetectionAngle || fabs(z) > DetectionAngle) {//抬头低头角度限制：仰角不大于5°，俯角不大于15°
         return NO;
     }

@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E304BCE724D8FD970020A724 /* FUExpresionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E304BCE624D8FD970020A724 /* FUExpresionView.m */; };
+		E304BCE924D903990020A724 /* landmarks.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E304BCE824D903990020A724 /* landmarks.bundle */; };
+		E304BCEC24D932B60020A724 /* FUTongueView.m in Sources */ = {isa = PBXBuildFile; fileRef = E304BCEB24D932B60020A724 /* FUTongueView.m */; };
 		E306CB472477A10900BECA3F /* AIConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = E306CB462477A10900BECA3F /* AIConfig.json */; };
 		E3127C69249352EE0096306C /* empty_aitpye_2d.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3127C68249352EE0096306C /* empty_aitpye_2d.bundle */; };
 		E3127C6F24936E760096306C /* default_bg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3127C6E24936E760096306C /* default_bg.bundle */; };
-		E313887224F742AB00A3AFDF /* ai_gesture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E313887124F742AB00A3AFDF /* ai_gesture.bundle */; };
+		E313888924F8A14A00A3AFDF /* ai_hand_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */; };
 		E332E6A024AF5CCB00232C4A /* bodyLandmarks_selife.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */; };
 		E332E6A124AF5CCB00232C4A /* bodyLandmarks_dance.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */; };
 		E332E6BC24AFC5F500232C4A /* libCNamaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E332E6B624AFC35500232C4A /* libCNamaSDK.framework */; };
@@ -42,6 +45,9 @@
 		E35DC6CB24766354005B4EED /* FUConfigCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E35DC6CA24766354005B4EED /* FUConfigCell.m */; };
 		E35DC6CE24766C05005B4EED /* FUHeadReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = E35DC6CD24766C05005B4EED /* FUHeadReusableView.m */; };
 		E35DC6D124766C23005B4EED /* FUFootReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = E35DC6D024766C23005B4EED /* FUFootReusableView.m */; };
+		E363071C24E0E4B600A16812 /* aitype.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E363071B24E0E4B600A16812 /* aitype.bundle */; };
+		E363071E24E0E53200A16812 /* set_tongue.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E363071D24E0E53200A16812 /* set_tongue.bundle */; };
+		E363072124E10E8B00A16812 /* FUIndexHandle.m in Sources */ = {isa = PBXBuildFile; fileRef = E363072024E10E8B00A16812 /* FUIndexHandle.m */; };
 		E3732C4F2477A35600D756B5 /* FUAICollectionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = E3732C4E2477A35600D756B5 /* FUAICollectionModel.m */; };
 		E3732C6B247B6AC100D756B5 /* FUImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = E3732C6A247B6AC100D756B5 /* FUImageHelper.m */; };
 		E3732C6E247BA71600D756B5 /* FUGestureView.m in Sources */ = {isa = PBXBuildFile; fileRef = E3732C6D247BA71600D756B5 /* FUGestureView.m */; };
@@ -97,10 +103,15 @@
 		2B408A44EDB64A685ADAB6D6 /* Pods-FUAlgorithmDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FUAlgorithmDemo.debug.xcconfig"; path = "Target Support Files/Pods-FUAlgorithmDemo/Pods-FUAlgorithmDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		520CB2386BFCC785A20FC705 /* Pods-FUAlgorithmDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FUAlgorithmDemo.release.xcconfig"; path = "Target Support Files/Pods-FUAlgorithmDemo/Pods-FUAlgorithmDemo.release.xcconfig"; sourceTree = "<group>"; };
 		64BE6B7E624B006AF6D1D903 /* libPods-FUAlgorithmDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FUAlgorithmDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E304BCE524D8FD970020A724 /* FUExpresionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUExpresionView.h; sourceTree = "<group>"; };
+		E304BCE624D8FD970020A724 /* FUExpresionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUExpresionView.m; sourceTree = "<group>"; };
+		E304BCE824D903990020A724 /* landmarks.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = landmarks.bundle; sourceTree = "<group>"; };
+		E304BCEA24D932B60020A724 /* FUTongueView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUTongueView.h; sourceTree = "<group>"; };
+		E304BCEB24D932B60020A724 /* FUTongueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUTongueView.m; sourceTree = "<group>"; };
 		E306CB462477A10900BECA3F /* AIConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AIConfig.json; sourceTree = "<group>"; };
 		E3127C68249352EE0096306C /* empty_aitpye_2d.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = empty_aitpye_2d.bundle; sourceTree = "<group>"; };
 		E3127C6E24936E760096306C /* default_bg.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = default_bg.bundle; sourceTree = "<group>"; };
-		E313887124F742AB00A3AFDF /* ai_gesture.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_gesture.bundle; sourceTree = "<group>"; };
+		E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_hand_processor.bundle; sourceTree = "<group>"; };
 		E332E5F624AF35CE00232C4A /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
 		E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = bodyLandmarks_selife.bundle; sourceTree = "<group>"; };
 		E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = bodyLandmarks_dance.bundle; sourceTree = "<group>"; };
@@ -148,6 +159,10 @@
 		E35DC6CD24766C05005B4EED /* FUHeadReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUHeadReusableView.m; sourceTree = "<group>"; };
 		E35DC6CF24766C23005B4EED /* FUFootReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUFootReusableView.h; sourceTree = "<group>"; };
 		E35DC6D024766C23005B4EED /* FUFootReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUFootReusableView.m; sourceTree = "<group>"; };
+		E363071B24E0E4B600A16812 /* aitype.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = aitype.bundle; sourceTree = "<group>"; };
+		E363071D24E0E53200A16812 /* set_tongue.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = set_tongue.bundle; sourceTree = "<group>"; };
+		E363071F24E10E8B00A16812 /* FUIndexHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUIndexHandle.h; sourceTree = "<group>"; };
+		E363072024E10E8B00A16812 /* FUIndexHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUIndexHandle.m; sourceTree = "<group>"; };
 		E3732C4D2477A35600D756B5 /* FUAICollectionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUAICollectionModel.h; sourceTree = "<group>"; };
 		E3732C4E2477A35600D756B5 /* FUAICollectionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUAICollectionModel.m; sourceTree = "<group>"; };
 		E3732C69247B6AC000D756B5 /* FUImageHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUImageHelper.h; sourceTree = "<group>"; };
@@ -242,6 +257,8 @@
 		E332E5F424AF345A00232C4A /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				E363071D24E0E53200A16812 /* set_tongue.bundle */,
+				E363071B24E0E4B600A16812 /* aitype.bundle */,
 				E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */,
 				E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */,
 				E3127C68249352EE0096306C /* empty_aitpye_2d.bundle */,
@@ -251,6 +268,7 @@
 				E3127C6E24936E760096306C /* default_bg.bundle */,
 				E3D2317C249DBAF800C656AB /* handgesture.bundle */,
 				E341082F24A3765900410722 /* hair_normal_algorithm.bundle */,
+				E304BCE824D903990020A724 /* landmarks.bundle */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -277,7 +295,7 @@
 		E332E70B24AFCB3A00232C4A /* model */ = {
 			isa = PBXGroup;
 			children = (
-				E313887124F742AB00A3AFDF /* ai_gesture.bundle */,
+				E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */,
 				E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */,
 				E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */,
 				E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */,
@@ -320,6 +338,10 @@
 				E35DC6D024766C23005B4EED /* FUFootReusableView.m */,
 				E3732C6C247BA71600D756B5 /* FUGestureView.h */,
 				E3732C6D247BA71600D756B5 /* FUGestureView.m */,
+				E304BCE524D8FD970020A724 /* FUExpresionView.h */,
+				E304BCE624D8FD970020A724 /* FUExpresionView.m */,
+				E304BCEA24D932B60020A724 /* FUTongueView.h */,
+				E304BCEB24D932B60020A724 /* FUTongueView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -393,6 +415,8 @@
 			children = (
 				E39CF8FA249762ED003A6C14 /* FUGestureHandle.h */,
 				E39CF8FB249762ED003A6C14 /* FUGestureHandle.m */,
+				E363071F24E10E8B00A16812 /* FUIndexHandle.h */,
+				E363072024E10E8B00A16812 /* FUIndexHandle.m */,
 			);
 			path = Handle;
 			sourceTree = "<group>";
@@ -520,6 +544,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E363071E24E0E53200A16812 /* set_tongue.bundle in Resources */,
 				E341083024A3765A00410722 /* hair_normal_algorithm.bundle in Resources */,
 				E3D2317D249DBAF800C656AB /* handgesture.bundle in Resources */,
 				E332E6A024AF5CCB00232C4A /* bodyLandmarks_selife.bundle in Resources */,
@@ -541,8 +566,10 @@
 				E332E71924AFCB3A00232C4A /* ai_face_processor.bundle in Resources */,
 				E332E71C24AFCB3A00232C4A /* tongue.bundle in Resources */,
 				E39CF93F249896F4003A6C14 /* anim_merge.bundle in Resources */,
+				E363071C24E0E4B600A16812 /* aitype.bundle in Resources */,
 				E3AD31BA24752D4E00B45264 /* Main.storyboard in Resources */,
 				E39CF942249896F4003A6C14 /* anim_hold.bundle in Resources */,
+				E313888924F8A14A00A3AFDF /* ai_hand_processor.bundle in Resources */,
 				E37A8739248A22EB006D900C /* fakeman.bundle in Resources */,
 				E39CF939249896F4003A6C14 /* anim_ok.bundle in Resources */,
 				E39CF93C249896F4003A6C14 /* anim_rock.bundle in Resources */,
@@ -556,11 +583,11 @@
 				E332E71D24AFCB3A00232C4A /* fxaa.bundle in Resources */,
 				E39CF936249896F4003A6C14 /* anim_heart.bundle in Resources */,
 				E39CF93E249896F4003A6C14 /* anim_eight.bundle in Resources */,
+				E304BCE924D903990020A724 /* landmarks.bundle in Resources */,
 				E332E6A124AF5CCB00232C4A /* bodyLandmarks_dance.bundle in Resources */,
 				E35DC6BD24762679005B4EED /* human_mask.bundle in Resources */,
 				E35DC6BE24762679005B4EED /* head_mask.bundle in Resources */,
 				E332E72124AFCB3A00232C4A /* fuzzytoonfilter.bundle in Resources */,
-				E313887224F742AB00A3AFDF /* ai_gesture.bundle in Resources */,
 				E39CF93D249896F4003A6C14 /* anim_two.bundle in Resources */,
 				E332E72224AFCB3A00232C4A /* face_beautification.bundle in Resources */,
 			);
@@ -641,7 +668,9 @@
 				E340579324754EF3003AAE2C /* FURecordEncoder.m in Sources */,
 				E340578724754BFC003AAE2C /* FUHeadButtonView.m in Sources */,
 				E3AD31B124752D4E00B45264 /* AppDelegate.m in Sources */,
+				E304BCEC24D932B60020A724 /* FUTongueView.m in Sources */,
 				E340579024754C95003AAE2C /* FUOpenGLView.m in Sources */,
+				E304BCE724D8FD970020A724 /* FUExpresionView.m in Sources */,
 				E3AD31C224752D6100B45264 /* main.m in Sources */,
 				E39CF8FC249762ED003A6C14 /* FUGestureHandle.m in Sources */,
 				E35DC6CE24766C05005B4EED /* FUHeadReusableView.m in Sources */,
@@ -653,6 +682,7 @@
 				E35DC6C824765F59005B4EED /* FUConfigController.m in Sources */,
 				E3732C6B247B6AC100D756B5 /* FUImageHelper.m in Sources */,
 				E3732C73247CB05400D756B5 /* FUShotViewController.m in Sources */,
+				E363072124E10E8B00A16812 /* FUIndexHandle.m in Sources */,
 				E34057212475334E003AAE2C /* FUHomeController.m in Sources */,
 				E37C42422480EF0C0095F824 /* FUActionModel.m in Sources */,
 				E3732C6E247BA71600D756B5 /* FUGestureView.m in Sources */,
@@ -797,7 +827,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -833,7 +863,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

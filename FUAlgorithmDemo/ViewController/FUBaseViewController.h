@@ -13,6 +13,9 @@
 #import "FUPhotoButton.h"
 #import "FUOpenGLView.h"
 #import "FUGestureView.h"
+
+#import "FUTongueView.h"
+#import "FUExpresionView.h"
 #define KScreenWidth ([UIScreen mainScreen].bounds.size.width)
 #define KScreenHeight ([UIScreen mainScreen].bounds.size.height)
 #define  iPhoneXStyle ((KScreenWidth == 375.f && KScreenHeight == 812.f ? YES : NO) || (KScreenWidth == 414.f && KScreenHeight == 896.f ? YES : NO))
@@ -33,6 +36,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) FUGestureView *mActionView;
 
+@property (strong, nonatomic) FUExpresionView *mExpresionView;
+
+@property (strong, nonatomic) FUTongueView *mTongueView;
+
+@property (strong, nonatomic) UILabel *buglyLabel;
 /* 子类重载，实现差异逻辑 */
 -(void)takePhotoToSave:(UIImage *)image;//拍照保存
 -(void)didOutputVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer;

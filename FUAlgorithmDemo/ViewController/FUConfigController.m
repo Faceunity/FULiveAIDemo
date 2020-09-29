@@ -37,11 +37,9 @@ static NSString *footViewID = @"footView";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tongzhi:)name:UIApplicationBackgroundRefreshStatusDidChangeNotification object:nil];
     
-    
-
-    for (FUAISectionModel*config in self.config) {
-        [[FUManager shareManager] loadBoudleWithConfig:config];//创建所有用到道具
-    }
+//    for (FUAISectionModel*config in self.config) {
+//        [[FUManager shareManager] loadBoudleWithConfig:config];//道具创建所有用到道具
+//    }
 }
 
 -(void)subView{
@@ -90,8 +88,7 @@ static NSString *footViewID = @"footView";
        flowLayout.minimumLineSpacing = 8;
        flowLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
        flowLayout.itemSize = CGSizeMake(80, 50);
-       
-
+    
        // 添加 collectionView，记得要设置 delegate 和 dataSource 的代理对象
        CGRect frame = self.view.frame;
        frame.size.width = frame.size.width * 0.75;
@@ -232,21 +229,14 @@ static NSString *footViewID = @"footView";
     if (modle.state == FUAICellstateDisable) {
         return;
     }
-
-    FUConfigCell *cell = (FUConfigCell *)[collectionView cellForItemAtIndexPath:indexPath];
     modle.state = modle.state?0:1;
     
-    if (modle.aiType == FUNamaAITypegestureRecognition || modle.aiType == FUNamaAITypeBodySkeleton ||modle.aiType == FUNamaAITypePortraitSegmentation || modle.aiType == FUNamaAITypeHairSplit || modle.aiType == FUNamaAITypeHeadSplit) {//单选
-        if (modle.state == FUAICellstateSel) {
-            [self changeEnableOther:modle state:FUAICellstateDisable];
-        }else{
-            [self changeEnableOther:modle state:FUAICellstateNol];
-        }
-        
-    }
-    if (modle.aiType == FUNamaAITypeBodyDetection || modle.aiType == FUNamaAITypeBodyKeyPoints || modle.aiType == FUNamaAITypeActionRecognition) {
-        [self disEnableOne];
-    }
+    if (modle.state == FUAICellstateSel) {
+        [self changeOtherStateWithSelCellModel:modle];
+    }else{
+        [self changeOtherStateWithNomalCellModel:modle];
+  }
+    
 
     [collectionView reloadData];
 }
@@ -265,53 +255,92 @@ static NSString *footViewID = @"footView";
     
 }
 
+-(NSArray *)otherCanEnable:(FUNamaAIType)aitype{
+    switch (aitype) {
+        case FUNamaAITypeKeypoint:
+        case FUNamaAITypeTongue:
+            case FUNamaAITypeExpression:
+            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeHairSplit),@(FUNamaAITypeHeadSplit),@(FUNamaAITypePortraitSegmentation),@(FUNamaAITypeActionRecognition),@(FUNamaAITypegestureRecognition)];
+            break;
+            
+            case FUNamaAITypeBodyKeyPoints:
+            case FUNamaAITypeActionRecognition:
+            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeActionRecognition)];
+            break;
+            
+        case FUNamaAITypeBodySkeleton:
+            return @[@(aitype)];
+            break;
+        default:
+            return  @[@(aitype),@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression)];
+            break;
+    }
+}
 
--(void)changeEnableOther:(FUAIConfigCellModel *)currentModle state:(FUAICellState)state{
+/* CellModel选中是，其他选中状态修改 */
+-(void)changeOtherStateWithSelCellModel:(FUAIConfigCellModel *)cellModle{
+    if (cellModle.aiType == FUNamaAITypeKeypoint || cellModle.aiType == FUNamaAITypeTongue ||cellModle.aiType == FUNamaAITypeExpression ) {//特征点默认随之选中
+        FUAISectionModel *sectionModel = _config[0];
+        sectionModel.aiMenu[0].state = FUAICellstateSel;
+    }
+    
+    NSArray *array = [self otherCanEnable:cellModle.aiType];//可共选的数组
+    for (FUAISectionModel *config in _config) {
+            for(int i = 0;i < config.aiMenu.count;i ++){
+            FUAIConfigCellModel *model = config.aiMenu[i];
+                if ([array containsObject:@(model.aiType)]) {//  不可共选的置灰
+                    continue;
+                }
+            model.state = FUAICellstateDisable;
+        }
+    }
+}
+
+/* CellModel取消选中，其他选中状态修改 */
+-(void)changeOtherStateWithNomalCellModel:(FUAIConfigCellModel *)cellModle{
+    if (cellModle.aiType == FUNamaAITypeKeypoint) {//特征点默认随之取消
+        for (FUAIConfigCellModel *modle in _config[0].aiMenu) {
+            modle.state = FUAICellstateNol;
+        }
+    }
+    
+    NSArray *array = [self otherCanEnable:cellModle.aiType];//可共选的数组
+    BOOL isFaceHaveSel = NO;
+    BOOL isOtherHaveSel = NO;
+    for (FUAISectionModel *config in _config) {
+        if (config.moudleType == FUMoudleTypeFace) {
+            for(int i = 0;i < config.aiMenu.count;i ++){
+                FUAIConfigCellModel *model = config.aiMenu[i];
+                if (model.state == FUAICellstateSel) {//  人脸还有选中
+                    isFaceHaveSel = YES;
+                }
+            }
+            continue;
+        }
+        for(int i = 0;i < config.aiMenu.count;i ++){
+            FUAIConfigCellModel *model = config.aiMenu[i];
+            if (model.state == FUAICellstateSel) {//  除人脸其他有选中
+                isOtherHaveSel = YES;
+            }
+        }
+    }
+    if (isOtherHaveSel) {
+        return;
+    }
     
     for (FUAISectionModel *config in _config) {
             for(int i = 0;i < config.aiMenu.count;i ++){
-
             FUAIConfigCellModel *model = config.aiMenu[i];
-            if (currentModle == model) {
+            if ([array containsObject:@(model.aiType)]) {//  不可共选的置灰
                 continue;
             }
-            model.state = state;
-        }
-
-    }
-}
-
--(void)disEnableOne{//隐藏单选
-    BOOL isHave = NO;
-    for (FUAISectionModel *config in _config) {
-            for(int i = 0;i < config.aiMenu.count;i ++){
-            FUAIConfigCellModel *modle = config.aiMenu[i];
-                if (modle.aiType == FUNamaAITypeBodyDetection || modle.aiType == FUNamaAITypeBodyKeyPoints || modle.aiType == FUNamaAITypeActionRecognition) {
-                    if (modle.state == FUAICellstateSel) {//置灰其他单选项目
-                        isHave = YES;
-                        break;
-                    }
-                }
-
-            }
-        }
-
-    for (FUAISectionModel *config in _config) {
-            for(int i = 0;i < config.aiMenu.count;i ++){
-            FUAIConfigCellModel *modle = config.aiMenu[i];
-            if (modle.aiType == FUNamaAITypegestureRecognition || modle.aiType == FUNamaAITypeBodySkeleton ||modle.aiType == FUNamaAITypePortraitSegmentation || modle.aiType == FUNamaAITypeHairSplit || modle.aiType == FUNamaAITypeHeadSplit) {
-                if (isHave) {
-                    modle.state = FUAICellstateDisable;
-                }else{
-                    modle.state = FUAICellstateNol;
-                }
+            model.state = FUAICellstateNol;
                 
+            if (model.aiType ==  FUNamaAITypeBodySkeleton && isFaceHaveSel) {
+                model.state = FUAICellstateDisable;
             }
         }
-
     }
 }
-
-
 
 @end
