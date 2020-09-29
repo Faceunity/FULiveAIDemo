@@ -110,9 +110,9 @@ FUCameraDataSource,FUPhotoButtonDelegate>{
     dispatch_after(delayTime, dispatch_get_main_queue(), ^(void){
         sender.userInteractionEnabled = YES ;
     });
-     sender.selected = !sender.selected ;
-     [self.mCamera changeCameraInputDeviceisFront:sender.selected];
      
+     [self.mCamera changeCameraInputDeviceisFront:sender.selected];
+     sender.selected = !sender.selected ;
     fuHumanProcessorReset();
     /**切换摄像头要调用此函数*/
     [FURenderer onCameraChange];

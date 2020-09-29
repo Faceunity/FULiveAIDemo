@@ -34,6 +34,8 @@
 
 /* 销毁道具，清除缓存 */
 - (void)destoryItems;
+/* 清除管理类缓存 */
+-(void)clearManagerCache;
 
 
 /* 将道具绘制到imager */

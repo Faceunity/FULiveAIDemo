@@ -12,6 +12,7 @@
 #import <SVProgressHUD.h>
 #import "UIViewController+CWLateralSlide.h"
 #import "FUConfigController.h"
+#import "FUIndexHandle.h"
 
 @interface FUPhotoViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>{
         __block BOOL takePic ;
@@ -63,6 +64,8 @@
     }
     [self.view addSubview:_photoBtn];
     
+    self.buglyLabel.hidden = YES;
+    
 }
 
 #pragma  mark ---- process image
@@ -86,89 +89,124 @@
             self.tipLabel.text = [FUManager shareManager].currentToast;
           });
         
-        if([[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition]) {//手势识别中....
-                  __weak typeof(self)weakSelf  = self ;
-              [[FUManager shareManager] renderImageData:imageData w:width h:height];
-
-              if(fuHandDetectorGetResultNumHands() > 0){
-                  FUAIGESTURETYPE type = fuHandDetectorGetResultGestureType(0);
-                  int index = [FUGestureHandle getIndexwith:type];
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                      [weakSelf.mGestureView setGestureViewSel:index];
-                      if (self.tipLabel.text || !self.tipLabel.hidden) {
-                       self.tipLabel.hidden = YES;
-                      }
-                    });
-              }else{
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                      [weakSelf.mGestureView setGestureViewSel:-1];
-                      if (self.tipLabel.text) {
-                          self.tipLabel.hidden = NO;
-                      }
-
-                  });
-              }
-          }else if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodySkeleton]) {//骨骼....
-              [weakSelf.mPerView displayImageData:imageData Size:CGSizeMake(width, height) Landmarks:NULL count:0 zoomScale:1];
-              [[FUManager shareManager] renderItemsWithPtaImageData:imageData w:width h:height];
-              
-              BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  if (self.tipLabel.text || !self.tipLabel.hidden) {
-                   self.tipLabel.hidden = isTrack;
-                  }
-                });
-
-          }else if([[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition]){//动作
-              __weak typeof(self)weakSelf  = self ;
-              [[FUManager shareManager] renderImageData:imageData w:width h:height];
-              
-              if(fuHumanProcessorGetNumResults() > 0){
-                  int  index = fuHumanProcessorGetResultActionType(0);
-                  NSLog(@"动作index------%d",fuHumanProcessorGetResultActionType(0));
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                      [weakSelf.mActionView setGestureViewSel:index];
-                      if (self.tipLabel.text || !self.tipLabel.hidden) {
-                          self.tipLabel.hidden = YES;
-                      }
-                  });
-
-              }else{
-                  dispatch_async(dispatch_get_main_queue(), ^{
-                      [weakSelf.mActionView setGestureViewSel:-1];
-                      if (self.tipLabel.text) {
-                          self.tipLabel.hidden = NO;
-                      }
-                  });
-
-              }
-          }else if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints]){//关键点
-              [[FUManager shareManager] renderImageData:imageData w:width h:height];
-              
-              BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  if (self.tipLabel.text || !self.tipLabel.hidden) {
-                   self.tipLabel.hidden = isTrack;
-                  }
-                });
-          }else if([[FUManager shareManager] isRuningAitype:FUNamaAITypeHairSplit] || [[FUManager shareManager] isRuningAitype:FUNamaAITypeHeadSplit]){
-              [[FUManager shareManager] renderImageData:imageData w:width h:height];
-              BOOL isTrack = [FURenderer isTracking] > 0?YES:NO;
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  if (self.tipLabel.text || !self.tipLabel.hidden) {
-                          self.tipLabel.hidden = isTrack >0?YES:NO;;
-                      }
-                  });
+        if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodySkeleton]) {//骨骼....
+            [[FUManager shareManager] renderItemsWithPtaImageData:imageData w:width h:height];
           }else{
-              [[FUManager shareManager] renderImageData:imageData w:width h:height];
-              BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
-              dispatch_async(dispatch_get_main_queue(), ^{
-                  if (self.tipLabel.text || !self.tipLabel.hidden) {
-                          self.tipLabel.hidden = isTrack >0?YES:NO;;
-                      }
-                  });
+            [[FUManager shareManager] renderImageData:imageData w:width h:height];
           }
+           
         
+      if([[FUManager shareManager] isRuningAitype:FUNamaAITypeKeypoint] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition] && !([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints] || [[FUManager shareManager] isRuningAitype:FUNamaAITypePortraitSegmentation])){
+            BOOL isTrack = [FURenderer isTracking] > 0?YES:NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.tipLabel.text || !self.tipLabel.hidden) {
+                        self.tipLabel.hidden = isTrack;
+                    }
+            });
+        }
+           
+         if([[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition]) {//手势识别中....
+                __weak typeof(self)weakSelf  = self ;
+                if(fuHandDetectorGetResultNumHands() > 0){
+                    FUAIGESTURETYPE type = fuHandDetectorGetResultGestureType(0);
+                    int index = [FUGestureHandle getIndexwith:type];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.mGestureView setGestureViewSel:index];
+                        if (self.tipLabel.text || !self.tipLabel.hidden) {
+                         self.tipLabel.hidden = YES;
+                        }
+                      });
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        BOOL isTrackFace = [FURenderer isTracking] > 0?YES:NO;
+                           [weakSelf.mGestureView setGestureViewSel:-1];;
+                           if (isTrackFace && [[FUManager shareManager] isRuningAitype:FUNamaAITypeKeypoint]){
+                               self.tipLabel.hidden = YES;
+                           }else{
+                               if (self.tipLabel.text) {
+                                   self.tipLabel.hidden = NO;
+                               }
+                           }
+                    });
+                }
+            }
+            
+            if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodySkeleton]) {//骨骼....
+                BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (self.tipLabel.text || !self.tipLabel.hidden) {
+                     self.tipLabel.hidden = isTrack;
+                    }
+                  });
+
+            }
+            if([[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition]){//动作
+                __weak typeof(self)weakSelf  = self ;
+                
+                BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
+                BOOL isTrackFace = [FURenderer isTracking] > 0?YES:NO;
+                
+                 if(isTrack){
+                    int  index = fuHumanProcessorGetResultActionType(0);
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.mActionView setGestureViewSel:index];
+                    });
+
+                }else{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.mActionView setGestureViewSel:-1];
+                    });
+                }
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (isTrack || isTrackFace) {
+                        self.tipLabel.hidden = YES;
+                    }else{
+                        if (self.tipLabel.text || !self.tipLabel.hidden ) {
+                         self.tipLabel.hidden = isTrack;
+                      }
+                    }
+                });
+            }
+            
+            if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints] || [[FUManager shareManager] isRuningAitype:FUNamaAITypePortraitSegmentation]){//人体
+                BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
+                BOOL isTrackFace = [FURenderer isTracking] > 0?YES:NO;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (isTrack || isTrackFace) {
+                        self.tipLabel.hidden = YES;
+                    }else{
+                        if (self.tipLabel.text || !self.tipLabel.hidden ) {
+                         self.tipLabel.hidden = isTrack;
+                      }
+                    }
+                  });
+            }
+            
+            if([[FUManager shareManager] isRuningAitype:FUNamaAITypeTongue]){
+                BOOL isTrack = [FURenderer isTracking] > 0?YES:NO;
+                int tongue_direction = 0;
+                [FURenderer getFaceInfo:0 name:@"tongue_direction" pret:&tongue_direction number:1];
+                int index = [FUIndexHandle getAItougueIndexwith:tongue_direction];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(isTrack){
+                        [self.mTongueView setTongueViewSel:index];
+                    }else{
+                        [self.mTongueView setTongueViewSel:-1];
+                    }
+                });
+            }
+            
+            if([[FUManager shareManager] isRuningAitype:FUNamaAITypeExpression]){
+                    int expression_type = 0;
+                    [FURenderer getFaceInfo:0 name:@"expression_type" pret:&expression_type number:1];
+                    NSArray *array = [FUIndexHandle getAarrayAIexpression:expression_type];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self.mExpresionView setExpresionViewSelArray:array];
+                        
+                    });
+            }
+
         [weakSelf.renderView displayImageData:imageData Size:CGSizeMake(width, height) Landmarks:NULL count:0 zoomScale:1];
         
         [[FURenderer shareRenderer] setBackCurrentContext];

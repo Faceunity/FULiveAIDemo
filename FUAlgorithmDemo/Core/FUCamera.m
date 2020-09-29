@@ -60,7 +60,7 @@ typedef void(^FUCameraRecordVidepCompleted)(NSString *videoPath);
 - (instancetype)init
 {
     if (self = [super init]) {
-        self.cameraPosition = AVCaptureDevicePositionBack;
+        self.cameraPosition = AVCaptureDevicePositionFront;
         self.captureFormat = kCVPixelFormatType_32BGRA;
         videoHDREnabled = YES;
     }
@@ -437,32 +437,40 @@ typedef void(^FUCameraRecordVidepCompleted)(NSString *videoPath);
 
 #pragma  mark -  帧率
 -(void)changeVideoFrameRate:(int)frameRate{
-    if (frameRate <= 30) {//此方法可以设置相机帧率,仅支持帧率小于等于30帧.
-        AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-        [videoDevice lockForConfiguration:NULL];
-        [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(10, frameRate * 10)];
-        [videoDevice setActiveVideoMaxFrameDuration:CMTimeMake(10, frameRate * 10)];
-        [videoDevice unlockForConfiguration];
-        return;
-    }
-    
-    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    for(AVCaptureDeviceFormat *vFormat in [videoDevice formats] ) {
-        CMFormatDescriptionRef description= vFormat.formatDescription;
-        float maxRate = ((AVFrameRateRange*) [vFormat.videoSupportedFrameRateRanges objectAtIndex:0]).maxFrameRate;
-        if (maxRate > frameRate - 1 &&
-            CMFormatDescriptionGetMediaSubType(description)==kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
-            if ([videoDevice lockForConfiguration:nil]) {
-                /* 设置分辨率的方法activeFormat与sessionPreset是互斥的 */
-                videoDevice.activeFormat = vFormat;
-                [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(10, frameRate * 10)];
-                [videoDevice setActiveVideoMaxFrameDuration:CMTimeMake(10, frameRate * 10)];
-                [videoDevice unlockForConfiguration];
-                break;
-            }
-        }
+    if ([self.camera lockForConfiguration:nil]) {
+        self.camera.activeVideoMinFrameDuration = CMTimeMake(1, frameRate);
+        self.camera.activeVideoMaxFrameDuration = CMTimeMake(1, frameRate);
+        [self.camera unlockForConfiguration];
     }
 }
+    
+    
+//    if (frameRate <= 30) {//此方法可以设置相机帧率,仅支持帧率小于等于30帧.
+//        AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+//        [videoDevice lockForConfiguration:NULL];
+//        [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(10, frameRate * 10)];
+//        [videoDevice setActiveVideoMaxFrameDuration:CMTimeMake(10, frameRate * 10)];
+//        [videoDevice unlockForConfiguration];
+//        return;
+//    }
+//
+//    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+//    for(AVCaptureDeviceFormat *vFormat in [videoDevice formats] ) {
+//        CMFormatDescriptionRef description= vFormat.formatDescription;
+//        float maxRate = ((AVFrameRateRange*) [vFormat.videoSupportedFrameRateRanges objectAtIndex:0]).maxFrameRate;
+//        if (maxRate > frameRate - 1 &&
+//            CMFormatDescriptionGetMediaSubType(description)==kCVPixelFormatType_420YpCbCr8BiPlanarFullRange) {
+//            if ([videoDevice lockForConfiguration:nil]) {
+//                /* 设置分辨率的方法activeFormat与sessionPreset是互斥的 */
+//                videoDevice.activeFormat = vFormat;
+//                [videoDevice setActiveVideoMinFrameDuration:CMTimeMake(10, frameRate * 10)];
+//                [videoDevice setActiveVideoMaxFrameDuration:CMTimeMake(10, frameRate * 10)];
+//                [videoDevice unlockForConfiguration];
+//                break;
+//            }
+//        }
+//    }
+//}
 
 - (BOOL)focusPointSupported
 {
@@ -681,6 +689,7 @@ typedef void(^FUCameraRecordVidepCompleted)(NSString *videoPath);
     *current = self.camera.exposureTargetBias;
 
 }
+
 
 
 
