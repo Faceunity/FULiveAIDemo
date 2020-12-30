@@ -13,6 +13,7 @@
 #import "MJExtension.h"
 #import "FUManager.h"
 #import "UIViewController+CWLateralSlide.h"
+#import "SVProgressHUD.h"
 
 @interface FUConfigController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 @property(nonatomic,strong)UICollectionView *collectionView;
@@ -106,6 +107,19 @@ static NSString *footViewID = @"footView";
 }
 
 
+- (void)showMessage:(NSString *)string{
+    //[SVProgressHUD showWithStatus:string]; //设置需要显示的文字
+    [SVProgressHUD showImage:[UIImage imageNamed:@"wrt424erte2342rx"] status:string];
+    [SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeNative];
+//    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeCustom]; //设置HUD背景图层的样式
+    [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
+    [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.74]];
+    [SVProgressHUD setBackgroundLayerColor:[UIColor clearColor]];
+    [SVProgressHUD setCornerRadius:5];
+    [SVProgressHUD dismissWithDelay:1.5];
+}
+
+
 #pragma  mark -  action
 -(void)restBtnClick:(UIButton *)btn{
     for (FUAISectionModel *config in _config) {
@@ -132,6 +146,7 @@ static NSString *footViewID = @"footView";
     NSNotification *notification  = [NSNotification notificationWithName:FUConfigControllerUpdateNotification object:nil userInfo:nil];
      [[NSNotificationCenter defaultCenter] postNotification:notification];
     [self dismissViewControllerAnimated:YES completion:nil];
+    
 }
 
 
@@ -233,6 +248,11 @@ static NSString *footViewID = @"footView";
     
     if (modle.state == FUAICellstateSel) {
         [self changeOtherStateWithSelCellModel:modle];
+          /* 证书权限 */
+          int moduleCode =  fuGetModuleCode([modle.moduleCodes[0] intValue]);
+          if((moduleCode & [modle.moduleCodes[1] intValue]) == 0){
+             [self showMessage:@"缺少证书,功能无效"];
+          }
     }else{
         [self changeOtherStateWithNomalCellModel:modle];
   }

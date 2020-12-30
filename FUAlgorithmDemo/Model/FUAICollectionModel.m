@@ -15,7 +15,9 @@
     return @{
              @"bundleNames" : @"NSString",
              @"subFootes" :@"NSString",
-             @"mToasts" :@"NSString"
+             @"mToasts" :@"NSString",
+             @"moduleCodes" :@"NSNumber",
+            @"moduleCodes" :@"NSNumber",
              };
 }
 
@@ -31,6 +33,7 @@
     modle.footSelInde = self.footSelInde;
     modle.subFootes = self.subFootes;
     modle.mToasts = self.mToasts;
+    modle.moduleCodes = self.moduleCodes;
     
     return modle;
 }

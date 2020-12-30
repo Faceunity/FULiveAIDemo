@@ -46,9 +46,66 @@ static NSString *gestureCellID = @"gestureCell";
     if (self = [super initWithFrame:frame]) {
         _iamges = iamges;
         [self setupCollectionView];
+        
+        
+        [self testAlpha0];
+        
     }
     return self;
 }
+
+-(void)testAlpha1{
+    [self layoutIfNeeded];
+    UIColor *color1 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:0.0];
+    UIColor *color2 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:1.0];
+    UIColor *color3 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:1.0];
+    UIColor *color4 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:0.0];
+    NSArray *colors = [NSArray arrayWithObjects:(id)color1.CGColor, color2.CGColor,color3.CGColor,color4.CGColor, nil];
+    NSArray *locations = [NSArray arrayWithObjects:@(0.0), @(0.08),@(0.92),@(1.0), nil];
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.colors = colors;
+    gradientLayer.locations = locations;
+    gradientLayer.frame = self.bounds;
+    gradientLayer.startPoint = CGPointMake(0, 0);
+    gradientLayer.endPoint   = CGPointMake(0, 1);
+    self.layer.mask = gradientLayer;
+}
+
+-(void)testAlpha2{
+    [self layoutIfNeeded];
+    UIColor *color1 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:0.0];
+    UIColor *color2 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:1.0];
+    UIColor *color3 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:1.0];
+    UIColor *color4 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:0.0];
+    NSArray *colors = [NSArray arrayWithObjects:(id)color1.CGColor, color2.CGColor,color3.CGColor,color4.CGColor, nil];
+    NSArray *locations = [NSArray arrayWithObjects:@(0.0), @(0.08),@(1.0),@(1.0), nil];
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.colors = colors;
+    gradientLayer.locations = locations;
+    gradientLayer.frame = self.bounds;
+    gradientLayer.startPoint = CGPointMake(0, 0);
+    gradientLayer.endPoint   = CGPointMake(0, 1);
+    self.layer.mask = gradientLayer;
+}
+
+-(void)testAlpha0{
+    [self layoutIfNeeded];
+    UIColor *color1 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:0.0];
+    UIColor *color2 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:1.0];
+    UIColor *color3 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:1.0];
+    UIColor *color4 = [UIColor colorWithRed:(0)  green:(0)  blue:(0)  alpha:0.0];
+    NSArray *colors = [NSArray arrayWithObjects:(id)color1.CGColor, color2.CGColor,color3.CGColor,color4.CGColor, nil];
+    NSArray *locations = [NSArray arrayWithObjects:@(0.0), @(0.0),@(0.92),@(1.0), nil];
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    gradientLayer.colors = colors;
+    gradientLayer.locations = locations;
+    gradientLayer.frame = self.bounds;
+    gradientLayer.startPoint = CGPointMake(0, 0);
+    gradientLayer.endPoint   = CGPointMake(0, 1);
+    self.layer.mask = gradientLayer;
+}
+
+
 
 -(void)setupCollectionView{
     // 设置 flowLayout
@@ -63,10 +120,11 @@ static NSString *gestureCellID = @"gestureCell";
        _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:flowLayout];
        _collectionView.layer.cornerRadius = 4;
       _collectionView.layer.masksToBounds = YES;
-    _collectionView.scrollEnabled = NO;
+//    _collectionView.scrollEnabled = NO;
        _collectionView.delegate = self;
        _collectionView.dataSource = self;
       _collectionView.backgroundColor = [UIColor clearColor];
+       _collectionView.bounces = NO;
        [self addSubview:_collectionView];
        
        // 注册 cell
@@ -76,6 +134,7 @@ static NSString *gestureCellID = @"gestureCell";
 
 -(void)setExpresionViewSel:(int)selIndex {
     _selIndexPath = [NSIndexPath indexPathForRow:selIndex inSection:0];
+    [self.collectionView scrollToItemAtIndexPath:_selIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
     [self.collectionView reloadData];
 }
 
@@ -83,6 +142,13 @@ static NSString *gestureCellID = @"gestureCell";
 -(void)setExpresionViewSelArray:(NSArray *)array {
     _selArray = array;
     [self.collectionView reloadData];
+//    if(array.count > 0){
+//        NSInteger aa = [array[0] integerValue];
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:aa  inSection:0];
+//        [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+//    }
+
+    
 }
 
 
@@ -109,6 +175,27 @@ static NSString *gestureCellID = @"gestureCell";
 
     return cell;
 }
+
+static int aa = 0;
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    if (scrollView.contentOffset.y != scrollView.contentSize.height - scrollView.bounds.size.height && scrollView.contentOffset.y > 0.0001 && aa != 1) {
+        [self testAlpha1];
+        aa = 1;
+    }
+    
+    if (scrollView.contentOffset.y == scrollView.contentSize.height - scrollView.bounds.size.height  && aa != 2) {
+        aa = 2;
+        [self testAlpha2];
+    }
+    
+    if (scrollView.contentOffset.y < 0.0001 && aa != 0) {
+        aa = 0;
+        [self testAlpha0];
+    }
+    
+}
+
 
 
 @end
