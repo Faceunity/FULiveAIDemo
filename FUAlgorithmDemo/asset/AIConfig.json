@@ -10,21 +10,24 @@
             "aiType":0,
             "bundleNames":["landmarks"],
             "parms":{"landmarks_type":1},
-            "mToasts":["未检测到人脸"]
+            "mToasts":["未检测到人脸"],
+            "moduleCodes":[1,4096]
         },
         {
             "state": 0,
             "aiMenuTitel": "舌头检测",
             "aiType":1,
             "bundleNames":["set_tongue"],
-            "mToasts":["未检测到人脸"]
+            "mToasts":["未检测到人脸"],
+            "moduleCodes":[1,8192]
         },
         {
             "state": 0,
             "aiMenuTitel": "表情识别",
             "aiType":2,
             "bundleNames":[],
-            "mToasts":["未检测到人脸"]
+            "mToasts":["未检测到人脸"],
+            "moduleCodes":[0,2048]
         }]
     },{
         "sectionTitel": "人体",
@@ -38,7 +41,8 @@
             "bundleNames":["bodyLandmarks_dance","bodyLandmarks_selife"],
             "footSelInde":0,
             "subFootes":["全身","半身"],
-            "mToasts":["未检测到全身,全身入镜试试哦","未检测到人体"]
+            "mToasts":["未检测到全身,全身入镜试试哦","未检测到人体"],
+            "moduleCodes":[1,16384]
         },
         {
             "state": 2,
@@ -48,7 +52,8 @@
         "bindItemNames":["fakeman","controller_config","default_bg","anim_eight","anim_fist","anim_greet","anim_gun","anim_heart","anim_hold","anim_korheart","anim_merge","anim_ok","anim_one", "anim_palm","anim_rock","anim_six","anim_thumb","anim_two","anim_idle","fxaa"],
             "footSelInde":0,
             "subFootes":["全身","半身"],
-            "mToasts":["未检测到全身,全身入镜试试哦","未检测到人体"]
+            "mToasts":["未检测到全身,全身入镜试试哦","未检测到人体"],
+            "moduleCodes":[1,128]
         }]
     },
     {
@@ -60,7 +65,8 @@
             "aiMenuTitel": "手势识别",
             "aiType":6,
             "bundleNames":["handgesture"],
-            "mToasts":[""]
+            "mToasts":[""],
+            "moduleCodes":[0,512]
         }]
     },
     {
@@ -73,14 +79,16 @@
             "aiType":7,
             "bundleNames":["human_mask"],
             "footSelInde":0,
-            "mToasts":["未检测到人体"]
+            "mToasts":["未检测到人体"],
+            "moduleCodes":[0,256]
         },
         {
             "state": 0,
             "aiMenuTitel": "头发分割",
             "aiType":8,
             "bundleNames":["hair_normal_algorithm"],
-            "mToasts":["未检测到人脸"]
+            "mToasts":["未检测到人脸"],
+            "moduleCodes":[0,1048576]
         },
         {
             "state": 0,
@@ -88,7 +96,8 @@
             "aiType":9,
             "bundleNames":["head_mask"],
             "footSelInde":0,
-            "mToasts":["未检测到人脸",]
+            "mToasts":["未检测到人脸",],
+            "moduleCodes":[1,32768]
         }]
     },
     {
@@ -100,7 +109,8 @@
             "bundleNames":["empty_aitpye_2d"],
             "aiMenuTitel": "动作识别",
             "aiType":10,
-            "mToasts":["未检测到人体"]
+            "mToasts":["未检测到人体"],
+            "moduleCodes":[1,65536]
         }]
     }
     ]

@@ -56,7 +56,7 @@ FUPopupMenuDelegate
     NSData *pathData=[[NSData alloc] initWithContentsOfFile:path];
     NSDictionary *dic=[NSJSONSerialization JSONObjectWithData:pathData options:NSJSONReadingMutableContainers error:nil];
     [FUManager shareManager].config = [FUAISectionModel mj_objectArrayWithKeyValuesArray:dic[@"data"]];
-    
+
     [self setupSubView];
     [self setupGestureView];
     [self setupExpressionView];
@@ -73,6 +73,8 @@ FUPopupMenuDelegate
     
     /* 设置默认加载的道具 */
     [[FUManager shareManager] setNeedRenderHandle];
+    
+    
 }
 
 
@@ -204,14 +206,35 @@ FUPopupMenuDelegate
 -(void)setupExpressionView{
     CGRect frame = CGRectZero;
     if (iPhoneXStyle) {
-        frame = CGRectMake(KScreenWidth - 56, 88 + 34, 40, 240);
+        frame = CGRectMake(KScreenWidth - 56, 88 + 34, 40, 460);
     }else{
-        frame = CGRectMake(KScreenWidth - 56, 88, 40, 240);
+        frame = CGRectMake(KScreenWidth - 56, 88, 40, 460);
     }
     
-    NSArray *images = @[@"demo_expression_icon_smile",@"demo_expression_icon_open_mouth",@"demo_expression_icon_wink",@"demo_expression_icon_biu"];//@"demo_expression_icon_frown",@"demo_expression_icon_bulging
+//    NSArray *images = @[@"demo_expression_icon_raise_eyebrows",@"demo_expression_icon_Left_corner_of_mouth",@"demo_expression_icon_right_corner_of_mouth",@"demo_expression_icon_mouth_o",@"demo_expression_icon_mouth_a",@"demo_expression_icon_pouting",@"demo_expression_icon_uting_mouth",@"demo_expression_icon_bulging",@"demo_expression_icon_close_left_eye",@"demo_expression_icon_close_right_eye",@"demo_expression_icon_turn_left",@"demo_expression_icon_turn_right",@"demo_expression_icon_smile",@"demo_expression_icon_nod",@"demo_expression_icon_frown",@"demo_expression_icon_eyes_wide_open",@"demo_expression_icon_twitch"];
+    
+        NSArray *images = @[@"demo_expression_icon_raise_eyebrows",@"demo_expression_icon_frown",@"demo_expression_icon_close_left_eye",@"demo_expression_icon_close_right_eye",@"demo_expression_icon_eyes_wide_open",@"demo_expression_icon_Left_corner_of_mouth",@"demo_expression_icon_right_corner_of_mouth",@"demo_expression_icon_smile",@"demo_expression_icon_mouth_o",@"demo_expression_icon_mouth_a",@"demo_expression_icon_pouting",@"demo_expression_icon_uting_mouth",@"demo_expression_icon_bulging",@"demo_expression_icon_twitch",@"demo_expression_icon_turn_left",@"demo_expression_icon_turn_right",@"demo_expression_icon_nod"];
     _mExpresionView = [[FUExpresionView alloc] initWithFrame:frame images:images];
     _mExpresionView.hidden = YES;
+    
+
+    CGRect frame1 = CGRectZero;
+    frame1 = CGRectMake(KScreenWidth - 160, 88, 95, 24);
+    frame1.origin.y = _mExpresionView.center.y;
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame1];
+    imageView.image = [UIImage imageNamed:@"demo_novice_bubble.png"];
+    imageView.tag = 100;
+    imageView.hidden = YES;
+    [self.view addSubview:imageView];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:imageView.bounds];
+    label.text = @"上滑列表滚动";
+    label.font = [UIFont systemFontOfSize:11];
+    label.textColor = [UIColor whiteColor];
+    [imageView addSubview:label];
+    
+
     [self.view addSubview:_mExpresionView];
 }
 
@@ -322,6 +345,11 @@ FUPopupMenuDelegate
         
         if (modle.moudleType == FUMoudleTypeFace && modle.aiMenu[2].state == FUAICellstateSel ) {//舌头选中
             _mExpresionView.hidden = NO;
+            UIImageView *iamgeView = [self.view viewWithTag:100];
+             iamgeView.hidden = NO;
+             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 iamgeView.hidden = YES;
+             });
         }
         
     }
@@ -368,7 +396,7 @@ static  NSTimeInterval oldTime = 0;
        [[FUManager shareManager] renderItemsToPixelBuffer:pixelBuffer];
    }
 
-    if([[FUManager shareManager] isRuningAitype:FUNamaAITypeKeypoint] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition] && !([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints] || [[FUManager shareManager] isRuningAitype:FUNamaAITypePortraitSegmentation])){
+    if(([[FUManager shareManager] isRuningAitype:FUNamaAITypeKeypoint] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition] && !([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints] || [[FUManager shareManager] isRuningAitype:FUNamaAITypePortraitSegmentation])) || [[FUManager shareManager] isRuningAitype:FUNamaAITypeHeadSplit] || [[FUManager shareManager] isRuningAitype:FUNamaAITypeHairSplit]){
         BOOL isTrack = [FURenderer isTracking] > 0?YES:NO;
         dispatch_async(dispatch_get_main_queue(), ^{
             if (self.tipLabel.text || !self.tipLabel.hidden) {
@@ -471,6 +499,7 @@ static  NSTimeInterval oldTime = 0;
         
         if([[FUManager shareManager] isRuningAitype:FUNamaAITypeExpression]){
                 int expression_type = 0;
+               
                 [FURenderer getFaceInfo:0 name:@"expression_type" pret:&expression_type number:1];
                 NSArray *array = [FUIndexHandle getAarrayAIexpression:expression_type];
                 dispatch_async(dispatch_get_main_queue(), ^{

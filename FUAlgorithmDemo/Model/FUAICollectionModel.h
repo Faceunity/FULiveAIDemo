@@ -63,6 +63,8 @@ typedef NS_ENUM(NSUInteger, FUNamaAIType) {
 @property (assign, nonatomic) int footSelInde;
 @property (nonatomic, copy) NSArray <NSString*>* subFootes;
 
+@property (strong, nonatomic) NSArray<NSNumber *>* moduleCodes;
+
 @end
 
 

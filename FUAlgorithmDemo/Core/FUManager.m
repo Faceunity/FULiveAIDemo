@@ -117,13 +117,9 @@ static int cunt;
 -(void)setNeedRenderHandle{
     _currentToast = nil;
     cunt = 0;
-    for (int i = 1; i < sizeof(items)/sizeof(int); i ++) {
+    for (int i = 0; i < sizeof(items)/sizeof(int); i ++) {
         items[i] = 0;
     }
-    
-    /* 默认加载人脸道具 */
-    items[0]  = [self loadItemwWithItemName:@"aitype"];
-    [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(FUAITYPE_FACEPROCESSOR)];
     
     /* 动态加载的道具 */
     int index = 1;
@@ -143,6 +139,14 @@ static int cunt;
     
     if ([_runingItems containsObject:@(FUNamaAITypeExpression)] || [_runingItems containsObject:@(FUNamaAITypeKeypoint)] || [_runingItems containsObject:@(FUNamaAITypeTongue)]) {
         _currentToast = @"未检测到人脸";
+        
+        /*人脸道具 */
+        items[0]  = [self loadItemwWithItemName:@"aitype"];
+//        [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(FUAITYPE_FACEPROCESSOR)];
+        
+        if ([_runingItems containsObject:@(FUNamaAITypeExpression)]) {
+            [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(FUAITYPE_FACEPROCESSOR_EXPRESSION_RECOGNIZER)];
+        }
     }
 }
 

@@ -96,7 +96,7 @@
           }
            
         
-      if([[FUManager shareManager] isRuningAitype:FUNamaAITypeKeypoint] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition] && !([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints] || [[FUManager shareManager] isRuningAitype:FUNamaAITypePortraitSegmentation])){
+    if(([[FUManager shareManager] isRuningAitype:FUNamaAITypeKeypoint] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition] && !([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints] || [[FUManager shareManager] isRuningAitype:FUNamaAITypePortraitSegmentation])) || [[FUManager shareManager] isRuningAitype:FUNamaAITypeHeadSplit] || [[FUManager shareManager] isRuningAitype:FUNamaAITypeHairSplit]){
             BOOL isTrack = [FURenderer isTracking] > 0?YES:NO;
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.tipLabel.text || !self.tipLabel.hidden) {
