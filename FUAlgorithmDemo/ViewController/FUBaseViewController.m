@@ -61,6 +61,7 @@ FUPopupMenuDelegate
     [self setupGestureView];
     [self setupExpressionView];
     [self setupTongueView];
+    [self setupEmotionView];
     
     [UIApplication sharedApplication].statusBarHidden = YES;
     
@@ -251,6 +252,20 @@ FUPopupMenuDelegate
     [self.view addSubview:_mTongueView];
 }
 
+-(void)setupEmotionView{
+    CGRect frame = CGRectZero;
+    if (iPhoneXStyle) {
+        frame = CGRectMake(16, 88 + 34, 95, 176);
+    }else{
+        frame = CGRectMake(16, 88, 95, 176);
+    }
+    NSArray *images = @[@"平静",@"惊讶",@"开心",@"厌恶",@"愤怒",@"恐惧",@"悲伤",@"困惑"];
+    _mEmotionView = [[FUTongueView alloc] initWithFrame:frame titles:images];
+    _mEmotionView.hidden = YES;
+    [_mEmotionView setViewType:FUViewTypeEmotion];
+    [self.view addSubview:_mEmotionView];
+}
+
 
 #pragma  mark -  FUHeadButtonViewDelegate
 
@@ -268,15 +283,29 @@ FUPopupMenuDelegate
 
 -(void)headButtonViewBuglyAction:(UIButton *)btn{
     self.buglyLabel.hidden = !self.buglyLabel.hidden;
-    if (_mTongueView.hidden == NO) {
+    if (_mTongueView.hidden == NO || _mEmotionView.hidden == NO) {
         if (!self.buglyLabel.hidden) {
             _mTongueView.transform = CGAffineTransformIdentity;
             [UIView animateWithDuration:0.35 animations:^{
                 self->_mTongueView.transform = CGAffineTransformMakeTranslation(0, self.buglyLabel.bounds.size.height + 10);
             }];
+            
+            _mEmotionView.transform = CGAffineTransformIdentity;
+            float height = 0;
+            height = self.buglyLabel.hidden?0:self.buglyLabel.bounds.size.height +  10;
+            height = self.mTongueView.hidden?height:height+self.mTongueView.frame.size.height + 10;
+            [UIView animateWithDuration:0.35 animations:^{
+                self->_mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
+            }];
         }else{
             [UIView animateWithDuration:0.25 animations:^{
                 self->_mTongueView.transform = CGAffineTransformIdentity;
+
+            }];
+            float height = 0;
+            height = self.mTongueView.hidden?height:height+self.mTongueView.frame.size.height + 10;
+            [UIView animateWithDuration:0. animations:^{
+                self->_mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
             }];
         }
     }
@@ -313,6 +342,7 @@ FUPopupMenuDelegate
     _mPerView.hidden = YES;
     _mTongueView.hidden = YES;
     _mExpresionView.hidden = YES;
+    _mEmotionView.hidden = YES;
     for (FUAISectionModel *modle in [FUManager shareManager].config) {
         if (modle.moudleType == FUMoudleTypeGesture && modle.aiMenu[0].state == FUAICellstateSel ) {//手势选中
             _mGestureView.hidden = NO;
@@ -342,6 +372,25 @@ FUPopupMenuDelegate
             }
             
         }
+        
+        if (modle.moudleType == FUMoudleTypeFace && modle.aiMenu[3].state == FUAICellstateSel ) {//情绪选中
+            _mEmotionView.hidden = NO;
+            float height = 0;
+            height = self.buglyLabel.hidden?0:self.buglyLabel.bounds.size.height +  10;
+            height = self.mTongueView.hidden?height:height+self.mTongueView.frame.size.height + 10;
+            if (!self.buglyLabel.hidden||!self.mTongueView.hidden) {
+                _mEmotionView.transform = CGAffineTransformIdentity;
+                [UIView animateWithDuration:0.35 animations:^{
+                    self->_mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
+                }];
+            }else{
+                [UIView animateWithDuration:0.25 animations:^{
+                    self->_mEmotionView.transform = CGAffineTransformIdentity;
+                }];
+            }
+            
+        }
+        
         
         if (modle.moudleType == FUMoudleTypeFace && modle.aiMenu[2].state == FUAICellstateSel ) {//舌头选中
             _mExpresionView.hidden = NO;
@@ -504,9 +553,18 @@ static  NSTimeInterval oldTime = 0;
                 NSArray *array = [FUIndexHandle getAarrayAIexpression:expression_type];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.mExpresionView setExpresionViewSelArray:array];
-                    
                 });
         }
+    
+    if([[FUManager shareManager] isRuningAitype:FUNamaAITypeEmotionRecognition]){
+            int emotion = 0;
+            [FURenderer getFaceInfo:0 name:@"emotion" pret:&emotion number:1];
+        
+            NSArray *array = [FUIndexHandle getAarrayAIemotion:emotion];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mEmotionView setViewSelArray:array];
+            });
+    }
     
     NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970];
     /* renderTime */

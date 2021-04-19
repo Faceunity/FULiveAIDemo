@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 +(int)getAIexpressionIndexwith:(FUAIEXPRESSIONTYPE)type;
 
 +(NSArray *)getAarrayAIexpression:(int)type;
+
++(NSArray *)getAarrayAIemotion:(int)type;
 @end
 
 NS_ASSUME_NONNULL_END

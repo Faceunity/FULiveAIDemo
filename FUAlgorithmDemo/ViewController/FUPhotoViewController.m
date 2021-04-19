@@ -206,6 +206,17 @@
                         
                     });
             }
+        
+        if([[FUManager shareManager] isRuningAitype:FUNamaAITypeEmotionRecognition]){
+                int emotion = 0;
+                [FURenderer getFaceInfo:0 name:@"emotion" pret:&emotion number:1];
+            
+                NSArray *array = [FUIndexHandle getAarrayAIemotion:emotion];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.mEmotionView setViewSelArray:array];
+                });
+        }
+
 
         [weakSelf.renderView displayImageData:imageData Size:CGSizeMake(width, height) Landmarks:NULL count:0 zoomScale:1];
         

@@ -279,27 +279,28 @@ static NSString *footViewID = @"footView";
     switch (aitype) {
         case FUNamaAITypeKeypoint:
         case FUNamaAITypeTongue:
-            case FUNamaAITypeExpression:
-            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeHairSplit),@(FUNamaAITypeHeadSplit),@(FUNamaAITypePortraitSegmentation),@(FUNamaAITypeActionRecognition),@(FUNamaAITypegestureRecognition)];
+        case FUNamaAITypeExpression:
+        case FUNamaAITypeEmotionRecognition:
+            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeHairSplit),@(FUNamaAITypeHeadSplit),@(FUNamaAITypePortraitSegmentation),@(FUNamaAITypeActionRecognition),@(FUNamaAITypegestureRecognition),@(FUNamaAITypeEmotionRecognition)];
             break;
             
             case FUNamaAITypeBodyKeyPoints:
             case FUNamaAITypeActionRecognition:
-            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeActionRecognition)];
+            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeEmotionRecognition)];
             break;
             
         case FUNamaAITypeBodySkeleton:
             return @[@(aitype)];
             break;
         default:
-            return  @[@(aitype),@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression)];
+            return  @[@(aitype),@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeEmotionRecognition)];
             break;
     }
 }
 
 /* CellModel选中是，其他选中状态修改 */
 -(void)changeOtherStateWithSelCellModel:(FUAIConfigCellModel *)cellModle{
-    if (cellModle.aiType == FUNamaAITypeKeypoint || cellModle.aiType == FUNamaAITypeTongue ||cellModle.aiType == FUNamaAITypeExpression ) {//特征点默认随之选中
+    if (cellModle.aiType == FUNamaAITypeKeypoint || cellModle.aiType == FUNamaAITypeTongue ||cellModle.aiType == FUNamaAITypeExpression || cellModle.aiType == FUNamaAITypeEmotionRecognition) {//特征点默认随之选中
         FUAISectionModel *sectionModel = _config[0];
         sectionModel.aiMenu[0].state = FUAICellstateSel;
     }

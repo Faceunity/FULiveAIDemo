@@ -19,8 +19,9 @@ static NSString *tongueID = @"tongueID";
 @property(nonatomic,strong)UITableView *mTableView;
 @property(nonatomic,strong)NSArray<NSString *>* mTitles;
 
-@property(nonatomic,strong) NSIndexPath* selIndexPath;
+@property(nonatomic,strong) NSArray *selArray;
 
+@property(nonatomic,assign) FUViewType current;
 @end
 
 @implementation FUTongueView
@@ -29,6 +30,7 @@ static NSString *tongueID = @"tongueID";
     if (self = [super initWithFrame:frame]) {
         _mTitles = mTitles;
         [self setupTableView];
+        _current = FUViewTypeTongue;
     }
     return self;
 }
@@ -40,7 +42,7 @@ static NSString *tongueID = @"tongueID";
     _mTableView.layer.masksToBounds = YES;
     _mTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _mTableView.scrollEnabled = NO;
-    [_mTableView registerClass:[FUTongueViewCell class] forCellReuseIdentifier:tongueID];
+//    [_mTableView registerClass:[FUTongueViewCell class] forCellReuseIdentifier:tongueID];
     
     _mTableView.delegate = self;
     _mTableView.dataSource = self;
@@ -62,15 +64,28 @@ static NSString *tongueID = @"tongueID";
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     FUTongueViewCell *cell = (FUTongueViewCell *)[tableView dequeueReusableCellWithIdentifier:tongueID];
+    if (cell == nil) {
+        cell = [[FUTongueViewCell alloc] initWithStyle: UITableViewCellStyleValue1
+                                      reuseIdentifier: tongueID];
+    }
     cell.textLabel.text = _mTitles[indexPath.row];
     cell.textLabel.textColor = [UIColor colorWithWhite:1.0 alpha:1.0];
     cell.textLabel.font = [UIFont systemFontOfSize:11];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    if (self.selIndexPath.row == indexPath.row && self.selIndexPath.section == indexPath.section && self.selIndexPath) {
+    cell.detailTextLabel.text = @"";
+    if ([_selArray containsObject:[NSNumber numberWithInteger:indexPath.row]]) {
         cell.backgroundColor = [UIColor colorWithRed:108/255.0 green:82/255.0 blue:255/255.0 alpha:1.0];
     }else{
         cell.backgroundColor = [UIColor clearColor];
     }
+    
+    if (_current == FUViewTypeEmotion && (indexPath.row == _mTitles.count - 1)) {
+        cell.backgroundColor = [UIColor colorWithRed:17/255.0 green:18/255.0 blue:38/255.0 alpha:0.5];
+        cell.detailTextLabel.textColor = [UIColor whiteColor];
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:11];
+        cell.detailTextLabel.text = [_selArray containsObject:[NSNumber numberWithInteger:indexPath.row]] ? @"是":@"否";
+    }
+    
     
     return cell;
 }
@@ -83,13 +98,22 @@ static NSString *tongueID = @"tongueID";
 
 -(void)setTongueViewSel:(int)selIndex{
     if (selIndex >= 0 || selIndex < _mTitles.count) {
-        _selIndexPath = [NSIndexPath indexPathForRow:selIndex inSection:0];
-    }else{
-        _selIndexPath = nil;
+        _selArray = [NSArray arrayWithObject:[NSNumber numberWithInt:selIndex]];
+        [NSIndexPath indexPathForRow:selIndex inSection:0];
     }
-    
     [_mTableView reloadData];
 }
 
+-(void)setViewSelArray:(NSArray <NSNumber *>*)array{
+    _selArray = array;
+    [self.mTableView reloadData];
+
+}
+
+-(void)setViewType:(FUViewType)type{
+    _current = type;
+    
+    [self.mTableView reloadData];
+}
 
 @end

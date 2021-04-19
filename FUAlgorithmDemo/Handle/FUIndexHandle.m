@@ -63,6 +63,20 @@
     
 }
 
++(NSArray *)getAarrayAIemotion:(int)type;
+{
+    NSMutableArray *mutarray = [NSMutableArray array];
+    
+    for (int i = 1; i < 9; i++) {
+        int a = 1 << i;
+        if(type & a){
+            [mutarray addObject:[NSNumber numberWithInt:[self convertToEmotionIndex:a]]];
+        }
+    }
+       return mutarray;
+    
+}
+
 +(int)convertToExpressionIndex:(int)type{
        switch (type) {
            case FUAIEXPRESSION_BROW_UP: {//抬眉毛
@@ -115,6 +129,42 @@
            }
            case FUAIEXPRESSION_MOUTH_ROLL: {//撇嘴
                return 11;
+           }
+           default:
+               return -1;
+       }
+   }
+
+
+
++(int)convertToEmotionIndex:(int)type{
+       switch (type) {
+//           case FUAIEMOTION_UNKNOWN: {
+//               return 0;
+//           }
+           case FUAIEMOTION_HAPPY: {
+               return 2;
+           }
+           case FUAIEMOTION_SAD: {
+               return 6;
+           }
+           case FUAIEMOTION_ANGRY: {
+               return 4;
+           }
+           case FUAIEMOTION_SURPRISE: {
+               return 1;
+           }
+           case FUAIEMOTION_FEAR: {
+               return 5;
+           }
+           case FUAIEMOTION_DISGUST: {
+               return 3;
+           }
+           case FUAIEMOTION_NEUTRAL: {
+               return 0;
+           }
+           case FUAIEMOTION_CONFUSE: {
+               return 7;
            }
            default:
                return -1;
