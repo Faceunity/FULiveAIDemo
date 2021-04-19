@@ -28,6 +28,14 @@
             "bundleNames":[],
             "mToasts":["未检测到人脸"],
             "moduleCodes":[0,2048]
+        },
+        {
+            "state": 0,
+            "aiMenuTitel": "情绪识别",
+            "aiType":11,
+            "bundleNames":[],
+            "mToasts":["未检测到人脸"],
+            "moduleCodes":[0,2048]
         }]
     },{
         "sectionTitel": "人体",

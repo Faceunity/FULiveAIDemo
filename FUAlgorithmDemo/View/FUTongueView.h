@@ -10,6 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef enum : NSUInteger {
+    FUViewTypeTongue,
+    FUViewTypeEmotion,
+} FUViewType;
+
 @interface FUTongueViewCell : UITableViewCell
 //@property (strong, nonatomic) UIImageView *mImageV;
 @end
@@ -20,6 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(instancetype)initWithFrame:(CGRect)frame titles:(NSArray<NSArray<NSString *>*>*)iamges;
 
 -(void)setTongueViewSel:(int)selIndex;
+
+-(void)setViewSelArray:(NSArray <NSNumber *>*)array;
+
+-(void)setViewType:(FUViewType)type;
 
 @end
 

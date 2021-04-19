@@ -40,6 +40,7 @@ typedef NS_ENUM(NSUInteger, FUNamaAIType) {
     FUNamaAITypeHeadSplit = 8,
     FUNamaAITypeHairSplit = 9,
     FUNamaAITypeActionRecognition = 10,
+    FUNamaAITypeEmotionRecognition = 11,
 };
 
 

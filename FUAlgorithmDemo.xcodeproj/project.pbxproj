@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4156DD802626C79900F059AF /* libCNamaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4156DD7E2626C79400F059AF /* libCNamaSDK.framework */; };
+		4156DD812626C79900F059AF /* libCNamaSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4156DD7E2626C79400F059AF /* libCNamaSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E304BCE724D8FD970020A724 /* FUExpresionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E304BCE624D8FD970020A724 /* FUExpresionView.m */; };
 		E304BCE924D903990020A724 /* landmarks.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E304BCE824D903990020A724 /* landmarks.bundle */; };
 		E304BCEC24D932B60020A724 /* FUTongueView.m in Sources */ = {isa = PBXBuildFile; fileRef = E304BCEB24D932B60020A724 /* FUTongueView.m */; };
@@ -16,8 +18,6 @@
 		E313888924F8A14A00A3AFDF /* ai_hand_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */; };
 		E332E6A024AF5CCB00232C4A /* bodyLandmarks_selife.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */; };
 		E332E6A124AF5CCB00232C4A /* bodyLandmarks_dance.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */; };
-		E332E6BC24AFC5F500232C4A /* libCNamaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E332E6B624AFC35500232C4A /* libCNamaSDK.framework */; };
-		E332E6BD24AFC5F500232C4A /* libCNamaSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E332E6B624AFC35500232C4A /* libCNamaSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E332E71924AFCB3A00232C4A /* ai_face_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */; };
 		E332E71A24AFCB3A00232C4A /* ai_face_processor_lite.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */; };
 		E332E71B24AFCB3A00232C4A /* ai_human_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */; };
@@ -92,7 +92,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E332E6BD24AFC5F500232C4A /* libCNamaSDK.framework in Embed Frameworks */,
+				4156DD812626C79900F059AF /* libCNamaSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -101,6 +101,8 @@
 
 /* Begin PBXFileReference section */
 		2B408A44EDB64A685ADAB6D6 /* Pods-FUAlgorithmDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FUAlgorithmDemo.debug.xcconfig"; path = "Target Support Files/Pods-FUAlgorithmDemo/Pods-FUAlgorithmDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		4156DD7E2626C79400F059AF /* libCNamaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = libCNamaSDK.framework; sourceTree = "<group>"; };
+		41A3CBE4262D712300297444 /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
 		520CB2386BFCC785A20FC705 /* Pods-FUAlgorithmDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FUAlgorithmDemo.release.xcconfig"; path = "Target Support Files/Pods-FUAlgorithmDemo/Pods-FUAlgorithmDemo.release.xcconfig"; sourceTree = "<group>"; };
 		64BE6B7E624B006AF6D1D903 /* libPods-FUAlgorithmDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FUAlgorithmDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E304BCE524D8FD970020A724 /* FUExpresionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUExpresionView.h; sourceTree = "<group>"; };
@@ -112,10 +114,8 @@
 		E3127C68249352EE0096306C /* empty_aitpye_2d.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = empty_aitpye_2d.bundle; sourceTree = "<group>"; };
 		E3127C6E24936E760096306C /* default_bg.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = default_bg.bundle; sourceTree = "<group>"; };
 		E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_hand_processor.bundle; sourceTree = "<group>"; };
-		E332E5F624AF35CE00232C4A /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
 		E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = bodyLandmarks_selife.bundle; sourceTree = "<group>"; };
 		E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = bodyLandmarks_dance.bundle; sourceTree = "<group>"; };
-		E332E6B624AFC35500232C4A /* libCNamaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = libCNamaSDK.framework; sourceTree = "<group>"; };
 		E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_face_processor.bundle; sourceTree = "<group>"; };
 		E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_face_processor_lite.bundle; sourceTree = "<group>"; };
 		E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_human_processor.bundle; sourceTree = "<group>"; };
@@ -216,7 +216,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E332E6BC24AFC5F500232C4A /* libCNamaSDK.framework in Frameworks */,
+				4156DD802626C79900F059AF /* libCNamaSDK.framework in Frameworks */,
 				E7F62A18C4B264C67FEC51E5 /* libPods-FUAlgorithmDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,9 +276,9 @@
 		E332E5F524AF35CE00232C4A /* Lib */ = {
 			isa = PBXGroup;
 			children = (
-				E332E5F624AF35CE00232C4A /* authpack.h */,
+				41A3CBE4262D712300297444 /* authpack.h */,
+				4156DD7E2626C79400F059AF /* libCNamaSDK.framework */,
 				E332E70A24AFCB3A00232C4A /* Resources */,
-				E332E6B624AFC35500232C4A /* libCNamaSDK.framework */,
 			);
 			path = Lib;
 			sourceTree = "<group>";

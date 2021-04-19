@@ -70,7 +70,7 @@ static FUManager *shareManager = NULL;
         float flexible = 0.5;
         fuSetFaceTrackParam((char *)[@"mouth_expression_more_flexible" UTF8String], &flexible);
 
-//        FUAI_VLogSetLevel(3);
+//        fuSetLogLevel(2);
         
         _mRotatedImage = [[FURotatedImage alloc] init];
         _runingItems = [NSMutableArray array];
@@ -137,16 +137,27 @@ static int cunt;
         _currentToast = @"未检测到人体";
     }
     
-    if ([_runingItems containsObject:@(FUNamaAITypeExpression)] || [_runingItems containsObject:@(FUNamaAITypeKeypoint)] || [_runingItems containsObject:@(FUNamaAITypeTongue)]) {
+    if ([_runingItems containsObject:@(FUNamaAITypeExpression)] || [_runingItems containsObject:@(FUNamaAITypeKeypoint)] || [_runingItems containsObject:@(FUNamaAITypeTongue)] || [_runingItems containsObject:@(FUNamaAITypeEmotionRecognition)]) {
         _currentToast = @"未检测到人脸";
         
         /*人脸道具 */
         items[0]  = [self loadItemwWithItemName:@"aitype"];
 //        [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(FUAITYPE_FACEPROCESSOR)];
         
-        if ([_runingItems containsObject:@(FUNamaAITypeExpression)]) {
-            [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(FUAITYPE_FACEPROCESSOR_EXPRESSION_RECOGNIZER)];
+
+        
+        if ([_runingItems containsObject:@(FUNamaAITypeEmotionRecognition)]&&[_runingItems containsObject:@(FUNamaAITypeExpression)]) {
+            int res = (FUAITYPE_FACEPROCESSOR_EMOTION_RECOGNIZER)|(FUAITYPE_FACEPROCESSOR_EXPRESSION_RECOGNIZER);
+            [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(res)];
+        }else{
+            if ([_runingItems containsObject:@(FUNamaAITypeExpression)]) {
+                [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(FUAITYPE_FACEPROCESSOR_EXPRESSION_RECOGNIZER)];
+            }
+            if ([_runingItems containsObject:@(FUNamaAITypeEmotionRecognition)]) {
+                [FURenderer itemSetParam:items[0] withName:@"aitype" value:@(FUAITYPE_FACEPROCESSOR_EMOTION_RECOGNIZER)];
+            }
         }
+        
     }
 }
 

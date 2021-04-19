@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) FUTongueView *mTongueView;
 
+@property (strong, nonatomic) FUTongueView *mEmotionView;
+
 @property (strong, nonatomic) UILabel *buglyLabel;
 /* 子类重载，实现差异逻辑 */
 -(void)takePhotoToSave:(UIImage *)image;//拍照保存
