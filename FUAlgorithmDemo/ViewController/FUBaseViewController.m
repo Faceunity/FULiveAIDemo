@@ -7,55 +7,55 @@
 //
 
 #import "FUBaseViewController.h"
-#import <MobileCoreServices/MobileCoreServices.h>
-#import "FURenderer.h"
-#import <CoreMotion/CoreMotion.h>
-#import <Masonry.h>
-#import "FUPopupMenu.h"
-#import "FUManager.h"
-#import "UIViewController+CWLateralSlide.h"
-#import "FUConfigController.h"
-#import "FUImageHelper.h"
-#import <objc/runtime.h>
-#import "FUGestureHandle.h"
-#import "SVProgressHUD.h"
-#import "MJExtension.h"
+#import "FUPhotoViewController.h"
+
+#import "FUGestureView.h"
+#import "FUTongueView.h"
+#import "FUExpresionView.h"
+
+#import "FUAICollectionModel.h"
 
 #import "FUIndexHandle.h"
+#import "UIViewController+CWLateralSlide.h"
 
-@interface FUBaseViewController ()<
-UINavigationControllerDelegate,
-UIImagePickerControllerDelegate,UINavigationControllerDelegate, UIImagePickerControllerDelegate,
-FUPopupMenuDelegate
->
-{
-    dispatch_semaphore_t signal;
-    float imageW ;
-    float imageH;
-}
-@property (strong, nonatomic) UIImageView *adjustImage;
+#import <MJExtension.h>
+#import <Masonry.h>
+
+@interface FUBaseViewController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+
+@property (nonatomic, strong) FUHeadButtonView *headButtonView;
+
+@property (nonatomic, strong) FUGLDisplayView *renderView;
+
+@property (nonatomic, strong) FUGestureView *mGestureView;
+
+@property (nonatomic, strong) FUGestureView *mActionView;
+
+@property (nonatomic, strong) FUExpresionView *mExpresionView;
+
+@property (nonatomic, strong) FUTongueView *mTongueView;
+
+@property (nonatomic, strong) FUTongueView *mEmotionView;
+
+@property (nonatomic, strong) UILabel *tipLabel;
+
+@property (nonatomic, strong) UILabel *buglyLabel;
+
+@property (nonatomic, strong) NSMutableArray *dataSource;
+
+/// 未检测到人脸或人体时的提示
+@property (nonatomic, copy) NSString *noTrackingString;
 
 @end
 
 @implementation FUBaseViewController
 
+#pragma mark - Life cycle
 
-- (BOOL)prefersStatusBarHidden
-{
-    return YES;
-}
-
--(void)viewDidLoad{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    UIImageView *headView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44)];
-    headView.image = [UIImage imageNamed:@"demo_bg_top_mask"];
-    [self.view addSubview:headView];
     
-    
-    NSString *path=[[NSBundle mainBundle] pathForResource:@"AIConfig" ofType:@"json"];
-    NSData *pathData=[[NSData alloc] initWithContentsOfFile:path];
-    NSDictionary *dic=[NSJSONSerialization JSONObjectWithData:pathData options:NSJSONReadingMutableContainers error:nil];
-    [FUManager shareManager].config = [FUAISectionModel mj_objectArrayWithKeyValuesArray:dic[@"data"]];
+    self.view.backgroundColor = [UIColor blackColor];
 
     [self setupSubView];
     [self setupGestureView];
@@ -63,34 +63,19 @@ FUPopupMenuDelegate
     [self setupTongueView];
     [self setupEmotionView];
     
-    [UIApplication sharedApplication].statusBarHidden = YES;
-    
-    /* 道具切信号 */
-    signal = dispatch_semaphore_create(1);
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateSubView) name:FUConfigControllerUpdateNotification object:nil];
-    
-    fuHumanProcessorSetMaxHumans(1);
-    
-    /* 设置默认加载的道具 */
-    [[FUManager shareManager] setNeedRenderHandle];
-    
-    
+    // 设置默认运行人脸关键点
+    [FUManager shareManager].runningFaceKeypoint = YES;
 }
 
 
 
-#pragma  mark -  UI
+#pragma mark - UI
+
 -(void)setupSubView{
-    /* opengl */
-    _renderView = [[FUOpenGLView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:_renderView];
+    [self.view addSubview:self.renderView];
     
-    /* 顶部按钮 */
-    _headButtonView = [[FUHeadButtonView alloc] init];
-    _headButtonView.delegate = self;
-    [self.view addSubview:_headButtonView];
-    [_headButtonView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.headButtonView];
+    [self.headButtonView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (@available(iOS 11.0, *)) {
             make.top.equalTo(self.view.mas_safeAreaLayoutGuideTop).offset(20);
         } else {
@@ -100,92 +85,24 @@ FUPopupMenuDelegate
         make.height.mas_equalTo(44);
     }];
     
-    /* bugly信息 */
-    _buglyLabel = [[UILabel alloc] init];
-    _buglyLabel.layer.masksToBounds = YES;
-    _buglyLabel.layer.cornerRadius = 5;
-    _buglyLabel.numberOfLines = 0;
-    _buglyLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
-    _buglyLabel.textColor = [UIColor whiteColor];
-    _buglyLabel.alpha = 0.74;
-    _buglyLabel.font = [UIFont systemFontOfSize:11];
-
-    NSMutableParagraphStyle *paragra = [[NSMutableParagraphStyle alloc] init];
-            paragra.lineSpacing = 3;//1,设置行间距
-            paragra.paragraphSpacing = 4; //2,设置段间距
-            paragra.alignment = UITextAlignmentLeft;//3,设置对齐方式
-            paragra.firstLineHeadIndent = 5;//4,首行缩进距离
-            paragra.headIndent = 5;//5，除首行之外其他行缩进
-            paragra.tailIndent = 300;//6,每行容纳字符的宽度
-            paragra.minimumLineHeight = 2;//7,每行最小高度
-            paragra.maximumLineHeight = 10;//8,每行最大高度
-            paragra.lineBreakMode = NSLineBreakByCharWrapping;//9,换行方式
-
-    NSString *str = @"\nresolution:\n720*1280\nfps: 30 \nframe time:10ms\nyaw: 10.1°\npitch: 10°\nroll: 10.1°\n";
-    NSMutableAttributedString *testStr = [[NSMutableAttributedString alloc] initWithString:str];
-    [testStr addAttribute:NSParagraphStyleAttributeName value:paragra range:NSMakeRange(0, testStr.length)];
-    
-    _buglyLabel.attributedText = testStr;
-    
-    [self.view addSubview:_buglyLabel];
-    [_buglyLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.buglyLabel];
+    [self.buglyLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_headButtonView.mas_bottom).offset(15);
         make.left.equalTo(self.view).offset(16);
         make.width.mas_equalTo(95);
         make.height.mas_equalTo(150);
     }];
     
-    /* 点击校准知识 */
-    _adjustImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"camera_校准"]];
-    _adjustImage.center = self.view.center;
-    _adjustImage.hidden = YES;
-    [self.view addSubview:_adjustImage];
-    
-    /* 未检测到人脸提示 */
-    _noTrackLabel = [[UILabel alloc] init];
-    _noTrackLabel = [[UILabel alloc] init];
-    _noTrackLabel.textColor = [UIColor whiteColor];
-    _noTrackLabel.font = [UIFont systemFontOfSize:17];
-    _noTrackLabel.textAlignment = NSTextAlignmentCenter;
-    _noTrackLabel.text = NSLocalizedString(@"No_Face_Tracking", @"未检测到人脸");
-    _noTrackLabel.hidden = YES;
-    [self.view addSubview:_noTrackLabel];
-    [_noTrackLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.view addSubview:self.tipLabel];
+    [self.tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self.view);
-        make.width.mas_equalTo(140);
-        make.height.mas_equalTo(22);
     }];
-    
-    /* 额外操作提示 */
-    _tipLabel = [[UILabel alloc] init];
-    _tipLabel.textColor = [UIColor whiteColor];
-//    _tipLabel.backgroundColor = [UIColor colorWithRed:17/255.0 green:18/255.0 blue:38/255.0 alpha:0.7];
-    _tipLabel.font = [UIFont systemFontOfSize:13];
-    _tipLabel.textAlignment = NSTextAlignmentCenter;
-    _tipLabel.text = @"已保存至手机";
-    _tipLabel.layer.cornerRadius = 4;
-    _tipLabel.layer.masksToBounds = YES;
-    _tipLabel.hidden = YES;
-    [self.view addSubview:_tipLabel];
-    [_tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.noTrackLabel.mas_bottom);
-        make.centerX.equalTo(self.view);
-        make.width.mas_equalTo(200);
-        make.height.mas_equalTo(32);
-    }];
-    
-    _mPerView = [[FUOpenGLView alloc] initWithFrame:CGRectMake(KScreenWidth - 90 - 5, KScreenHeight - 146 - 5, 90, 146)];
-    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanAction:)];
-    [_mPerView addGestureRecognizer:panGestureRecognizer];
-    _mPerView.backgroundColor = [UIColor redColor];
-    _mPerView.hidden = YES;
-    [self.view addSubview:_mPerView];
 
 }
 
 -(void)setupGestureView{
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width, 100);
-    if(iPhoneXStyle){
+    if (FUiPhoneXStyle()) {
         frame.origin.y = self.view.frame.size.height - 134;
     }else{
         frame.origin.y = self.view.frame.size.height - 100;
@@ -206,21 +123,21 @@ FUPopupMenuDelegate
 
 -(void)setupExpressionView{
     CGRect frame = CGRectZero;
-    if (iPhoneXStyle) {
-        frame = CGRectMake(KScreenWidth - 56, 88 + 34, 40, 460);
-    }else{
-        frame = CGRectMake(KScreenWidth - 56, 88, 40, 460);
+    
+    NSLog(@"%@, %@", @(FUScreenWidth), @(FUScreenHeight));
+    
+    if (FUiPhoneXStyle()) {
+        frame = CGRectMake(FUScreenWidth - 56, 88 + 34, 40, 460);
+    } else {
+        frame = CGRectMake(FUScreenWidth - 56, 88, 40, 460);
     }
-    
-//    NSArray *images = @[@"demo_expression_icon_raise_eyebrows",@"demo_expression_icon_Left_corner_of_mouth",@"demo_expression_icon_right_corner_of_mouth",@"demo_expression_icon_mouth_o",@"demo_expression_icon_mouth_a",@"demo_expression_icon_pouting",@"demo_expression_icon_uting_mouth",@"demo_expression_icon_bulging",@"demo_expression_icon_close_left_eye",@"demo_expression_icon_close_right_eye",@"demo_expression_icon_turn_left",@"demo_expression_icon_turn_right",@"demo_expression_icon_smile",@"demo_expression_icon_nod",@"demo_expression_icon_frown",@"demo_expression_icon_eyes_wide_open",@"demo_expression_icon_twitch"];
-    
-        NSArray *images = @[@"demo_expression_icon_raise_eyebrows",@"demo_expression_icon_frown",@"demo_expression_icon_close_left_eye",@"demo_expression_icon_close_right_eye",@"demo_expression_icon_eyes_wide_open",@"demo_expression_icon_Left_corner_of_mouth",@"demo_expression_icon_right_corner_of_mouth",@"demo_expression_icon_smile",@"demo_expression_icon_mouth_o",@"demo_expression_icon_mouth_a",@"demo_expression_icon_pouting",@"demo_expression_icon_uting_mouth",@"demo_expression_icon_bulging",@"demo_expression_icon_twitch",@"demo_expression_icon_turn_left",@"demo_expression_icon_turn_right",@"demo_expression_icon_nod"];
+    NSArray *images = @[@"demo_expression_icon_raise_eyebrows",@"demo_expression_icon_frown",@"demo_expression_icon_close_left_eye",@"demo_expression_icon_close_right_eye",@"demo_expression_icon_eyes_wide_open",@"demo_expression_icon_Left_corner_of_mouth",@"demo_expression_icon_right_corner_of_mouth",@"demo_expression_icon_smile",@"demo_expression_icon_mouth_o",@"demo_expression_icon_mouth_a",@"demo_expression_icon_pouting",@"demo_expression_icon_uting_mouth",@"demo_expression_icon_bulging",@"demo_expression_icon_twitch",@"demo_expression_icon_turn_left",@"demo_expression_icon_turn_right",@"demo_expression_icon_nod"];
     _mExpresionView = [[FUExpresionView alloc] initWithFrame:frame images:images];
     _mExpresionView.hidden = YES;
     
 
     CGRect frame1 = CGRectZero;
-    frame1 = CGRectMake(KScreenWidth - 160, 88, 95, 24);
+    frame1 = CGRectMake(FUScreenWidth - 160, 88, 95, 24);
     frame1.origin.y = _mExpresionView.center.y;
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame1];
@@ -241,10 +158,10 @@ FUPopupMenuDelegate
 
 -(void)setupTongueView{
     CGRect frame = CGRectZero;
-    if (iPhoneXStyle) {
-        frame = CGRectMake(16, 88 + 34, 95, 180);
+    if (FUiPhoneXStyle()) {
+        frame = CGRectMake(16, 88 + 34, 95, 176);
     }else{
-        frame = CGRectMake(16, 88, 95, 180);
+        frame = CGRectMake(16, 88, 95, 176);
     }
     NSArray *images = @[@"舌头上",@"舌头下",@"舌头左",@"舌头右",@"舌头左上",@"舌头左下",@"舌头右上",@"舌头右下"];
     _mTongueView = [[FUTongueView alloc] initWithFrame:frame titles:images];
@@ -254,7 +171,7 @@ FUPopupMenuDelegate
 
 -(void)setupEmotionView{
     CGRect frame = CGRectZero;
-    if (iPhoneXStyle) {
+    if (FUiPhoneXStyle()) {
         frame = CGRectMake(16, 88 + 34, 95, 176);
     }else{
         frame = CGRectMake(16, 88, 95, 176);
@@ -267,17 +184,259 @@ FUPopupMenuDelegate
 }
 
 
-#pragma  mark -  FUHeadButtonViewDelegate
+#pragma mark - Public methods
+
+- (void)refreshOutputVideo {
+    [self updateNoTrackingTips];
+    
+    if ([FUManager shareManager].isRunningTongueTracking) {
+        // 舌头检测
+        int tongue_direction = 0;
+        [FUConfigManager faceInfoWithName:@"tongue_direction" pret:&tongue_direction number:1];
+        int index = [FUIndexHandle aiTougueIndexWithType:tongue_direction];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.mTongueView setTongueViewSel:index];
+        });
+    }
+    
+    if ([FUManager shareManager].isRunningExpressionRecognition) {
+        // 表情识别
+        int expression_type = 0;
+        if ([FUConfigManager faceInfoWithName:@"expression_type" pret:&expression_type number:1]) {
+            NSArray *array = [FUIndexHandle aiExpressionArray:expression_type];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mExpresionView setExpresionViewSelArray:array];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mExpresionView setExpresionViewSelArray:[NSArray new]];
+            });
+        }
+    }
+    
+    
+    if ([FUManager shareManager].isRunningEmotionRecognition) {
+        int emotion = 0;
+        if ([FUConfigManager faceInfoWithName:@"emotion" pret:&emotion number:1]) {
+            NSArray *array = [FUIndexHandle aiEmotionArray:emotion];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mEmotionView setViewSelArray:array];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mEmotionView setViewSelArray:[NSArray new]];
+            });
+        }
+    }
+    
+    if ([FUManager shareManager].isRunningGestureRecognition) {
+        // 手势识别
+        if ([FUConfigManager isTrackingHand]) {
+            FUAIGESTURETYPE type = [FUAIKit fuHandDetectorGetResultGestureType:0];
+            int index = [FUIndexHandle aiGestureIndexWithType:type];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mGestureView setGestureViewSel:index];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mGestureView setGestureViewSel:-1];
+            });
+        }
+    }
+    
+    if ([FUManager shareManager].isRunningActionRecognition) {
+        // 动作识别
+        if ([FUConfigManager isTrackingBody]) {
+            int index = [FUAIKit fuHumanProcessorGetResultActionType:0];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mActionView setGestureViewSel:index];
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mActionView setGestureViewSel:-1];
+            });
+        }
+    }
+}
+
+#pragma mark - Private methods
+
+/// 更新设置后的效果
+- (void)updateConfigEffects:(NSArray<FUAISectionModel *> *)configs {
+    for (FUAISectionModel *model in configs) {
+        for (FUAIConfigCellModel *configModel in model.aiMenu) {
+            switch (configModel.aiType) {
+                case FUNamaAITypeKeypoint:{
+                    [FUManager shareManager].runningFaceKeypoint = configModel.state == FUAICellStateSel;
+                }
+                    break;
+                case FUNamaAITypeTongue:{
+                    [FUManager shareManager].runningTongueTracking = configModel.state == FUAICellStateSel;
+                }
+                    break;
+                case FUNamaAITypeExpressionRecognition:{
+                    [FUManager shareManager].runningExpressionRecognition = configModel.state == FUAICellStateSel;
+                }
+                    break;
+                case FUNamaAITypeEmotionRecognition:{
+                    [FUManager shareManager].runningEmotionRecognition = configModel.state == FUAICellStateSel;
+                }
+                    break;
+                case FUNamaAITypeBodyKeypoint:{
+                    if (configModel.state == FUAICellStateDisable) {
+                        [FUManager shareManager].runningWholeBodyKeypoint = NO;
+                        [FUManager shareManager].runningHalfBodyKeypoint = NO;
+                    } else {
+                        if (configModel.footSelInde == 0) {
+                            // 全身关键点
+                            [FUManager shareManager].runningWholeBodyKeypoint = configModel.state == FUAICellStateSel;
+                        } else {
+                            // 半身关键点
+                            [FUManager shareManager].runningHalfBodyKeypoint = configModel.state == FUAICellStateSel;
+                        }
+                    }
+                }
+                    break;
+                case FUNamaAITypeBodySkeleton:{
+                    if (configModel.state == FUAICellStateDisable) {
+                        [FUManager shareManager].runningWholeBodySkeleton = NO;
+                        [FUManager shareManager].runningHalfBodySkeleton = NO;
+                    } else {
+                        if (configModel.footSelInde == 0) {
+                            // 全身骨骼
+                            [FUManager shareManager].runningWholeBodySkeleton = configModel.state == FUAICellStateSel;
+                        } else {
+                            // 半身骨骼
+                            [FUManager shareManager].runningHalfBodySkeleton = configModel.state == FUAICellStateSel;
+                        }
+                    }
+                }
+                    break;
+                case FUNamaAITypeGestureRecognition:{
+                    [FUManager shareManager].runningGestureRecognition = configModel.state == FUAICellStateSel;
+                }
+                    break;
+                case FUNamaAITypePortraitSegmentation:{
+                    [FUManager shareManager].runningPortraitSegmentation = configModel.state == FUAICellStateSel;
+                }
+                    break;
+                case FUNamaAITypeHairSplit:{
+                    [FUManager shareManager].runningHairSplit = configModel.state == FUAICellStateSel;
+                }
+                    break;
+                case FUNamaAITypeHeadSplit:{
+                    [FUManager shareManager].runningHeadSplit = configModel.state == FUAICellStateSel;
+                }
+                    break;
+                case FUNamaAITypeActionRecognition:{
+                    [FUManager shareManager].runningActionRecognition = configModel.state == FUAICellStateSel;
+                }
+                    break;
+            }
+        }
+    }
+}
+
+/// 更新设置后的UI
+- (void)updateConfigUI {
+    self.mGestureView.hidden = YES;
+    self.mActionView.hidden = YES;
+    self.mTongueView.hidden = YES;
+    self.mExpresionView.hidden = YES;
+    self.mEmotionView.hidden = YES;
+    
+    if ([FUManager shareManager].isRunningTongueTracking) {
+        self.mTongueView.hidden = NO;
+        // 舌头检测视图位置根据视频信息视图变化
+        if (self.buglyLabel.hidden) {
+            [UIView animateWithDuration:0.25 animations:^{
+                self.mTongueView.transform = CGAffineTransformIdentity;
+            }];
+        } else {
+            _mTongueView.transform = CGAffineTransformIdentity;
+            [UIView animateWithDuration:0.35 animations:^{
+                self.mTongueView.transform = CGAffineTransformMakeTranslation(0, CGRectGetHeight(self.buglyLabel.bounds) +  10);
+            }];
+        }
+    }
+    
+    if ([FUManager shareManager].isRunningExpressionRecognition) {
+        // 表情识别选中
+        self.mExpresionView.hidden = NO;
+        // 提示上下滑动 1秒后消失
+        UIImageView *tip = [self.view viewWithTag:100];
+        tip.hidden = NO;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            tip.hidden = YES;
+        });
+    }
+    
+    if ([FUManager shareManager].isRunningEmotionRecognition) {
+        // 情绪识别选中
+        self.mEmotionView.hidden = NO;
+        if (self.buglyLabel.hidden && self.mTongueView.hidden) {
+            [UIView animateWithDuration:0.25 animations:^{
+                self.mEmotionView.transform = CGAffineTransformIdentity;
+            }];
+        } else {
+            CGFloat height = self.buglyLabel.hidden ? 0 : CGRectGetHeight(self.buglyLabel.bounds) +  10;
+            height = self.mTongueView.hidden ? height : (height + CGRectGetHeight(self.mTongueView.frame) + 10);
+            [UIView animateWithDuration:0.35 animations:^{
+                self.mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
+            }];
+        }
+    }
+    
+    if ([FUManager shareManager].isRunningGestureRecognition) {
+        self.mGestureView.hidden = NO;
+    }
+    if ([FUManager shareManager].isRunningActionRecognition) {
+        self.mActionView.hidden = NO;
+    }
+}
+
+/// 更新检测不到人脸/人体提示语
+- (void)updateNoTrackingTips {
+    
+    if (![FUConfigManager isTrackingFace] && [FUManager shareManager].isNeedFace) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.tipLabel.hidden = NO;
+            self.tipLabel.text = @"未检测到人脸";
+        });
+        return;
+    }
+    
+    if (![FUConfigManager isTrackingBody] && [FUManager shareManager].isNeedBody) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.tipLabel.hidden = NO;
+            if (([FUManager shareManager].isRunningWholeBodyKeypoint || [FUManager shareManager].isRunningWholeBodySkeleton) && ![FUManager shareManager].isRunningActionRecognition) {
+                // 单独使用全身效果
+                self.tipLabel.text = @"未检测到全身，全身入镜试试哦~";
+            } else {
+                self.tipLabel.text = @"未检测到人体";
+            }
+        });
+        return;
+    }
+    
+    if (![FUConfigManager isTrackingHand] && [FUManager shareManager].isNeedGesture) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.tipLabel.hidden = NO;
+            self.tipLabel.text = @"未检测到手势";
+        });
+        return;
+    }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.tipLabel.hidden = YES;
+    });
+}
+
+#pragma mark - FUHeadButtonViewDelegate
 
 -(void)headButtonViewBackAction:(UIButton *)btn{
-    dispatch_semaphore_wait(signal, DISPATCH_TIME_FOREVER);
-    [self.navigationController popViewControllerAnimated:YES];
-    dispatch_semaphore_signal(signal);
     [[FUManager shareManager] destoryItems];
-    [[FUManager shareManager] clearManagerCache];
-    [FUManager shareManager].currentToast = nil;
-    /* 清一下信息，防止快速切换有人脸信息缓存 */
-    [FURenderer onCameraChange];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 
@@ -287,25 +446,25 @@ FUPopupMenuDelegate
         if (!self.buglyLabel.hidden) {
             _mTongueView.transform = CGAffineTransformIdentity;
             [UIView animateWithDuration:0.35 animations:^{
-                self->_mTongueView.transform = CGAffineTransformMakeTranslation(0, self.buglyLabel.bounds.size.height + 10);
+                self.mTongueView.transform = CGAffineTransformMakeTranslation(0, self.buglyLabel.bounds.size.height + 10);
             }];
             
             _mEmotionView.transform = CGAffineTransformIdentity;
             float height = 0;
-            height = self.buglyLabel.hidden?0:self.buglyLabel.bounds.size.height +  10;
-            height = self.mTongueView.hidden?height:height+self.mTongueView.frame.size.height + 10;
+            height = self.buglyLabel.hidden? 0 : self.buglyLabel.bounds.size.height +  10;
+            height = self.mTongueView.hidden?height:height + self.mTongueView.frame.size.height + 10;
             [UIView animateWithDuration:0.35 animations:^{
-                self->_mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
+                self.mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
             }];
         }else{
             [UIView animateWithDuration:0.25 animations:^{
-                self->_mTongueView.transform = CGAffineTransformIdentity;
+                self.mTongueView.transform = CGAffineTransformIdentity;
 
             }];
             float height = 0;
             height = self.mTongueView.hidden?height:height+self.mTongueView.frame.size.height + 10;
             [UIView animateWithDuration:0. animations:^{
-                self->_mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
+                self.mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
             }];
         }
     }
@@ -313,405 +472,100 @@ FUPopupMenuDelegate
 
 
 -(void)headButtonViewMoreAction:(UIButton *)btn{
-    btn.userInteractionEnabled = NO ;
+    btn.userInteractionEnabled = NO;
     dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
     dispatch_after(delayTime, dispatch_get_main_queue(), ^(void){
         btn.userInteractionEnabled = YES ;
     });
-    FUConfigController *vc = [[FUConfigController alloc] init];
     
-    /* 配置数据 */
-    NSMutableArray *configs = [NSMutableArray array];
-    for (FUAISectionModel *model in [FUManager shareManager].config) {
-        [configs addObject:[model copy]];
+    FUConfigController *configController = [[FUConfigController alloc] init];
+    // 重新生成一份数据，避免设置界面更新问题
+    NSMutableArray *datas = [[NSMutableArray alloc] init];
+    for (FUAISectionModel *model in self.dataSource) {
+        [datas addObject:[model copy]];
     }
-    vc.config = configs;
-    
+    configController.configDataSource = datas;
+    configController.delegate = self;
     CWLateralSlideConfiguration *config = [CWLateralSlideConfiguration configurationWithDistance:kCWSCREENWIDTH * 0.75 maskAlpha:0.4 scaleY:1.0 direction:CWDrawerTransitionFromRight backImage:nil];
-    [self cw_showDrawerViewController:vc animationType:CWDrawerAnimationTypeDefault configuration:config];
-    
-    vc.weakVC = self;
+    [self cw_showDrawerViewController:configController animationType:CWDrawerAnimationTypeDefault configuration:config];
 }
 
+#pragma mark - FUConfigControllerProtocol
 
-#pragma  mark -  FUConfigControllerUpdateNotification
+- (void)configController:(FUConfigController *)controller didChangeConfigDataSource:(NSArray<FUAISectionModel *> *)configs {
+    NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+    for (FUAISectionModel *model in configs) {
+        [tempArray addObject:[model copy]];
+    }
+    self.dataSource = tempArray;
+    [self updateConfigEffects:self.dataSource];
+    [self updateConfigUI];
+}
 
--(void)updateSubView{
-     _mGestureView.hidden = YES;
-    _mActionView.hidden = YES;
-    _mPerView.hidden = YES;
-    _mTongueView.hidden = YES;
-    _mExpresionView.hidden = YES;
-    _mEmotionView.hidden = YES;
-    for (FUAISectionModel *modle in [FUManager shareManager].config) {
-        if (modle.moudleType == FUMoudleTypeGesture && modle.aiMenu[0].state == FUAICellstateSel ) {//手势选中
-            _mGestureView.hidden = NO;
-        }
-        
-        if (modle.moudleType == FUMoudleTypeAction && modle.aiMenu[0].state == FUAICellstateSel ) {//动作选中
-            _mActionView.hidden = NO;
-        }
-        
-        if(modle.aiMenu.count > 1){//是否有骨骼
-            if (modle.moudleType == FUMoudleTypeBody && modle.aiMenu[1].state == FUAICellstateSel ) {//动作选中
-                _mPerView.hidden = NO;
+#pragma mark - Getters
+
+- (FUGLDisplayView *)renderView {
+    if (!_renderView) {
+        _renderView = [[FUGLDisplayView alloc] initWithFrame:self.view.bounds];
+    }
+    return _renderView;
+}
+
+- (NSMutableArray *)dataSource {
+    if (!_dataSource) {
+        NSString *path=[[NSBundle mainBundle] pathForResource:@"AIConfig" ofType:@"json"];
+        NSData *pathData=[[NSData alloc] initWithContentsOfFile:path];
+        NSDictionary *dic=[NSJSONSerialization JSONObjectWithData:pathData options:NSJSONReadingMutableContainers error:nil];
+        NSArray *datas = [[FUAISectionModel mj_objectArrayWithKeyValuesArray:dic[@"data"]] copy];
+        if ([self isMemberOfClass:[FUPhotoViewController class]]) {
+            NSMutableArray *configs = [[NSMutableArray alloc] init];
+            for (FUAISectionModel *model in datas) {
+                if(model.moudleType == FUMoudleTypeBody){
+                    // 只需要人体关键点，不需要骨骼
+                    NSArray *tempArray = [NSArray arrayWithObjects:model.aiMenu[0], nil];
+                    model.aiMenu = tempArray;
+                }
+                [configs addObject:[model copy]];
             }
-        }
-        
-        if (modle.moudleType == FUMoudleTypeFace && modle.aiMenu[1].state == FUAICellstateSel ) {//舌头选中
-            _mTongueView.hidden = NO;
-            if (!self.buglyLabel.hidden) {
-                _mTongueView.transform = CGAffineTransformIdentity;
-                [UIView animateWithDuration:0.35 animations:^{
-                    self->_mTongueView.transform = CGAffineTransformMakeTranslation(0, self.buglyLabel.bounds.size.height +  10);
-                }];
-            }else{
-                [UIView animateWithDuration:0.25 animations:^{
-                    self->_mTongueView.transform = CGAffineTransformIdentity;
-                }];
-            }
-            
-        }
-        
-        if (modle.moudleType == FUMoudleTypeFace && modle.aiMenu[3].state == FUAICellstateSel ) {//情绪选中
-            _mEmotionView.hidden = NO;
-            float height = 0;
-            height = self.buglyLabel.hidden?0:self.buglyLabel.bounds.size.height +  10;
-            height = self.mTongueView.hidden?height:height+self.mTongueView.frame.size.height + 10;
-            if (!self.buglyLabel.hidden||!self.mTongueView.hidden) {
-                _mEmotionView.transform = CGAffineTransformIdentity;
-                [UIView animateWithDuration:0.35 animations:^{
-                    self->_mEmotionView.transform = CGAffineTransformMakeTranslation(0, height);
-                }];
-            }else{
-                [UIView animateWithDuration:0.25 animations:^{
-                    self->_mEmotionView.transform = CGAffineTransformIdentity;
-                }];
-            }
-            
-        }
-        
-        
-        if (modle.moudleType == FUMoudleTypeFace && modle.aiMenu[2].state == FUAICellstateSel ) {//舌头选中
-            _mExpresionView.hidden = NO;
-            UIImageView *iamgeView = [self.view viewWithTag:100];
-             iamgeView.hidden = NO;
-             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                 iamgeView.hidden = YES;
-             });
+            _dataSource = [configs mutableCopy];
+        } else {
+            _dataSource = [datas mutableCopy];
         }
         
     }
+    return _dataSource;
 }
 
-#pragma mark - FUCameraDelegate
-static int rate = 0;
-static NSTimeInterval totalRenderTime = 0;
-static  NSTimeInterval oldTime = 0;
--(void)didOutputVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    
-//    fuSetTrackFaceAIType(FUAITYPE_HUMAN_RPOCESSOR);
-    
-    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) ;
-    float h = CVPixelBufferGetHeight(pixelBuffer);
-    float w = CVPixelBufferGetWidth(pixelBuffer);
-
-    [_mPerView displayPixelBuffer:pixelBuffer];
-    
-    NSTimeInterval startTime =  [[NSDate date] timeIntervalSince1970];
-    
-//    if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodySkeleton]) {//手势识别中....
-//              __weak typeof(self)weakSelf  = self ;
-//          CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-//          char *data =  (char *)CVPixelBufferGetBaseAddress(pixelBuffer);
-//          fuSetTrackFaceAIType(FUAITYPE_HUMAN_PROCESSOR_2D_DANCE);
-//          [FURenderer trackFace:FU_FORMAT_BGRA_BUFFER inputData:data width:w height:h];
-//          CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-//
-//          if(fuHumanProcessorGetNumResults() > 0){
-//              NSLog(@"人体识别index------%d",index);
-//          }else{
-//              dispatch_async(dispatch_get_main_queue(), ^{
-//                  [weakSelf.mGestureView setGestureViewSel:-1];
-//              });
-//          }
-//      }
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.tipLabel.text = [FUManager shareManager].currentToast;
-    });
-   if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodySkeleton]) {//骨骼....
-       [[FUManager shareManager] renderItemsWithPtaPixelBuffer:pixelBuffer];
-   }else{
-       [[FUManager shareManager] renderItemsToPixelBuffer:pixelBuffer];
-   }
-
-    if(([[FUManager shareManager] isRuningAitype:FUNamaAITypeKeypoint] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition] && ![[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition] && !([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints] || [[FUManager shareManager] isRuningAitype:FUNamaAITypePortraitSegmentation])) || [[FUManager shareManager] isRuningAitype:FUNamaAITypeHeadSplit] || [[FUManager shareManager] isRuningAitype:FUNamaAITypeHairSplit]){
-        BOOL isTrack = [FURenderer isTracking] > 0?YES:NO;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (self.tipLabel.text || !self.tipLabel.hidden) {
-                    self.tipLabel.hidden = isTrack;
-                }
-        });
+- (FUHeadButtonView *)headButtonView {
+    if (!_headButtonView) {
+        _headButtonView = [[FUHeadButtonView alloc] init];
+        _headButtonView.delegate = self;
     }
-       
-     if([[FUManager shareManager] isRuningAitype:FUNamaAITypegestureRecognition]) {//手势识别中....
-            __weak typeof(self)weakSelf  = self ;
-            if(fuHandDetectorGetResultNumHands() > 0){
-                FUAIGESTURETYPE type = fuHandDetectorGetResultGestureType(0);
-                int index = [FUGestureHandle getIndexwith:type];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf.mGestureView setGestureViewSel:index];
-                    if (self.tipLabel.text || !self.tipLabel.hidden) {
-                     self.tipLabel.hidden = YES;
-                    }
-                  });
-            }else{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    BOOL isTrackFace = [FURenderer isTracking] > 0?YES:NO;
-                       [weakSelf.mGestureView setGestureViewSel:-1];;
-                       if (isTrackFace && [[FUManager shareManager] isRuningAitype:FUNamaAITypeKeypoint]){
-                           self.tipLabel.hidden = YES;
-                       }else{
-                           if (self.tipLabel.text) {
-                               self.tipLabel.hidden = NO;
-                           }
-                       }
-                });
-            }
-        }
-        
-        if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodySkeleton]) {//骨骼....
-            BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.tipLabel.text || !self.tipLabel.hidden) {
-                 self.tipLabel.hidden = isTrack;
-                }
-              });
+    return _headButtonView;
+}
 
-        }
-        if([[FUManager shareManager] isRuningAitype:FUNamaAITypeActionRecognition]){//动作
-            __weak typeof(self)weakSelf  = self ;
-            
-            BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
-            BOOL isTrackFace = [FURenderer isTracking] > 0?YES:NO;
-            
-             if(isTrack){
-                int  index = fuHumanProcessorGetResultActionType(0);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf.mActionView setGestureViewSel:index];
-                });
-
-            }else{
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakSelf.mActionView setGestureViewSel:-1];
-                });
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (isTrack || isTrackFace) {
-                    self.tipLabel.hidden = YES;
-                }else{
-                    if (self.tipLabel.text || !self.tipLabel.hidden ) {
-                     self.tipLabel.hidden = isTrack;
-                  }
-                }
-            });
-        }
-        
-        if([[FUManager shareManager] isRuningAitype:FUNamaAITypeBodyKeyPoints] || [[FUManager shareManager] isRuningAitype:FUNamaAITypePortraitSegmentation]){//人体
-            BOOL isTrack = fuHumanProcessorGetNumResults() > 0?YES:NO;
-            BOOL isTrackFace = [FURenderer isTracking] > 0?YES:NO;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (isTrack || isTrackFace) {
-                    self.tipLabel.hidden = YES;
-                }else{
-                    if (self.tipLabel.text || !self.tipLabel.hidden ) {
-                     self.tipLabel.hidden = isTrack;
-                  }
-                }
-              });
-        }
-        
-        if([[FUManager shareManager] isRuningAitype:FUNamaAITypeTongue]){
-            BOOL isTrack = [FURenderer isTracking] > 0?YES:NO;
-            int tongue_direction = 0;
-            [FURenderer getFaceInfo:0 name:@"tongue_direction" pret:&tongue_direction number:1];
-            int index = [FUIndexHandle getAItougueIndexwith:tongue_direction];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if(isTrack){
-                    [self.mTongueView setTongueViewSel:index];
-                }else{
-                    [self.mTongueView setTongueViewSel:-1];
-                }
-            });
-        }
-        
-        if([[FUManager shareManager] isRuningAitype:FUNamaAITypeExpression]){
-                int expression_type = 0;
-               
-                [FURenderer getFaceInfo:0 name:@"expression_type" pret:&expression_type number:1];
-                NSArray *array = [FUIndexHandle getAarrayAIexpression:expression_type];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.mExpresionView setExpresionViewSelArray:array];
-                });
-        }
-    
-    if([[FUManager shareManager] isRuningAitype:FUNamaAITypeEmotionRecognition]){
-            int emotion = 0;
-            [FURenderer getFaceInfo:0 name:@"emotion" pret:&emotion number:1];
-        
-            NSArray *array = [FUIndexHandle getAarrayAIemotion:emotion];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.mEmotionView setViewSelArray:array];
-            });
+- (UILabel *)buglyLabel {
+    if (!_buglyLabel) {
+        _buglyLabel = [[UILabel alloc] init];
+        _buglyLabel.layer.masksToBounds = YES;
+        _buglyLabel.layer.cornerRadius = 5;
+        _buglyLabel.numberOfLines = 0;
+        _buglyLabel.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.5];
+        _buglyLabel.textColor = [UIColor whiteColor];
+        _buglyLabel.alpha = 0.74;
+        _buglyLabel.font = [UIFont systemFontOfSize:11];
     }
-    
-    NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970];
-    /* renderTime */
-    totalRenderTime += endTime - startTime;
-    rate ++;
-    
-    [self updateVideoParametersText:endTime bufferRef:pixelBuffer];
-    
-//    fuHumanProcessorReset();
-//    fuHumanProcessorSetMaxHumans(1);
-//     int res1 = fuHumanProcessorGetNumResults()
-//      bb =fuHumanProcessorGetResultJoint2ds(0, &size);
-
-    [self.renderView displayPixelBuffer:pixelBuffer];
-//    int res2 =fuHumanProcessorGetResultTrackId(0);
-//   const float*aa = fuHumanProcessorGetResultRect(0);
-   
-//    const float*cc = fuHumanProcessorGetResultJoint3ds(0, size);
-//    const float*dd= fuHumanProcessorGetResultHumanMask(0,&mask_width,&mask_height);
-//    const float*ee = fuFaceProcessorGetResultHairMask(0,&mask_width,&mask_height);
-//    const float*ff = fuFaceProcessorGetResultHeadMask(0, &mask_width, &mask_height);
-    
-    
-//    [self.renderView displayPixelBuffer:pixelBuffer];
-////    static float posterLandmarks[239* 2];
-////    [FURenderer getFaceInfo:0 name:@"landmarks" pret:posterLandmarks number:239* 2];
-//    [self.renderView displayPixelBuffer:pixelBuffer];
-
+    return _buglyLabel;
 }
 
-//#pragma mark - FUCameraDataSource
-//-(CGPoint)faceCenterInImage:(FUCamera *)camera{
-//    CGPoint center = CGPointMake(-1, -1);
-////    BOOL isHaveFace = [[FUManager shareManager] isTracking];
-//
-//    if (isHaveFace) {
-//        center = [self cameraFocusAndExposeFace];
-//    }
-//    return center;
-//}
-//
-//
-//-(CGPoint)cameraFocusAndExposeFace{
-//    CGPoint center = [[FUManager shareManager] getFaceCenterInFrameSize:CGSizeMake(imageW, imageH)];
-//   return  CGPointMake(center.y, self.mCamera.isFrontCamera ? center.x : 1 - center.x);
-//}
-
-
-
-#pragma  mark -  刷新bugly text
-// 更新视频参数栏
--(void)updateVideoParametersText:(NSTimeInterval)startTime bufferRef:(CVPixelBufferRef)pixelBuffer{
-    if (startTime - oldTime >= 1) {//一秒钟计算平均值
-        oldTime = startTime;
-        int diaplayRate = rate;
-        NSTimeInterval diaplayRenderTime = totalRenderTime;
-        
-        int w = CVPixelBufferGetWidth(pixelBuffer);
-        int h = CVPixelBufferGetHeight(pixelBuffer);
-        
-        float aaa[3] = {0};
-        float expression_type = 0;
-        [FURenderer getFaceInfo:0 name:@"rotation_euler" pret:aaa number:3];
-
-        float x = aaa[0] * 180 / M_PI;
-        float y = aaa[1] * 180 / M_PI;
-        float z = aaa[2] * 180 / M_PI;
-    
-        BOOL isTrack = [FURenderer isTracking] > 0?YES:NO;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSMutableParagraphStyle *paragra = [[NSMutableParagraphStyle alloc] init];
-            paragra.lineSpacing = 3;//1,设置行间距
-            paragra.paragraphSpacing = 4; //2,设置段间距
-            paragra.alignment = UITextAlignmentLeft;//3,设置对齐方式
-            paragra.firstLineHeadIndent = 5;//4,首行缩进距离
-            paragra.headIndent = 5;//5，除首行之外其他行缩进
-            paragra.tailIndent = 300;//6,每行容纳字符的宽度
-            paragra.minimumLineHeight = 2;//7,每行最小高度
-            paragra.maximumLineHeight = 10;//8,每行最大高度
-            paragra.lineBreakMode = NSLineBreakByCharWrapping;//9,换行方式
-            NSString *str = nil;
-            if (isTrack) {
-                str = [NSString stringWithFormat:@"\nresolution:\n%d*%d\nfps: %d \nframe time:%.0fms\nyaw: %.2f°\npitch: %.2f°\nroll: %.2f°\n",w,h,diaplayRate,diaplayRenderTime *1000.0/diaplayRate,y,x,z];
-            }else{
-                str = [NSString stringWithFormat:@"\nresolution:\n%d*%d\nfps: %d \nframe time:%.0fms\nyaw: null\npitch: null\nroll: null\n",w,h,diaplayRate,diaplayRenderTime *1000.0/diaplayRate];
-            }
-            
-            NSMutableAttributedString *testStr = [[NSMutableAttributedString alloc] initWithString:str];
-            [testStr addAttribute:NSParagraphStyleAttributeName value:paragra range:NSMakeRange(0, testStr.length)];
-            
-            self->_buglyLabel.attributedText = testStr;
-            
-            // @" resolution:\n  %@\n fps: %d \n render cost:\n  %.0fms",ratioStr,diaplayRate,diaplayRenderTime * 1000.0 / diaplayRate];
-        });
-        totalRenderTime = 0;
-        rate = 0;
+- (UILabel *)tipLabel {
+    if (!_tipLabel) {
+        _tipLabel = [[UILabel alloc] init];
+        _tipLabel.textColor = [UIColor whiteColor];
+        _tipLabel.font = [UIFont systemFontOfSize:13];
+        _tipLabel.hidden = YES;
     }
+    return _tipLabel;
 }
-
-
-/* 该功能，是否需要开启多重采样 */
--(BOOL)needSetMultiSamples{
-    return NO;
-}
-     
-
--(BOOL)onlyJumpImage{
-    return NO;
-}
-
-
-- (void)handlePanAction:(UIPanGestureRecognizer *)sender {
-    CGPoint point = [sender translationInView:[sender.view superview]];
-    
-    CGFloat senderHalfViewWidth = sender.view.frame.size.width / 2;
-    CGFloat senderHalfViewHeight = sender.view.frame.size.height / 2;
-    
-    __block CGPoint viewCenter = CGPointMake(sender.view.center.x + point.x, sender.view.center.y + point.y);
-    // 拖拽状态结束
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [UIView animateWithDuration:0.4 animations:^{
-            if ((sender.view.center.x + point.x - senderHalfViewWidth) <= 5 || sender.view.center.x < KScreenWidth/2) {
-                viewCenter.x = senderHalfViewWidth + 5;
-            }
-            if ((sender.view.center.x + point.x + senderHalfViewWidth) >= KScreenWidth - 5 || sender.view.center.x >= KScreenWidth/2) {
-                viewCenter.x = KScreenWidth - senderHalfViewWidth - 5;
-            }
-            if ((sender.view.center.y + point.y - senderHalfViewHeight) <= 75) {
-                viewCenter.y = senderHalfViewHeight + 75;
-            }
-            if ((sender.view.center.y + point.y + senderHalfViewHeight) >= (KScreenHeight -5)) {
-                viewCenter.y = KScreenHeight - senderHalfViewHeight - 5;
-            }
-            sender.view.center = viewCenter;
-        } completion:^(BOOL finished) {
-
-        }];
-        [sender setTranslation:CGPointMake(0, 0) inView:[sender.view superview]];
-    } else {
-        // UIGestureRecognizerStateBegan || UIGestureRecognizerStateChanged
-        viewCenter.x = sender.view.center.x + point.x;
-        viewCenter.y = sender.view.center.y + point.y;
-        sender.view.center = viewCenter;
-        [sender setTranslation:CGPointMake(0, 0) inView:[sender.view superview]];
-    }
-}
-
 
 @end

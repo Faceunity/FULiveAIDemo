@@ -34,10 +34,8 @@
     modle.subFootes = self.subFootes;
     modle.mToasts = self.mToasts;
     modle.moduleCodes = self.moduleCodes;
-    
     return modle;
 }
-
 
 @end
 

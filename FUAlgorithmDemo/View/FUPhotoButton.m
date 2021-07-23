@@ -140,7 +140,7 @@
 -(void)startRecord{
     if (!(_type & FUPhotoButtonTypeRecord)) return;
     dispatch_async(dispatch_get_main_queue(), ^{
-        originTransform = self.transform ;
+        self->originTransform = self.transform ;
         [UIView animateWithDuration:0.5 animations:^{
 //            self.transform = CGAffineTransformMakeTranslation(0, -5);
             self.transform = CGAffineTransformScale(self.transform, 1.1, 1.1);
@@ -158,7 +158,7 @@
             [self.delegate stopRecord];
         }
 //        [UIView animateWithDuration:0.5 animations:^{
-            self.transform = originTransform;
+        self.transform = self->originTransform;
 //        }];
     });
 }

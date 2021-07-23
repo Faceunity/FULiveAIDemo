@@ -9,10 +9,10 @@
 #import "FUHomeController.h"
 #import "FUShotViewController.h"
 #import "FUPhotoViewController.h"
-#import <MobileCoreServices/MobileCoreServices.h>
-#import <SVProgressHUD.h>
 
-@interface FUHomeController ()
+#import <MobileCoreServices/MobileCoreServices.h>
+
+@interface FUHomeController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *tapView1;
 @property (weak, nonatomic) IBOutlet UIView *tapView2;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mLayoutConstraintH;
@@ -23,58 +23,71 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
-    _mLayoutConstraintH.constant = 1/[UIScreen mainScreen].scale;
+    _mLayoutConstraintH.constant = 1 / [UIScreen mainScreen].scale;
     
     self.tapView1.layer.cornerRadius = 8;
     self.tapView2.layer.cornerRadius = 8;
     
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesView1)];
+    UILongPressGestureRecognizer *tapGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(touchesView1:)];
+    tapGesture.minimumPressDuration = 0;
     [self.tapView1 addGestureRecognizer:tapGesture];
     
-    UITapGestureRecognizer *tapGesture2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touchesView2)];
+    UILongPressGestureRecognizer *tapGesture2 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(touchesView2:)];
+    tapGesture2.minimumPressDuration = 0;
     [self.tapView2 addGestureRecognizer:tapGesture2];    
     
 }
 
--(void)touchesView1{
-    
-    FUShotViewController *vc = [[FUShotViewController alloc] init];
-    vc.view.backgroundColor = [UIColor whiteColor];
-    
-    [UIView animateWithDuration:0.025 animations:^{
-        self.tapView1.transform = CGAffineTransformMakeScale(0.9, 0.9);
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.025 animations:^{
-                self.tapView1.transform = CGAffineTransformIdentity;
-            } completion:^(BOOL finished) {
-
-               [self.navigationController pushViewController:vc animated:YES];
-            }];
-    }];
-
+- (void)touchesView1:(UILongPressGestureRecognizer *)tap {
+    switch (tap.state) {
+        case UIGestureRecognizerStateBegan:{
+            self.tapView1.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        }
+            break;
+        case UIGestureRecognizerStateEnded:{
+            self.tapView1.transform = CGAffineTransformIdentity;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                FUShotViewController *vc = [[FUShotViewController alloc] init];
+                [self.navigationController pushViewController:vc animated:YES];
+            });
+        }
+            break;
+        case UIGestureRecognizerStateFailed:
+        case UIGestureRecognizerStateCancelled:{
+            self.tapView1.transform = CGAffineTransformIdentity;
+        }
+            break;
+        default:
+            break;
+    }
 }
 
--(void)touchesView2{
-
-    [UIView animateWithDuration:0.1 animations:^{
-        self.tapView2.transform = CGAffineTransformMakeScale(0.8, 0.8);
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.1 animations:^{
-                self.tapView2.transform = CGAffineTransformIdentity;
-            } completion:^(BOOL finished) {
-                 [self showImagePickerWithMediaType:(NSString *)kUTTypeImage];
-            }];
-    }];
+- (void)touchesView2:(UILongPressGestureRecognizer *)tap {
+    switch (tap.state) {
+        case UIGestureRecognizerStateBegan:{
+            self.tapView2.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        }
+            break;
+        case UIGestureRecognizerStateEnded:{
+            self.tapView2.transform = CGAffineTransformIdentity;
+            [self showImagePickerWithMediaType:(NSString *)kUTTypeImage];
+        }
+            break;
+        case UIGestureRecognizerStateFailed:
+        case UIGestureRecognizerStateCancelled:{
+            self.tapView2.transform = CGAffineTransformIdentity;
+        }
+            break;
+        default:
+            break;
+    }
 
 }
 
 
 - (void)showImagePickerWithMediaType:(NSString *)mediaType {
-    
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    
     picker.delegate = self;
     picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
     picker.allowsEditing = NO;
@@ -89,13 +102,8 @@
     // 关闭相册
     [picker dismissViewControllerAnimated:NO completion:^{
         NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-        
-        if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]){  //视频
-            
-        }else if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) { //照片
-            
+        if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
             UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            
             // 图片转正
             if (image.imageOrientation != UIImageOrientationUp && image.imageOrientation != UIImageOrientationUpMirrored) {
                 
@@ -111,25 +119,12 @@
             NSData *imageData0 = UIImageJPEGRepresentation(image, 1.0);
             
             FUPhotoViewController *vc = [[FUPhotoViewController alloc] init];
+            vc.photoImage = [UIImage imageWithData:imageData0];
             [self.navigationController pushViewController:vc animated:YES];
-            vc.mPotoImage = [UIImage imageWithData:imageData0];
-    
         }
     }];
     
 }
 
-
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

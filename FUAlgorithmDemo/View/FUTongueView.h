@@ -16,7 +16,10 @@ typedef enum : NSUInteger {
 } FUViewType;
 
 @interface FUTongueViewCell : UITableViewCell
-//@property (strong, nonatomic) UIImageView *mImageV;
+
+@property (nonatomic, strong) UILabel *itemLabel;
+@property (nonatomic, strong) UILabel *detailsLabel;
+
 @end
 
 
