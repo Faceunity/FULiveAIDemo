@@ -10,38 +10,38 @@
 #import "FUConfigCell.h"
 #import "FUHeadReusableView.h"
 #import "FUFootReusableView.h"
-#import "MJExtension.h"
+
 #import "FUManager.h"
+#import "FUMacros.h"
+
 #import "UIViewController+CWLateralSlide.h"
-#import "SVProgressHUD.h"
 
-@interface FUConfigController ()<UICollectionViewDelegate,UICollectionViewDataSource>
-@property(nonatomic,strong)UICollectionView *collectionView;
+#import <SVProgressHUD.h>
+#import <MJExtension.h>
 
+@interface FUConfigController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
+@property (nonatomic,strong) UICollectionView *collectionView;
 
 @end
-#define sw [UIScreen mainScreen].bounds.size.width
-
-NSString *const FUConfigControllerUpdateNotification = @"FUConfigControllerNotification";
 
 @implementation FUConfigController
 
 static NSString *cellID = @"Cell";
 static NSString *headerViewID = @"MGHeaderView";
 static NSString *footViewID = @"footView";
+
+#pragma mark - Life cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.view.backgroundColor = [UIColor whiteColor];
-    // Do any additional setup after loading the view.
-    [self setupCollectionView];
+    [self.view addSubview:self.collectionView];
     [self subView];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(tongzhi:)name:UIApplicationBackgroundRefreshStatusDidChangeNotification object:nil];
-    
-//    for (FUAISectionModel*config in self.config) {
-//        [[FUManager shareManager] loadBoudleWithConfig:config];//道具创建所有用到道具
-//    }
 }
+
+#pragma mark - UI
 
 -(void)subView{
     UILabel *label = [[UILabel alloc] init];
@@ -55,7 +55,7 @@ static NSString *footViewID = @"footView";
     label.alpha = 1.0;
     
     UIView *view = [[UIView alloc] init];
-    view.frame = CGRectMake(0,88,sw,1/[UIScreen mainScreen].scale);
+    view.frame = CGRectMake(0,88, FUScreenWidth, 1/[UIScreen mainScreen].scale);
     view.backgroundColor = [UIColor colorWithRed:230/255.0 green:230/255.0 blue:230/255.0 alpha:1.0];
     [self.view addSubview:view];
     
@@ -81,37 +81,9 @@ static NSString *footViewID = @"footView";
     [self.view addSubview:donBtn];
 }
 
-
--(void)setupCollectionView{
-    // 设置 flowLayout
-       UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-       flowLayout.minimumInteritemSpacing = 16;
-       flowLayout.minimumLineSpacing = 8;
-       flowLayout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
-       flowLayout.itemSize = CGSizeMake(80, 50);
-    
-       // 添加 collectionView，记得要设置 delegate 和 dataSource 的代理对象
-       CGRect frame = self.view.frame;
-       frame.size.width = frame.size.width * 0.75;
-       frame.origin.y = 89;
-       _collectionView = [[UICollectionView alloc] initWithFrame:frame collectionViewLayout:flowLayout];
-       _collectionView.delegate = self;
-       _collectionView.dataSource = self;
-      _collectionView.backgroundColor = [UIColor whiteColor];
-       [self.view addSubview:_collectionView];
-       
-       // 注册 cell
-       [_collectionView registerClass:[FUConfigCell class] forCellWithReuseIdentifier:cellID];
-       [self.collectionView registerClass:[FUHeadReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerViewID];
-        [self.collectionView registerClass:[FUFootReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footViewID];
-}
-
-
 - (void)showMessage:(NSString *)string{
-    //[SVProgressHUD showWithStatus:string]; //设置需要显示的文字
     [SVProgressHUD showImage:[UIImage imageNamed:@"wrt424erte2342rx"] status:string];
     [SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeNative];
-//    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeCustom]; //设置HUD背景图层的样式
     [SVProgressHUD setForegroundColor:[UIColor whiteColor]];
     [SVProgressHUD setBackgroundColor:[UIColor colorWithWhite:0 alpha:0.74]];
     [SVProgressHUD setBackgroundLayerColor:[UIColor clearColor]];
@@ -120,87 +92,160 @@ static NSString *footViewID = @"footView";
 }
 
 
-#pragma  mark -  action
--(void)restBtnClick:(UIButton *)btn{
-    for (FUAISectionModel *config in _config) {
-            for(int i = 0;i < config.aiMenu.count;i ++){
+#pragma mark - Private methods
+
+-(int)isShowFootView:(NSInteger)section{
+    FUAISectionModel *config =  self.configDataSource[section];
+    for(int i = 0;i < config.aiMenu.count;i ++){
+        FUAIConfigCellModel *model = config.aiMenu[i];
+        if (model.state == FUAICellStateSel && model.subFootes > 0) {
+            return i;
+        }
+    }
+    return  -1;
+}
+
+/// 选中某项后其他可选类型
+- (NSArray *)otherCanEnable:(FUNamaAIType)aitype{
+    switch (aitype) {
+        case FUNamaAITypeKeypoint:
+        case FUNamaAITypeTongue:
+        case FUNamaAITypeExpressionRecognition:
+        case FUNamaAITypeEmotionRecognition:
+            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeBodyKeypoint),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeBodyKeypoint),@(FUNamaAITypeHairSplit),@(FUNamaAITypeHeadSplit),@(FUNamaAITypePortraitSegmentation),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeGestureRecognition),@(FUNamaAITypeEmotionRecognition)];
+            break;
+            
+            case FUNamaAITypeBodyKeypoint:
+            case FUNamaAITypeActionRecognition:
+            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeBodyKeypoint),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeEmotionRecognition)];
+            break;
+            
+        case FUNamaAITypeBodySkeleton:
+            return @[@(aitype)];
+            break;
+        default:
+            return  @[@(aitype),@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeEmotionRecognition)];
+            break;
+    }
+}
+
+/// CellModel选中是，其他选中状态修改
+-(void)changeOtherStateWithSelCellModel:(FUAIConfigCellModel *)cellModle{
+    if (cellModle.aiType == FUNamaAITypeKeypoint || cellModle.aiType == FUNamaAITypeTongue ||cellModle.aiType == FUNamaAITypeExpressionRecognition || cellModle.aiType == FUNamaAITypeEmotionRecognition) {//特征点默认随之选中
+        FUAISectionModel *sectionModel = self.configDataSource[0];
+        sectionModel.aiMenu[0].state = FUAICellStateSel;
+    }
+    
+    NSArray *array = [self otherCanEnable:cellModle.aiType];// 可共选的数组
+    for (FUAISectionModel *config in self.configDataSource) {
+        for(int i = 0;i < config.aiMenu.count;i ++){
             FUAIConfigCellModel *model = config.aiMenu[i];
-            model.state = FUAICellstateNol;
-                model.footSelInde = 0;
+            if ([array containsObject:@(model.aiType)]) {// 不可共选的置灰
+                continue;
+            }
+            model.state = FUAICellStateDisable;
+        }
+    }
+}
+
+/// CellModel取消选中，其他选中状态修改
+-(void)changeOtherStateWithNomalCellModel:(FUAIConfigCellModel *)cellModle{
+    if (cellModle.aiType == FUNamaAITypeKeypoint) {//特征点默认随之取消
+        for (FUAIConfigCellModel *modle in self.configDataSource[0].aiMenu) {
+            modle.state = FUAICellStateNol;
+        }
+    }
+    
+    NSArray *array = [self otherCanEnable:cellModle.aiType];//可共选的数组
+    BOOL isFaceHaveSel = NO;
+    BOOL isOtherHaveSel = NO;
+    for (FUAISectionModel *config in self.configDataSource) {
+        if (config.moudleType == FUMoudleTypeFace) {
+            for(int i = 0;i < config.aiMenu.count;i ++){
+                FUAIConfigCellModel *model = config.aiMenu[i];
+                if (model.state == FUAICellStateSel) {//  人脸还有选中
+                    isFaceHaveSel = YES;
+                }
+            }
+            continue;
+        }
+        for(int i = 0;i < config.aiMenu.count;i ++){
+            FUAIConfigCellModel *model = config.aiMenu[i];
+            if (model.state == FUAICellStateSel) {//  除人脸其他有选中
+                isOtherHaveSel = YES;
+            }
+        }
+    }
+    if (isOtherHaveSel) {
+        return;
+    }
+    
+    for (FUAISectionModel *config in self.configDataSource) {
+        for (int i = 0;i < config.aiMenu.count;i ++) {
+            FUAIConfigCellModel *model = config.aiMenu[i];
+            if ([array containsObject:@(model.aiType)]) {//  不可共选的置灰
+                continue;
+            }
+            model.state = FUAICellStateNol;
+            if (model.aiType ==  FUNamaAITypeBodySkeleton && isFaceHaveSel) {
+                model.state = FUAICellStateDisable;
+            }
+        }
+    }
+}
+
+
+#pragma  mark - Event response
+
+- (void)restBtnClick:(UIButton *)btn{
+    for (FUAISectionModel *config in self.configDataSource) {
+        for(int i = 0; i < config.aiMenu.count; i++){
+            FUAIConfigCellModel *model = config.aiMenu[i];
+            model.state = FUAICellStateNol;
+            model.footSelInde = 0;
         }
     }
     [_collectionView reloadData];
     
-    /* 确认修改，同步数据 */
-    [FUManager shareManager].config = self.config;
-    [[FUManager shareManager] setNeedRenderHandle];
+    // 移除所有道具
+    [[FUManager shareManager] destoryItems];
     
-    NSNotification *notification  = [NSNotification notificationWithName:FUConfigControllerUpdateNotification object:nil userInfo:nil];
-     [[NSNotificationCenter defaultCenter] postNotification:notification];
-//    [self dismissViewControllerAnimated:YES completion:nil];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(configController:didChangeConfigDataSource:)]) {
+        [self.delegate configController:self didChangeConfigDataSource:[self.configDataSource copy]];
+    }
 }
 
--(void)donBtnClick:(UIButton *)btn{
-    [FUManager shareManager].config = self.config;
-    [[FUManager shareManager] setNeedRenderHandle];
-    NSNotification *notification  = [NSNotification notificationWithName:FUConfigControllerUpdateNotification object:nil userInfo:nil];
-     [[NSNotificationCenter defaultCenter] postNotification:notification];
+- (void)donBtnClick:(UIButton *)btn{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(configController:didChangeConfigDataSource:)]) {
+        [self.delegate configController:self didChangeConfigDataSource:[self.configDataSource copy]];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
-    
 }
 
 
-#pragma mark collectionView代理方法
-//返回section个数
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return _config.count;
+#pragma mark - Collection view data source
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return self.configDataSource.count;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return _config[section].aiMenu.count;
+    return self.configDataSource[section].aiMenu.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     FUConfigCell *cell = (FUConfigCell *)[collectionView dequeueReusableCellWithReuseIdentifier:cellID forIndexPath:indexPath];
-    FUAIConfigCellModel *model = _config[indexPath.section].aiMenu[indexPath.row];
+    FUAIConfigCellModel *model = self.configDataSource[indexPath.section].aiMenu[indexPath.row];
     cell.model = model;
     return cell;
 }
 
-//设置每个item的尺寸
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return CGSizeMake(80, 32);
-}
-
-//设置每个item的UIEdgeInsets
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-{
-    return UIEdgeInsetsMake(0, 10, 0, 10);
-}
-
-//设置每个item水平间距
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 10;
-}
-
-
-//设置每个item垂直间距
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
-{
-    return 15;
-}
-
-
-//通过设置SupplementaryViewOfKind 来设置头部或者底部的view，其中 ReuseIdentifier 的值必须和 注册是填写的一致，本例都为 “reusableView”
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
+/// 通过设置SupplementaryViewOfKind 来设置头部或者底部的view，其中 ReuseIdentifier 的值必须和 注册是填写的一致，本例都为 “reusableView”
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
 
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]){
     FUHeadReusableView *headerView= (FUHeadReusableView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerViewID forIndexPath:indexPath];
-        FUAISectionModel *model = _config[indexPath.section];
+        FUAISectionModel *model = self.configDataSource[indexPath.section];
         headerView.titleLabel.text = model.sectionTitel;
         headerView.mImageView.image = [UIImage imageNamed:model.sectionImageName];
     return headerView;
@@ -210,8 +255,8 @@ static NSString *footViewID = @"footView";
     FUFootReusableView *fView= (FUFootReusableView *)[collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footViewID forIndexPath:indexPath];
         
         int selIndex = [self isShowFootView:indexPath.section];
-        if (_config[indexPath.section].aiMenu[selIndex]) {
-            fView.model = _config[indexPath.section].aiMenu[selIndex];
+        if (self.configDataSource[indexPath.section].aiMenu[selIndex]) {
+            fView.model = self.configDataSource[indexPath.section].aiMenu[selIndex];
         }
         fView.userInteractionEnabled = YES;
     
@@ -221,147 +266,78 @@ static NSString *footViewID = @"footView";
 
 }
 
-
-// 设置Header的尺寸
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
- CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
- return CGSizeMake(screenWidth, 44);
+/// 设置Header的尺寸
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    return CGSizeMake(screenWidth, 44);
 }
  
-// 设置Footer的尺寸
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
+/// 设置Footer的尺寸
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     if ([self isShowFootView:section] >= 0){
         CGFloat screenWidth = collectionView.bounds.size.width;
         return CGSizeMake(screenWidth, 50);
     }
- return CGSizeMake(0, 0);
+    return CGSizeMake(0, 0);
 }
 
-//点击item方法
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    FUAIConfigCellModel *modle =  _config[indexPath.section].aiMenu[indexPath.row];
-    if (modle.state == FUAICellstateDisable) {
+#pragma mark - Collection view delegate
+
+/// 点击item
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    FUAIConfigCellModel *modle =  self.configDataSource[indexPath.section].aiMenu[indexPath.row];
+    if (modle.state == FUAICellStateDisable) {
         return;
     }
-    modle.state = modle.state?0:1;
+    modle.state = modle.state ? 0 : 1;
     
-    if (modle.state == FUAICellstateSel) {
+    if (modle.state == FUAICellStateSel) {
         [self changeOtherStateWithSelCellModel:modle];
           /* 证书权限 */
-          int moduleCode =  fuGetModuleCode([modle.moduleCodes[0] intValue]);
-          if((moduleCode & [modle.moduleCodes[1] intValue]) == 0){
-             [self showMessage:@"缺少证书,功能无效"];
-          }
-    }else{
+        int moduleCode = [FURenderKit getModuleCode:[modle.moduleCodes[0] intValue]];
+        if((moduleCode & [modle.moduleCodes[1] intValue]) == 0){
+            [self showMessage:@"缺少证书,功能无效"];
+        }
+    } else {
         [self changeOtherStateWithNomalCellModel:modle];
-  }
-    
-
+    }
     [collectionView reloadData];
 }
 
 
--(int)isShowFootView:(NSInteger)section{
-    FUAISectionModel *config =  _config[section];
-    
-    for(int i = 0;i < config.aiMenu.count;i ++){
-        FUAIConfigCellModel *model = config.aiMenu[i];
-        if (model.state == FUAICellstateSel && model.subFootes > 0) {
-            return i;
-        }
-    }
-    return  -1;
-    
+#pragma mark - Collection view delegate flow layout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(80, 32);
 }
 
--(NSArray *)otherCanEnable:(FUNamaAIType)aitype{
-    switch (aitype) {
-        case FUNamaAITypeKeypoint:
-        case FUNamaAITypeTongue:
-        case FUNamaAITypeExpression:
-        case FUNamaAITypeEmotionRecognition:
-            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeHairSplit),@(FUNamaAITypeHeadSplit),@(FUNamaAITypePortraitSegmentation),@(FUNamaAITypeActionRecognition),@(FUNamaAITypegestureRecognition),@(FUNamaAITypeEmotionRecognition)];
-            break;
-            
-            case FUNamaAITypeBodyKeyPoints:
-            case FUNamaAITypeActionRecognition:
-            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeBodyKeyPoints),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeEmotionRecognition)];
-            break;
-            
-        case FUNamaAITypeBodySkeleton:
-            return @[@(aitype)];
-            break;
-        default:
-            return  @[@(aitype),@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpression),@(FUNamaAITypeEmotionRecognition)];
-            break;
-    }
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(0, 10, 0, 10);
 }
 
-/* CellModel选中是，其他选中状态修改 */
--(void)changeOtherStateWithSelCellModel:(FUAIConfigCellModel *)cellModle{
-    if (cellModle.aiType == FUNamaAITypeKeypoint || cellModle.aiType == FUNamaAITypeTongue ||cellModle.aiType == FUNamaAITypeExpression || cellModle.aiType == FUNamaAITypeEmotionRecognition) {//特征点默认随之选中
-        FUAISectionModel *sectionModel = _config[0];
-        sectionModel.aiMenu[0].state = FUAICellstateSel;
-    }
-    
-    NSArray *array = [self otherCanEnable:cellModle.aiType];//可共选的数组
-    for (FUAISectionModel *config in _config) {
-            for(int i = 0;i < config.aiMenu.count;i ++){
-            FUAIConfigCellModel *model = config.aiMenu[i];
-                if ([array containsObject:@(model.aiType)]) {//  不可共选的置灰
-                    continue;
-                }
-            model.state = FUAICellstateDisable;
-        }
-    }
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
+    return 10;
 }
 
-/* CellModel取消选中，其他选中状态修改 */
--(void)changeOtherStateWithNomalCellModel:(FUAIConfigCellModel *)cellModle{
-    if (cellModle.aiType == FUNamaAITypeKeypoint) {//特征点默认随之取消
-        for (FUAIConfigCellModel *modle in _config[0].aiMenu) {
-            modle.state = FUAICellstateNol;
-        }
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 15;
+}
+
+#pragma mark - Getters
+
+- (UICollectionView *)collectionView {
+    if (!_collectionView) {
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 89, CGRectGetWidth(self.view.frame) * 0.75, CGRectGetHeight(self.view.frame)) collectionViewLayout:[UICollectionViewFlowLayout new]];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.backgroundColor = [UIColor whiteColor];
+        // 注册 cell
+        [_collectionView registerClass:[FUConfigCell class] forCellWithReuseIdentifier:cellID];
+        [_collectionView registerClass:[FUHeadReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerViewID];
+        [_collectionView registerClass:[FUFootReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footViewID];
     }
-    
-    NSArray *array = [self otherCanEnable:cellModle.aiType];//可共选的数组
-    BOOL isFaceHaveSel = NO;
-    BOOL isOtherHaveSel = NO;
-    for (FUAISectionModel *config in _config) {
-        if (config.moudleType == FUMoudleTypeFace) {
-            for(int i = 0;i < config.aiMenu.count;i ++){
-                FUAIConfigCellModel *model = config.aiMenu[i];
-                if (model.state == FUAICellstateSel) {//  人脸还有选中
-                    isFaceHaveSel = YES;
-                }
-            }
-            continue;
-        }
-        for(int i = 0;i < config.aiMenu.count;i ++){
-            FUAIConfigCellModel *model = config.aiMenu[i];
-            if (model.state == FUAICellstateSel) {//  除人脸其他有选中
-                isOtherHaveSel = YES;
-            }
-        }
-    }
-    if (isOtherHaveSel) {
-        return;
-    }
-    
-    for (FUAISectionModel *config in _config) {
-            for(int i = 0;i < config.aiMenu.count;i ++){
-            FUAIConfigCellModel *model = config.aiMenu[i];
-            if ([array containsObject:@(model.aiType)]) {//  不可共选的置灰
-                continue;
-            }
-            model.state = FUAICellstateNol;
-                
-            if (model.aiType ==  FUNamaAITypeBodySkeleton && isFaceHaveSel) {
-                model.state = FUAICellstateDisable;
-            }
-        }
-    }
+    return _collectionView;
 }
 
 @end

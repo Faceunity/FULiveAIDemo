@@ -23,7 +23,6 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        int h = frame.size.height;
         int w = frame.size.width;
         
         self.bgView = [[UIView alloc] initWithFrame:CGRectMake(6, 6, w - 12, 44)];

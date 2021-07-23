@@ -7,102 +7,200 @@
 //
 
 #import "FUShotViewController.h"
-#import "FUImageHelper.h"
-#import "FUCamera.h"
-#import "FUGestureModel.h"
-#import "MJExtension.h"
-#import <SVProgressHUD.h>
-#import <libCNamaSDK/FURenderer.h>
+
+#import "FUPhotoButton.h"
+
 #import "FUManager.h"
+#import "FUIndexHandle.h"
 
-@interface FUShotViewController ()<FUCameraDelegate,
-FUCameraDataSource,FUPhotoButtonDelegate>{
-    dispatch_semaphore_t semaphore;
-    UIImage *mCaptureImage;
-}
-@property (strong, nonatomic) FUPhotoButton *photoBtn;
+#import "UIViewController+CWLateralSlide.h"
 
-@property (strong, nonatomic) FUCamera *mCamera;
+#import <SVProgressHUD.h>
+#import <MJExtension.h>
+
+@interface FUShotViewController ()<FUPhotoButtonDelegate, FURenderKitDelegate>
+
+@property (nonatomic, strong) FUPhotoButton *photoBtn;
+
+@property (nonatomic, strong) FUGLDisplayView *smallDisplayView;
+
+@property (nonatomic, strong) NSMutableParagraphStyle *paragraphStyle;
 
 @end
 
 @implementation FUShotViewController
 
-#pragma mark -  Loading
+// 视频信息计算相关
+static int rate = 0;
+static NSTimeInterval startTime;
+static NSTimeInterval totalRenderTime = 0;
+static NSTimeInterval oldTime = 0;
 
--(FUCamera *)mCamera {
-    if (!_mCamera) {
-        _mCamera = [[FUCamera alloc] init];
-        _mCamera.delegate = self ;
-        _mCamera.dataSource = self;
-    }
-    return _mCamera ;
-}
+#pragma mark -  Life cycle
 
 -(void)viewDidLoad{
     [super viewDidLoad];
-    /* 后台监听 */
-    [self addObserver];
-
+    
     [self setupStotSubView];
     
-    [self.mCamera startCapture];
-    [_mCamera changeSessionPreset:AVCaptureSessionPreset1280x720];
+    [[FURenderKit shareRenderKit] startInternalCamera];
+    // 摄像头默认设置为前置
+    if (![FURenderKit shareRenderKit].captureCamera.isFrontCamera) {
+        [[FURenderKit shareRenderKit].captureCamera changeCameraInputDeviceisFront:YES];
+    }
+    [FURenderKit shareRenderKit].glDisplayView = self.renderView;
+    [FURenderKit shareRenderKit].delegate = self;
+    
     
 }
 
-
--(void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [_photoBtn photoButtonFinishRecord];
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [[FURenderKit shareRenderKit].captureCamera resetFocusAndExposureModes];
+    [FUConfigManager onCameraChange];
+    [self.photoBtn photoButtonFinishRecord];
 }
 
-#pragma  mark -  UI
+- (void)dealloc {
+    [[FURenderKit shareRenderKit] stopInternalCamera];
+    [FURenderKit shareRenderKit].glDisplayView = nil;
+}
+
+
+#pragma mark -  UI
 
 -(void)setupStotSubView{
-    /* 录制按钮 */
-    _photoBtn = [[FUPhotoButton alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
-    [_photoBtn setImage:[UIImage imageNamed:@"camera_btn_camera_normal"] forState:UIControlStateNormal];
-    if(iPhoneXStyle){
-        _photoBtn.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 150 - 50);
-    }else{
-        _photoBtn.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 120 - 20);
+    
+    [self.view addSubview:self.smallDisplayView];
+    
+    [self.view addSubview:self.photoBtn];
+    
+    NSString *bugly = @"\nresolution:\n720*1280\nfps: 30 \nframe time:10ms\nyaw: 10.1°\npitch: 10°\nroll: 10.1°\n";
+    NSMutableAttributedString *buglyString = [[NSMutableAttributedString alloc] initWithString:bugly];
+    [buglyString addAttribute:NSParagraphStyleAttributeName value:self.paragraphStyle range:NSMakeRange(0, bugly.length)];
+    self.buglyLabel.attributedText = buglyString;
+    
+}
+
+#pragma mark - Event response
+
+- (void)handlePanAction:(UIPanGestureRecognizer *)sender {
+    CGPoint point = [sender translationInView:[sender.view superview]];
+    
+    CGFloat senderHalfViewWidth = sender.view.frame.size.width / 2;
+    CGFloat senderHalfViewHeight = sender.view.frame.size.height / 2;
+    
+    __block CGPoint viewCenter = CGPointMake(sender.view.center.x + point.x, sender.view.center.y + point.y);
+    // 拖拽状态结束
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [UIView animateWithDuration:0.4 animations:^{
+            if ((sender.view.center.x + point.x - senderHalfViewWidth) <= 5 || sender.view.center.x < FUScreenWidth/2) {
+                viewCenter.x = senderHalfViewWidth + 5;
+            }
+            if ((sender.view.center.x + point.x + senderHalfViewWidth) >= FUScreenWidth - 5 || sender.view.center.x >= FUScreenWidth/2) {
+                viewCenter.x = FUScreenWidth - senderHalfViewWidth - 5;
+            }
+            if ((sender.view.center.y + point.y - senderHalfViewHeight) <= 75) {
+                viewCenter.y = senderHalfViewHeight + 75;
+            }
+            if ((sender.view.center.y + point.y + senderHalfViewHeight) >= (FUScreenHeight -5)) {
+                viewCenter.y = FUScreenHeight - senderHalfViewHeight - 5;
+            }
+            sender.view.center = viewCenter;
+        } completion:^(BOOL finished) {
+
+        }];
+        [sender setTranslation:CGPointMake(0, 0) inView:[sender.view superview]];
+    } else {
+        // UIGestureRecognizerStateBegan || UIGestureRecognizerStateChanged
+        viewCenter.x = sender.view.center.x + point.x;
+        viewCenter.y = sender.view.center.y + point.y;
+        sender.view.center = viewCenter;
+        [sender setTranslation:CGPointMake(0, 0) inView:[sender.view superview]];
     }
-    _photoBtn.delegate = self;
-    [self.view addSubview:_photoBtn];
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if (error) {
+        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"保存图片失败", nil)];
+    } else {
+        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"图片已保存到相册", nil)];
+    }
+    [SVProgressHUD dismissWithDelay:1.5f];
+}
+
+- (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if (error) {
+        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"保存视频失败", nil)];
+    } else {
+        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"视频已保存到相册", nil)];
+    }
+    [SVProgressHUD dismissWithDelay:1.5f];
+}
+
+#pragma mark - Private methods
+
+// 更新视频参数栏
+- (void)updateVideoParametersText:(NSTimeInterval)startTime bufferRef:(CVPixelBufferRef)pixelBuffer{
+    if (startTime - oldTime >= 1) {//一秒钟计算平均值
+        oldTime = startTime;
+        int diaplayRate = rate;
+        NSTimeInterval diaplayRenderTime = totalRenderTime;
+        
+        int w = (int)CVPixelBufferGetWidth(pixelBuffer);
+        int h = (int)CVPixelBufferGetHeight(pixelBuffer);
+        
+        float pret[3] = {0};
+        [FUConfigManager faceInfoWithName:@"rotation_euler" pret:pret number:3];
+        float x = pret[0] * 180 / M_PI;
+        float y = pret[1] * 180 / M_PI;
+        float z = pret[2] * 180 / M_PI;
     
+        BOOL isTrack = [[FUManager shareManager] isRunningFaceKeypoint] && [FUConfigManager isTrackingFace];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString *str = isTrack ? [NSString stringWithFormat:@"\nresolution:\n%d*%d\nfps: %d \nframe time:%.0fms\nyaw: %.2f°\npitch: %.2f°\nroll: %.2f°\n", w, h, diaplayRate, diaplayRenderTime * 1000.0 / diaplayRate, y, x, z] : [NSString stringWithFormat:@"\nresolution:\n%d*%d\nfps: %d \nframe time:%.0fms\nyaw: null\npitch: null\nroll: null\n", w, h, diaplayRate, diaplayRenderTime * 1000.0 / diaplayRate];
+            NSMutableAttributedString *testStr = [[NSMutableAttributedString alloc] initWithString:str];
+            [testStr addAttribute:NSParagraphStyleAttributeName value:self.paragraphStyle range:NSMakeRange(0, testStr.length)];
+            
+            self.buglyLabel.attributedText = testStr;
+        });
+        totalRenderTime = 0;
+        rate = 0;
+    }
 }
 
+#pragma mark - FURenderKitDelegate
 
+- (void)renderKitWillRenderFromRenderInput:(FURenderInput *)renderInput {
+    startTime = [[NSDate date] timeIntervalSince1970];
+    if ([FUManager shareManager].runningHalfBodySkeleton || [FUManager shareManager].runningWholeBodySkeleton) {
+        [self.smallDisplayView displayPixelBuffer:renderInput.pixelBuffer];
+    }
+}
 
+- (BOOL)renderKitShouldDoRender {
+    return YES;
+}
 
--(UIImage *)captureImage{
-    mCaptureImage = nil;
-    semaphore = dispatch_semaphore_create(0);
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-    return mCaptureImage;
+- (void)renderKitDidRenderToOutput:(FURenderOutput *)renderOutput {
+    // 及时刷新对应界面控件
+    [self refreshOutputVideo];
     
+    // 视频信息计算
+    NSTimeInterval endTime =  [[NSDate date] timeIntervalSince1970];
+    totalRenderTime += (endTime - startTime);
+    rate ++;
+    [self updateVideoParametersText:endTime bufferRef:renderOutput.pixelBuffer];
 }
-
--(void)updateSubView{
-    [super updateSubView];
-    _photoBtn.hidden = [[FUManager shareManager] isRuningAitype:FUNamaAITypeBodySkeleton] ? YES:NO;
-}
-
-
 
 #pragma  mark -  FUHeadButtonViewDelegate
 
-
 -(void)headButtonViewBackAction:(UIButton *)btn{
-    [self.mCamera stopCapture];
+    [[FURenderKit shareRenderKit] stopInternalCamera];
     [super headButtonViewBackAction:btn];
 }
-
--(void)headButtonViewSegmentedChange:(UISegmentedControl *)sender{
-    _mCamera.captureFormat = _mCamera.captureFormat == kCVPixelFormatType_32BGRA ? kCVPixelFormatType_420YpCbCr8BiPlanarFullRange:kCVPixelFormatType_32BGRA;
-}
-
 
 -(void)headButtonViewSwitchAction:(UIButton *)sender{
     sender.userInteractionEnabled = NO ;
@@ -111,20 +209,29 @@ FUCameraDataSource,FUPhotoButtonDelegate>{
         sender.userInteractionEnabled = YES ;
     });
      
-     [self.mCamera changeCameraInputDeviceisFront:sender.selected];
-     sender.selected = !sender.selected ;
-    fuHumanProcessorReset();
-    /**切换摄像头要调用此函数*/
-    [FURenderer onCameraChange];
+    [[FURenderKit shareRenderKit].captureCamera changeCameraInputDeviceisFront:sender.selected];
+    sender.selected = !sender.selected ;
+    [FUConfigManager resetHumanProcessor];
+    [FUConfigManager onCameraChange];
 }
 
+#pragma mark - FUConfigControllerProtocol
 
+- (void)configController:(FUConfigController *)controller didChangeConfigDataSource:(NSArray<FUAISectionModel *> *)configs {
+    
+    [super configController:controller didChangeConfigDataSource:configs];
+    
+    // 拍照按钮根据是否人体骨骼显示/隐藏
+    self.photoBtn.hidden = [FUManager shareManager].runningHalfBodySkeleton || [FUManager shareManager].runningWholeBodySkeleton;
+    // 小视图根据是否人体骨骼显示/隐藏
+    self.smallDisplayView.hidden = !([FUManager shareManager].runningHalfBodySkeleton || [FUManager shareManager].runningWholeBodySkeleton);
+}
 
 #pragma mark -  PhotoButtonDelegate
 
-/*  拍照  */
-- (void)takePhoto{
-    //拍照效果
+/// 拍照
+- (void)takePhoto {
+    // 拍照效果
     self.photoBtn.enabled = NO;
     UIView *whiteView = [[UIView alloc] initWithFrame:self.view.bounds];
     whiteView.backgroundColor = [UIColor whiteColor];
@@ -141,94 +248,76 @@ FUCameraDataSource,FUPhotoButtonDelegate>{
         }];
     }];
     
-    
-    UIImage *image = [self captureImage];
-    if (image) {
-        [self takePhotoToSave:image];
+    UIImage *resultImage = [FURenderKit captureImage];
+    if (resultImage) {
+        [self takePhotoToSave:resultImage];
     }
 }
 
--(void)takePhotoToSave:(UIImage *)image{
+-(void)takePhotoToSave:(UIImage *)image {
     UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
 }
 
-/*  开始录像    */
+/// 开始录像
 - (void)startRecord {
-    [self.mCamera startRecord];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYYMMddhhmmssSS"];
+    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    NSString *videoPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", dateString]];
+    [FURenderKit startRecordVideoWithFilePath:videoPath];
 }
 
-/*  停止录像    */
+/// 停止录像
 - (void)stopRecord {
-       __weak typeof(self)weakSelf  = self ;
-    [self.mCamera stopRecordWithCompletionHandler:^(NSString *videoPath) {
+    [FURenderKit stopRecordVideoComplention:^(NSString * _Nonnull filePath) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            UISaveVideoAtPathToSavedPhotosAlbum(videoPath, weakSelf, @selector(video:didFinishSavingWithError:contextInfo:), NULL);
+            UISaveVideoAtPathToSavedPhotosAlbum(filePath, self, @selector(video:didFinishSavingWithError:contextInfo:), NULL);
         });
     }];
 }
 
 
-- (void)image: (UIImage *) image didFinishSavingWithError: (NSError *) error contextInfo: (void *) contextInfo
-{
-    if(error != NULL){
-        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"保存图片失败", nil)];
-    }else{
-        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"图片已保存到相册", nil)];
+#pragma mark - Getters
+
+- (FUGLDisplayView *)smallDisplayView {
+    if (!_smallDisplayView) {
+        _smallDisplayView = [[FUGLDisplayView alloc] initWithFrame:CGRectMake(FUScreenWidth - 95, FUScreenHeight - 151, 90, 146)];
+        UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanAction:)];
+        [_smallDisplayView addGestureRecognizer:panGestureRecognizer];
+        _smallDisplayView.backgroundColor = [UIColor redColor];
+        _smallDisplayView.hidden = YES;
     }
-    [SVProgressHUD dismissWithDelay:1.5f];
+    return _smallDisplayView;
 }
 
-- (void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
-{
-    if(error != NULL){
-        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"保存视频失败", nil)];
-        
-    }else{
-        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"视频已保存到相册", nil)];
+- (FUPhotoButton *)photoBtn {
+    if (!_photoBtn) {
+        _photoBtn = [[FUPhotoButton alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
+        [_photoBtn setImage:[UIImage imageNamed:@"camera_btn_camera_normal"] forState:UIControlStateNormal];
+        if(FUiPhoneXStyle()){
+            _photoBtn.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 150 - 50);
+        }else{
+            _photoBtn.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 120 - 20);
+        }
+        _photoBtn.delegate = self;
     }
-    [SVProgressHUD dismissWithDelay:1.5f];
+    return _photoBtn;
 }
 
-
-- (void)dismissTipLabel
-{
-    self.tipLabel.hidden = YES;
-}
-
-#pragma mark - FUCameraDelegate
-
--(void)didOutputVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer {
-    [super didOutputVideoSampleBuffer:sampleBuffer];
-    
-    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) ;
-    /* 拍照抓图 */
-    if (!mCaptureImage && semaphore) {
-        mCaptureImage = [FUImageHelper imageFromPixelBuffer:pixelBuffer];
-        dispatch_semaphore_signal(semaphore);
+- (NSMutableParagraphStyle *)paragraphStyle {
+    if (!_paragraphStyle) {
+        _paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        _paragraphStyle.lineSpacing = 3;                    // 设置行间距
+        _paragraphStyle.paragraphSpacing = 4;               // 设置段间距
+        _paragraphStyle.alignment = NSTextAlignmentLeft;    // 设置对齐方式
+        _paragraphStyle.firstLineHeadIndent = 5;            // 首行缩进距离
+        _paragraphStyle.headIndent = 5;                     // 除首行之外其他行缩进
+        _paragraphStyle.tailIndent = 300;                   // 每行容纳字符的宽度
+        _paragraphStyle.minimumLineHeight = 2;              // 每行最小高度
+        _paragraphStyle.maximumLineHeight = 10;             // 每行最大高度
+        _paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;  // 换行方式
     }
+    return _paragraphStyle;
 }
-
-#pragma mark -  Observer
-
-- (void)addObserver{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willResignActive) name:UIApplicationWillResignActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
-}
-
-- (void)willResignActive{
-    if (self.navigationController.visibleViewController == self) {
-        [self.mCamera stopCapture];
-//        self.mCamera = nil;
-    }
-}
-
-
-- (void)didBecomeActive{
-    if (self.navigationController.visibleViewController == self) {
-        [self.mCamera startCapture];
-    }
-}
-
-
 
 @end

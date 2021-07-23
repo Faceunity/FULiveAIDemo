@@ -31,6 +31,6 @@ typedef NS_OPTIONS(NSUInteger, FUPhotoButtonType) {
 
 @property (nonatomic, assign) FUPhotoButtonType type;
 
--(void)photoButtonFinishRecord;
+- (void)photoButtonFinishRecord;
 
 @end

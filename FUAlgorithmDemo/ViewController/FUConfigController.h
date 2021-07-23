@@ -7,17 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FUAICollectionModel.h"
+
+@class FUConfigController, FUAISectionModel;
+
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString* const FUConfigControllerUpdateNotification;
+@protocol FUConfigControllerProtocol <NSObject>
+
+/// 设置数据发生变化（修改、重置）
+/// @param controller 控制器
+/// @param configs 设置数据源数组
+- (void)configController:(FUConfigController *)controller didChangeConfigDataSource:(NSArray<FUAISectionModel*> *)configs;
+
+@end
 
 @interface FUConfigController : UIViewController
 
+@property (nonatomic, weak) id<FUConfigControllerProtocol> delegate;
 
-@property(nonatomic,strong) NSMutableArray <FUAISectionModel*>*config;
+@property (nonatomic, strong) NSMutableArray<FUAISectionModel*> *configDataSource;
 
-@property (nonatomic,weak) UIViewController *weakVC;
 @end
 
 NS_ASSUME_NONNULL_END

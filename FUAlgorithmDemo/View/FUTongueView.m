@@ -7,10 +7,49 @@
 //
 
 #import "FUTongueView.h"
+#import <Masonry.h>
 
 static NSString *tongueID = @"tongueID";
 
 @implementation FUTongueViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        [self.contentView addSubview:self.itemLabel];
+        [self.itemLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.leading.equalTo(self.contentView.mas_leading).mas_offset(15);
+            make.centerY.equalTo(self.contentView);
+        }];
+        
+        [self.contentView addSubview:self.detailsLabel];
+        [self.detailsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.trailing.equalTo(self.contentView.mas_trailing).mas_offset(-15);
+            make.centerY.equalTo(self.contentView);
+        }];
+    }
+    return self;
+}
+
+- (UILabel *)itemLabel {
+    if (!_itemLabel) {
+        _itemLabel = [[UILabel alloc] init];
+        _itemLabel.textColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        _itemLabel.font = [UIFont systemFontOfSize:11];
+    }
+    return _itemLabel;
+}
+
+- (UILabel *)detailsLabel {
+    if (!_detailsLabel) {
+        _detailsLabel = [[UILabel alloc] init];
+        _detailsLabel.textColor = [UIColor whiteColor];
+        _detailsLabel.font = [UIFont systemFontOfSize:11];
+    }
+    return _detailsLabel;
+}
 
 @end
 
@@ -42,13 +81,10 @@ static NSString *tongueID = @"tongueID";
     _mTableView.layer.masksToBounds = YES;
     _mTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _mTableView.scrollEnabled = NO;
-//    [_mTableView registerClass:[FUTongueViewCell class] forCellReuseIdentifier:tongueID];
-    
+    _mTableView.rowHeight = 22;
     _mTableView.delegate = self;
     _mTableView.dataSource = self;
-    
     [self addSubview:_mTableView];
-    
 }
 
 
@@ -65,14 +101,10 @@ static NSString *tongueID = @"tongueID";
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     FUTongueViewCell *cell = (FUTongueViewCell *)[tableView dequeueReusableCellWithIdentifier:tongueID];
     if (cell == nil) {
-        cell = [[FUTongueViewCell alloc] initWithStyle: UITableViewCellStyleValue1
-                                      reuseIdentifier: tongueID];
+        cell = [[FUTongueViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:tongueID];
     }
-    cell.textLabel.text = _mTitles[indexPath.row];
-    cell.textLabel.textColor = [UIColor colorWithWhite:1.0 alpha:1.0];
-    cell.textLabel.font = [UIFont systemFontOfSize:11];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.detailTextLabel.text = @"";
+    cell.itemLabel.text = _mTitles[indexPath.row];
+    cell.detailsLabel.text = nil;
     if ([_selArray containsObject:[NSNumber numberWithInteger:indexPath.row]]) {
         cell.backgroundColor = [UIColor colorWithRed:108/255.0 green:82/255.0 blue:255/255.0 alpha:1.0];
     }else{
@@ -81,17 +113,14 @@ static NSString *tongueID = @"tongueID";
     
     if (_current == FUViewTypeEmotion && (indexPath.row == _mTitles.count - 1)) {
         cell.backgroundColor = [UIColor colorWithRed:17/255.0 green:18/255.0 blue:38/255.0 alpha:0.5];
-        cell.detailTextLabel.textColor = [UIColor whiteColor];
-        cell.detailTextLabel.font = [UIFont systemFontOfSize:11];
-        cell.detailTextLabel.text = [_selArray containsObject:[NSNumber numberWithInteger:indexPath.row]] ? @"是":@"否";
+        cell.detailsLabel.text = [_selArray containsObject:[NSNumber numberWithInteger:indexPath.row]] ? @"是":@"否";
     }
-    
     
     return cell;
 }
 
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 22;
 }
 

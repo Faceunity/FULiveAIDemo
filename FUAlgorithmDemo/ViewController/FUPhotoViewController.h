@@ -11,7 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface FUPhotoViewController : FUBaseViewController
-@property(strong,nonatomic)UIImage *mPotoImage;
+
+@property (nonatomic, strong) UIImage *photoImage;
+
 @end
 
 NS_ASSUME_NONNULL_END

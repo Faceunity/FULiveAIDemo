@@ -37,12 +37,12 @@
 
 -(void)setState:(FUAICellState)state{
     _state = state;
-    if (_state == FUAICellstateNol) {
+    if (_state == FUAICellStateNol) {
         self.backgroundColor = [UIColor colorWithRed:247/255.0 green:248/255.0 blue:250/255.0 alpha:1.0];
         _titleLabel.textColor = [UIColor colorWithRed:100/255.0 green:103/255.0 blue:122/255.0 alpha:1.0];
         _titleLabel.layer.borderWidth = 0;//边框宽度
         _titleLabel.font = [UIFont systemFontOfSize:12];
-    }else if(_state == FUAICellstateSel){
+    }else if(_state == FUAICellStateSel){
          _titleLabel.font = [UIFont boldSystemFontOfSize:12];
         self.backgroundColor = [UIColor colorWithRed:108/255.0 green:82/255.0 blue:255/255.0 alpha:0.09];
         _titleLabel.textColor = [UIColor colorWithRed:108/255.0 green:82/255.0 blue:255/255.0 alpha:1.0];
