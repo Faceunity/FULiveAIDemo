@@ -50,6 +50,7 @@ static NSTimeInterval oldTime = 0;
     }
     [FURenderKit shareRenderKit].glDisplayView = self.renderView;
     [FURenderKit shareRenderKit].delegate = self;
+    [FUAIKit shareKit].faceProcessorDetectMode = FUFaceProcessorDetectModeVideo;
     
     
 }

@@ -32,6 +32,9 @@
 		E340578D24754C28003AAE2C /* FUPhotoButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E340578B24754C28003AAE2C /* FUPhotoButton.m */; };
 		E3405796247551A2003AAE2C /* FUCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E3405795247551A2003AAE2C /* FUCircleProgressView.m */; };
 		E341083024A3765A00410722 /* hair_normal_algorithm.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E341082F24A3765900410722 /* hair_normal_algorithm.bundle */; };
+		E345990226AECBE400565E1B /* FUVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E345990126AECBE300565E1B /* FUVideoViewController.m */; };
+		E345990526AECCDA00565E1B /* FUVideoReader.m in Sources */ = {isa = PBXBuildFile; fileRef = E345990426AECCDA00565E1B /* FUVideoReader.m */; };
+		E345990826AED77B00565E1B /* UIImage+FU.m in Sources */ = {isa = PBXBuildFile; fileRef = E345990626AED77B00565E1B /* UIImage+FU.m */; };
 		E35DC6B624761FB5005B4EED /* FUManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E35DC6B424761FB5005B4EED /* FUManager.m */; };
 		E35DC6BD24762679005B4EED /* human_mask.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E35DC6BB24762678005B4EED /* human_mask.bundle */; };
 		E35DC6BE24762679005B4EED /* head_mask.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E35DC6BC24762679005B4EED /* head_mask.bundle */; };
@@ -135,6 +138,12 @@
 		E3405797247551DF003AAE2C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		E3405799247551EC003AAE2C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		E341082F24A3765900410722 /* hair_normal_algorithm.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = hair_normal_algorithm.bundle; sourceTree = "<group>"; };
+		E345990026AECBE300565E1B /* FUVideoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUVideoViewController.h; sourceTree = "<group>"; };
+		E345990126AECBE300565E1B /* FUVideoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUVideoViewController.m; sourceTree = "<group>"; };
+		E345990326AECCDA00565E1B /* FUVideoReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUVideoReader.h; sourceTree = "<group>"; };
+		E345990426AECCDA00565E1B /* FUVideoReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUVideoReader.m; sourceTree = "<group>"; };
+		E345990626AED77B00565E1B /* UIImage+FU.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FU.m"; sourceTree = "<group>"; };
+		E345990726AED77B00565E1B /* UIImage+FU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FU.h"; sourceTree = "<group>"; };
 		E35DC6B424761FB5005B4EED /* FUManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUManager.m; sourceTree = "<group>"; };
 		E35DC6B524761FB5005B4EED /* FUManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUManager.h; sourceTree = "<group>"; };
 		E35DC6BB24762678005B4EED /* human_mask.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = human_mask.bundle; sourceTree = "<group>"; };
@@ -334,6 +343,31 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		E345990926AED79100565E1B /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				E345990A26AED7B000565E1B /* Category */,
+				E35DC6B524761FB5005B4EED /* FUManager.h */,
+				E35DC6B424761FB5005B4EED /* FUManager.m */,
+				E363071F24E10E8B00A16812 /* FUIndexHandle.h */,
+				E363072024E10E8B00A16812 /* FUIndexHandle.m */,
+				E39972AB26536546009BBAC9 /* FUConfigManager.h */,
+				E39972AC26536546009BBAC9 /* FUConfigManager.m */,
+				E345990326AECCDA00565E1B /* FUVideoReader.h */,
+				E345990426AECCDA00565E1B /* FUVideoReader.m */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		E345990A26AED7B000565E1B /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				E345990726AED77B00565E1B /* UIImage+FU.h */,
+				E345990626AED77B00565E1B /* UIImage+FU.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		E35DC6B8247625EE005B4EED /* bundles */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,21 +391,10 @@
 				E3732C72247CB05400D756B5 /* FUShotViewController.m */,
 				E3732C74247CC21E00D756B5 /* FUPhotoViewController.h */,
 				E3732C75247CC21E00D756B5 /* FUPhotoViewController.m */,
+				E345990026AECBE300565E1B /* FUVideoViewController.h */,
+				E345990126AECBE300565E1B /* FUVideoViewController.m */,
 			);
 			path = ViewController;
-			sourceTree = "<group>";
-		};
-		E35DC6C524765E10005B4EED /* Core */ = {
-			isa = PBXGroup;
-			children = (
-				E363071F24E10E8B00A16812 /* FUIndexHandle.h */,
-				E363072024E10E8B00A16812 /* FUIndexHandle.m */,
-				E35DC6B524761FB5005B4EED /* FUManager.h */,
-				E35DC6B424761FB5005B4EED /* FUManager.m */,
-				E39972AB26536546009BBAC9 /* FUConfigManager.h */,
-				E39972AC26536546009BBAC9 /* FUConfigManager.m */,
-			);
-			path = Core;
 			sourceTree = "<group>";
 		};
 		E3600E6B2477805900A7D1C3 /* Model */ = {
@@ -478,7 +501,7 @@
 				E35DC6C424765DEA005B4EED /* ViewController */,
 				E340572524754AFC003AAE2C /* View */,
 				E3600E6B2477805900A7D1C3 /* Model */,
-				E35DC6C524765E10005B4EED /* Core */,
+				E345990926AED79100565E1B /* Helper */,
 				E39972C12654B6CD009BBAC9 /* Macros */,
 				E332E5F524AF35CE00232C4A /* Lib */,
 				E39972A0265352B7009BBAC9 /* Resource */,
@@ -670,10 +693,12 @@
 				E3732C76247CC21E00D756B5 /* FUPhotoViewController.m in Sources */,
 				E35DC6B624761FB5005B4EED /* FUManager.m in Sources */,
 				E3732C4F2477A35600D756B5 /* FUAICollectionModel.m in Sources */,
+				E345990226AECBE400565E1B /* FUVideoViewController.m in Sources */,
 				E3405796247551A2003AAE2C /* FUCircleProgressView.m in Sources */,
 				E340578724754BFC003AAE2C /* FUHeadButtonView.m in Sources */,
 				E3AD31B124752D4E00B45264 /* AppDelegate.m in Sources */,
 				E304BCEC24D932B60020A724 /* FUTongueView.m in Sources */,
+				E345990526AECCDA00565E1B /* FUVideoReader.m in Sources */,
 				E304BCE724D8FD970020A724 /* FUExpresionView.m in Sources */,
 				E3AD31C224752D6100B45264 /* main.m in Sources */,
 				E35DC6CE24766C05005B4EED /* FUHeadReusableView.m in Sources */,
@@ -682,6 +707,7 @@
 				E39972AD26536546009BBAC9 /* FUConfigManager.m in Sources */,
 				E35DC6CB24766354005B4EED /* FUConfigCell.m in Sources */,
 				E35DC6C824765F59005B4EED /* FUConfigController.m in Sources */,
+				E345990826AED77B00565E1B /* UIImage+FU.m in Sources */,
 				E3732C73247CB05400D756B5 /* FUShotViewController.m in Sources */,
 				E363072124E10E8B00A16812 /* FUIndexHandle.m in Sources */,
 				E34057212475334E003AAE2C /* FUHomeController.m in Sources */,
@@ -827,7 +853,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -863,7 +889,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
