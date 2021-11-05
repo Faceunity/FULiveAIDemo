@@ -13,6 +13,7 @@
 #import "UIViewController+CWLateralSlide.h"
 
 #import <SVProgressHUD.h>
+#import <Masonry.h>
 
 @interface FUPhotoViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>{
         dispatch_queue_t renderQueue;
@@ -30,8 +31,11 @@
 @implementation FUPhotoViewController
 
 #pragma mark - Life cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [FUAIKit shareKit].faceProcessorDetectMode = FUFaceProcessorDetectModeImage;
     
     renderQueue = dispatch_queue_create("com.face.render", DISPATCH_QUEUE_SERIAL);
     
@@ -43,6 +47,15 @@
     self.renderView.contentMode = FUGLDisplayViewContentModeScaleAspectFit;
     
     [self.view addSubview:self.savePhotoButton];
+    [self.savePhotoButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view);
+        if (@available(iOS 11.0, *)) {
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).mas_offset(-105);
+        } else {
+            make.bottom.equalTo(self.view.mas_bottom).mas_offset(-105);
+        }
+        make.size.mas_offset(CGSizeMake(75, 75));
+    }];
     
     self.buglyLabel.hidden = YES;
     
@@ -56,6 +69,7 @@
     }
     dispatch_async(renderQueue, ^{
         @autoreleasepool {//防止大图片，内存峰值过高
+            [FUConfigManager resetHumanProcessor];
             FUImageBuffer imageBuffer = [self.photoImage getImageBuffer];
             FURenderInput *input = [[FURenderInput alloc] init];
             input.renderConfig.imageOrientation = 0;
@@ -132,14 +146,9 @@
 
 - (UIButton *)savePhotoButton {
     if (!_savePhotoButton) {
-        _savePhotoButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 75, 75)];
-        [_savePhotoButton setImage:[UIImage imageNamed:@"demo_btn_save"] forState:UIControlStateNormal];
+        _savePhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_savePhotoButton setBackgroundImage:[UIImage imageNamed:@"demo_btn_save"] forState:UIControlStateNormal];
         [_savePhotoButton addTarget:self action:@selector(savePictureAction:) forControlEvents:UIControlEventTouchUpInside];
-        if(FUiPhoneXStyle()){
-            _savePhotoButton.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 150 - 50);
-        }else{
-            _savePhotoButton.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height - 120 - 20);
-        }
     }
     return _savePhotoButton;
 }

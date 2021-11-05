@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TNt-Vb-f0L">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="TNt-Vb-f0L">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FU Live Demo算法版" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rEn-8O-EkO">
-                                        <rect key="frame" x="125.5" y="15.5" width="163.5" height="20.5"/>
+                                        <rect key="frame" x="125.5" y="15.5" width="163" height="20.5"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -131,10 +131,50 @@
                                     <constraint firstItem="dES-tg-zeD" firstAttribute="centerY" secondItem="r9O-Rm-jRO" secondAttribute="centerY" id="t0T-Gn-mIo"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C4U-RY-dBP">
+                                <rect key="frame" x="36" y="692" width="342" height="76"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="demo_home_icon_image_processing" translatesAutoresizingMaskIntoConstraints="NO" id="aW9-Yq-ugW">
+                                        <rect key="frame" x="36" y="15" width="46" height="46"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="46" id="97R-St-DZB"/>
+                                            <constraint firstAttribute="width" constant="46" id="WMu-Zd-8Bp"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="视频处理" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zac-TS-377">
+                                        <rect key="frame" x="98" y="28" width="92" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="18A-xX-3PG"/>
+                                            <constraint firstAttribute="width" constant="92" id="oSG-60-kUW"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="demo_home_icon_right_click" translatesAutoresizingMaskIntoConstraints="NO" id="ETN-LU-COh">
+                                        <rect key="frame" x="296" y="32" width="12" height="12"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="12" id="cyf-J0-LJ1"/>
+                                            <constraint firstAttribute="width" constant="12" id="hVR-NE-3u2"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.10740094629999999" green="0.097519762809999994" blue="0.21211683749999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="ETN-LU-COh" firstAttribute="centerY" secondItem="C4U-RY-dBP" secondAttribute="centerY" id="7aJ-S3-wAF"/>
+                                    <constraint firstItem="zac-TS-377" firstAttribute="centerY" secondItem="C4U-RY-dBP" secondAttribute="centerY" id="8Y4-ag-cqq"/>
+                                    <constraint firstAttribute="height" constant="76" id="ElU-uK-Zey"/>
+                                    <constraint firstItem="aW9-Yq-ugW" firstAttribute="centerY" secondItem="C4U-RY-dBP" secondAttribute="centerY" id="H7C-3T-u6a"/>
+                                    <constraint firstItem="aW9-Yq-ugW" firstAttribute="leading" secondItem="C4U-RY-dBP" secondAttribute="leading" constant="36" id="Itb-zS-ifB"/>
+                                    <constraint firstItem="zac-TS-377" firstAttribute="leading" secondItem="aW9-Yq-ugW" secondAttribute="trailing" constant="16" id="ca3-od-TFJ"/>
+                                    <constraint firstAttribute="trailing" secondItem="ETN-LU-COh" secondAttribute="trailing" constant="34" id="vwY-Ik-FYy"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="r9O-Rm-jRO" firstAttribute="leading" secondItem="6ZE-ay-S0e" secondAttribute="leadingMargin" constant="16" id="9M8-sJ-lQu"/>
+                            <constraint firstItem="C4U-RY-dBP" firstAttribute="leading" secondItem="6ZE-ay-S0e" secondAttribute="leadingMargin" constant="16" id="Aed-ft-Pwg"/>
                             <constraint firstAttribute="trailingMargin" secondItem="iDc-i8-B9N" secondAttribute="trailing" constant="16" id="EmE-zp-pMU"/>
                             <constraint firstItem="DeS-GW-S7h" firstAttribute="leading" secondItem="6ZE-ay-S0e" secondAttribute="leading" id="MNY-TE-1KQ"/>
                             <constraint firstItem="iDc-i8-B9N" firstAttribute="leading" secondItem="6ZE-ay-S0e" secondAttribute="leadingMargin" constant="16" id="Msu-3j-ldi"/>
@@ -142,11 +182,13 @@
                             <constraint firstItem="iDc-i8-B9N" firstAttribute="centerY" secondItem="6ZE-ay-S0e" secondAttribute="centerY" constant="50" id="f3h-v9-yUN"/>
                             <constraint firstItem="ErD-Qh-gdU" firstAttribute="top" secondItem="DeS-GW-S7h" secondAttribute="bottom" id="o3I-ou-bKT"/>
                             <constraint firstItem="DeS-GW-S7h" firstAttribute="top" secondItem="y1P-YT-KQI" secondAttribute="bottom" id="piW-RR-zdN"/>
+                            <constraint firstItem="C4U-RY-dBP" firstAttribute="top" secondItem="r9O-Rm-jRO" secondAttribute="bottom" constant="40" id="sBz-t5-Oqs"/>
                             <constraint firstItem="r9O-Rm-jRO" firstAttribute="top" secondItem="iDc-i8-B9N" secondAttribute="bottom" constant="40" id="tXw-mQ-4EO"/>
                             <constraint firstAttribute="trailing" secondItem="ErD-Qh-gdU" secondAttribute="trailing" id="v02-Jr-sLz"/>
                             <constraint firstItem="ErD-Qh-gdU" firstAttribute="leading" secondItem="6ZE-ay-S0e" secondAttribute="leading" id="vl7-oP-EBD"/>
                             <constraint firstItem="iDc-i8-B9N" firstAttribute="centerX" secondItem="6ZE-ay-S0e" secondAttribute="centerX" id="w1u-40-Ocd"/>
                             <constraint firstAttribute="trailingMargin" secondItem="r9O-Rm-jRO" secondAttribute="trailing" constant="16" id="x1k-co-xtj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="C4U-RY-dBP" secondAttribute="trailing" constant="16" id="xre-Ce-Rvg"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="FULive" id="Cls-kb-1rE"/>
@@ -154,6 +196,7 @@
                         <outlet property="mLayoutConstraintH" destination="hOo-eX-pJ6" id="JAG-1B-fj3"/>
                         <outlet property="tapView1" destination="iDc-i8-B9N" id="N1j-bR-9IW"/>
                         <outlet property="tapView2" destination="r9O-Rm-jRO" id="I7M-5d-Ikr"/>
+                        <outlet property="tapView3" destination="C4U-RY-dBP" id="je3-yy-LRS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f2k-iy-T9Y" sceneMemberID="firstResponder"/>

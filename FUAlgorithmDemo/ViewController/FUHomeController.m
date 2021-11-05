@@ -9,12 +9,14 @@
 #import "FUHomeController.h"
 #import "FUShotViewController.h"
 #import "FUPhotoViewController.h"
+#import "FUVideoViewController.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
 @interface FUHomeController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIView *tapView1;
 @property (weak, nonatomic) IBOutlet UIView *tapView2;
+@property (weak, nonatomic) IBOutlet UIView *tapView3;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *mLayoutConstraintH;
 
 @end
@@ -28,6 +30,7 @@
     
     self.tapView1.layer.cornerRadius = 8;
     self.tapView2.layer.cornerRadius = 8;
+    self.tapView3.layer.cornerRadius = 8;
     
     UILongPressGestureRecognizer *tapGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(touchesView1:)];
     tapGesture.minimumPressDuration = 0;
@@ -35,7 +38,11 @@
     
     UILongPressGestureRecognizer *tapGesture2 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(touchesView2:)];
     tapGesture2.minimumPressDuration = 0;
-    [self.tapView2 addGestureRecognizer:tapGesture2];    
+    [self.tapView2 addGestureRecognizer:tapGesture2];
+    
+    UILongPressGestureRecognizer *tapGesture3 = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(touchesView3:)];
+    tapGesture3.minimumPressDuration = 0;
+    [self.tapView3 addGestureRecognizer:tapGesture3];
     
 }
 
@@ -85,6 +92,27 @@
 
 }
 
+- (void)touchesView3:(UILongPressGestureRecognizer *)tap {
+    switch (tap.state) {
+        case UIGestureRecognizerStateBegan:{
+            self.tapView3.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        }
+            break;
+        case UIGestureRecognizerStateEnded:{
+            self.tapView3.transform = CGAffineTransformIdentity;
+            [self showImagePickerWithMediaType:(NSString *)kUTTypeMovie];
+        }
+            break;
+        case UIGestureRecognizerStateFailed:
+        case UIGestureRecognizerStateCancelled:{
+            self.tapView3.transform = CGAffineTransformIdentity;
+        }
+            break;
+        default:
+            break;
+    }
+}
+
 
 - (void)showImagePickerWithMediaType:(NSString *)mediaType {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
@@ -121,6 +149,11 @@
             FUPhotoViewController *vc = [[FUPhotoViewController alloc] init];
             vc.photoImage = [UIImage imageWithData:imageData0];
             [self.navigationController pushViewController:vc animated:YES];
+        } else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
+            // 选择视频
+            FUVideoViewController *videoController = [[FUVideoViewController alloc] init];
+            videoController.videoURL = info[UIImagePickerControllerMediaURL];
+            [self.navigationController pushViewController:videoController animated:YES];
         }
     }];
     
