@@ -1,4 +1,36 @@
-# Demo运行说明文档-iOS  
+# SDK集成指导文档-iOS  
+
+------
+
+级别：Public   
+更新日期：2021-01-27
+SDK版本: 8.1.0
+
+### 最新更新内容：
+
+1）更新人脸检测模型为全角度,高端机可自由选择是否启动小人脸检测
+2）更新PTA侧驱动相关接口
+3）解决部分已知bug
+
+------
+
+级别：Public   
+更新日期：2021-12-24 
+SDK版本: 8.0.2
+
+### 最新更新内容：
+
+1）解决部分bug
+
+------
+
+级别：Public   
+更新日期：2021-11-17 
+SDK版本: 8.0.1
+
+### 最新更新内容：
+
+1）解决部分bug
 
 ------
 
@@ -80,7 +112,7 @@ SDK版本: 7.4.0
 ------
 
 
-## 2. SDK文件结构
+## 2. SDK文件结构(使用新架构FURenderKit动态库)
 
 本小节，描述Demo文件结构，各个目录，以及重要文件的功能。
 
@@ -93,7 +125,7 @@ SDK版本: 7.4.0
       +Beauty                   //美颜模块
         ...
     +Helpers                //主要业务管理类  
-      -FUManager              //NAMA业务管理类
+      -FUManager              //Nama业务管理类
       +VC                      //基类控制器
       +Manager                 //管理类基类
           ...   
@@ -130,16 +162,27 @@ Xcode 8或更高版本
 ### 3.2 导入SDK 
 #### 3.2.1 通过cocoapods集成
 
-全功能版本（支持物理特效）：
+Nama全功能版本（支持物理特效）：
 
 ```
-pod 'Nama', '7.4.1' 
+pod 'Nama', '8.1.0' 
 ```
 
-lite 版（体积更小，包含人脸相关的功能(海报换脸除外)）：
+Nama-lite版本（体积更小，包含人脸相关的功能(海报换脸除外)）：
 
 ```
-pod 'Nama-lite', '7.4.1' 
+pod 'Nama-lite', '8.1.0' 
+```
+FURenderKit全功能版本（支持物理特效）：
+
+```
+pod 'FURenderKit', '8.1.0' 
+```
+
+FURenderKit-lite版本：
+
+```
+pod 'FURenderKit-lite', '8.1.0' 
 ```
 
 接下来执行：
@@ -154,13 +197,18 @@ pod install
 pod repo update 或 pod setup
 ```
 
-#### 3.2.2 通过 github 下载集成
+#### 3.2.2 直接下载
 
-全功能版本（支持物理特效）：[FaceUnity-SDK-iOS-v7.4.0.zip](https://www.faceunity.com/sdk/FaceUnity-SDK-iOS-v7.4.0.zip)
+Nama全功能版本（支持物理特效）：[FaceUnity-SDK-iOS-v8.1.0.zip](https://fu-sdk.oss-cn-hangzhou.aliyuncs.com/FaceUnity-SDK-iOS-v8.1.0.zip)
 
-lite 版（体积更小，包含人脸相关的功能(海报换脸除外)）：[FaceUnity-SDK-iOS-v7.4.0-lite.zip](https://www.faceunity.com/sdk/FaceUnity-SDK-iOS-v7.4.0-lite.zip)
+Nama-lite版本： 版（体积更小，包含人脸相关的功能(海报换脸除外)）：[FaceUnity-SDK-iOS-v8.1.0-lite.zip](https://fu-sdk.oss-cn-hangzhou.aliyuncs.com/FaceUnity-SDK-iOS-v8.1.0-lite.zip)
 
+FURenderKit全功能版本（支持物理特效）：
+    [FURenderKit-v8.1.0.zip](https://fu-sdk.oss-cn-hangzhou.aliyuncs.com/FURenderKit-v8.1.0.zip)
 
+FURenderKit-lite版本：
+    [FURenderKit-lite-v8.1.0.zip](https://fu-sdk.oss-cn-hangzhou.aliyuncs.com/FURenderKit-lite-v8.1.0.zip)
+    
 
 下载完成并解压后将库文件夹拖入到工程中，并勾选上 Copy items if needed，如图：
 
@@ -168,7 +216,7 @@ lite 版（体积更小，包含人脸相关的功能(海报换脸除外)）：[
 
 ![](imgs/picture1.png)
 
-libCNamaSDK.framework是动态库，需要在General->Framworks，Libraries,and Embedded  Content 中添加依赖关系，并将Embed设置为Embed&Sign，否则会导致运行后因找不到库而崩
+libCNamaSDK.framework或者FURenderKit.framework是动态库，需要在General->Framworks，Libraries,and Embedded  Content 中添加依赖关系，并将Embed设置为Embed&Sign，否则会导致运行后因找不到库而崩
 
 如图：
 

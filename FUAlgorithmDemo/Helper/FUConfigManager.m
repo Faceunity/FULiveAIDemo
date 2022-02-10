@@ -45,6 +45,12 @@
         
         // 设置最大人脸数量
         [FUAIKit shareKit].maxTrackFaces = 8;
+        
+        // 设置人脸算法质量
+        [FUAIKit shareKit].faceProcessorFaceLandmarkQuality = [FURenderKit devicePerformanceLevel] == FUDevicePerformanceLevelHigh ? FUFaceProcessorFaceLandmarkQualityHigh : FUFaceProcessorFaceLandmarkQualityMedium;
+        
+        // 设置小脸检测是否打开
+        [FUAIKit shareKit].faceProcessorDetectSmallFace = [FURenderKit devicePerformanceLevel] == FUDevicePerformanceLevelHigh;
     });
 }
 
