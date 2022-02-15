@@ -16,6 +16,7 @@
 /// 骨骼需要设置Scene
 @property (nonatomic, strong) FUScene *scene;
 @property (nonatomic, strong) FUAvatar *avatar;
+@property (nonatomic, strong) FUBackground *sceneBackground;
 
 @end
 
@@ -44,10 +45,7 @@ static FUManager *shareManager = NULL;
     
     if (_runningWholeBodySkeleton || _runningHalfBodySkeleton) {
         // 解绑骨骼相关
-        [[FURenderKit shareRenderKit] removeScene:self.scene completion:nil];
-        [FURenderKit shareRenderKit].currentScene = nil;
-        _avatar = nil;
-        _scene = nil;
+        [self destoryScene];
         _runningWholeBodySkeleton = NO;
         _runningHalfBodySkeleton = NO;
     }
@@ -62,6 +60,16 @@ static FUManager *shareManager = NULL;
     _runningHairSplit = NO;
     _runningHeadSplit = NO;
     _runningActionRecognition = NO;
+}
+
+- (void)destoryScene {
+    [self.scene removeAvatar:self.avatar];
+    _avatar = nil;
+    [[FURenderKit shareRenderKit] removeScene:self.scene completion:^(BOOL success) {
+        [FURenderKit shareRenderKit].currentScene = nil;
+    }];
+    _scene = nil;
+    _sceneBackground = nil;
 }
 
 - (BOOL)isNeedFace {
@@ -206,14 +214,22 @@ static FUManager *shareManager = NULL;
             // 如果已经运行半身骨骼，则先设为NO
             _runningHalfBodySkeleton = NO;
         }
-        [[FURenderKit shareRenderKit] addScene:self.scene completion:^(BOOL success) {
+        if (![FURenderKit shareRenderKit].currentScene) {
+            [[FURenderKit shareRenderKit] addScene:self.scene completion:^(BOOL success) {
+                [FURenderKit shareRenderKit].currentScene = self.scene;
+                self.scene.background = self.sceneBackground;
+                [self.scene addAvatar:self.avatar];
+                self.scene.AIConfig.bodyTrackMode = FUBodyTrackModeFull;
+                self.avatar.position = FUPositionMake(0, 53.14, -537.94);
+                [self.avatar setEnableHumanAnimDriver:YES];
+            }];
+        } else {
             self.scene.AIConfig.bodyTrackMode = FUBodyTrackModeFull;
             self.avatar.position = FUPositionMake(0, 53.14, -537.94);
-            [FURenderKit shareRenderKit].currentScene = self.scene;
-        }];
+            [self.avatar setEnableHumanAnimDriver:YES];
+        }
     } else {
-        [[FURenderKit shareRenderKit] removeScene:self.scene completion:nil];
-        [FURenderKit shareRenderKit].currentScene = nil;
+        [self destoryScene];
     }
 }
 
@@ -227,14 +243,22 @@ static FUManager *shareManager = NULL;
             // 如果已经运行全身骨骼，则先设为NO
             _runningWholeBodySkeleton = NO;
         }
-        [[FURenderKit shareRenderKit] addScene:self.scene completion:^(BOOL success) {
+        if (![FURenderKit shareRenderKit].currentScene) {
+            [[FURenderKit shareRenderKit] addScene:self.scene completion:^(BOOL success) {
+                [FURenderKit shareRenderKit].currentScene = self.scene;
+                self.scene.background = self.sceneBackground;
+                [self.scene addAvatar:self.avatar];
+                self.scene.AIConfig.bodyTrackMode = FUBodyTrackModeHalf;
+                self.avatar.position = FUPositionMake(0, 0, -183.89);
+                [self.avatar setEnableHumanAnimDriver:YES];
+            }];
+        } else {
             self.scene.AIConfig.bodyTrackMode = FUBodyTrackModeHalf;
             self.avatar.position = FUPositionMake(0, 0, -183.89);
-            [FURenderKit shareRenderKit].currentScene = self.scene;
-        }];
+            [self.avatar setEnableHumanAnimDriver:YES];
+        }
     } else {
-        [[FURenderKit shareRenderKit] removeScene:self.scene completion:nil];
-        [FURenderKit shareRenderKit].currentScene = nil;
+        [self destoryScene];
     }
 }
 
@@ -299,11 +323,16 @@ static FUManager *shareManager = NULL;
     if (!_scene) {
         _scene = [[FUScene alloc] init];
         _scene.AIConfig.bodyTrackEnable = YES;
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"default_bg" ofType:@"bundle"];
-        _scene.background = [FUBackground itemWithPath:path name:@"bg"];
-        [_scene addAvatar:self.avatar];
     }
     return _scene;
+}
+
+- (FUBackground *)sceneBackground {
+    if (!_sceneBackground) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"default_bg" ofType:@"bundle"];
+        _sceneBackground = [[FUBackground alloc] initWithPath:path name:@"bg"];
+    }
+    return _sceneBackground;
 }
 
 - (FUAvatar *)avatar {

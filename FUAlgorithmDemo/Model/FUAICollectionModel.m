@@ -16,8 +16,7 @@
              @"bundleNames" : @"NSString",
              @"subFootes" :@"NSString",
              @"mToasts" :@"NSString",
-             @"moduleCodes" :@"NSNumber",
-            @"moduleCodes" :@"NSNumber",
+             @"moduleCodes" :@"NSNumber"
              };
 }
 
