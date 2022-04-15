@@ -121,7 +121,7 @@
 		E332E71124AFCB3A00232C4A /* tongue.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = tongue.bundle; sourceTree = "<group>"; };
 		E332E71224AFCB3A00232C4A /* fxaa.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = fxaa.bundle; sourceTree = "<group>"; };
 		E332E71324AFCB3A00232C4A /* face_makeup.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = face_makeup.bundle; sourceTree = "<group>"; };
-		E332E71424AFCB3A00232C4A /* controller.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = controller.bundle; sourceTree = "<group>"; };
+		E332E71424AFCB3A00232C4A /* controller.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = controller.bundle; sourceTree = "<group>"; };
 		E332E71524AFCB3A00232C4A /* body_slim.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = body_slim.bundle; sourceTree = "<group>"; };
 		E332E71624AFCB3A00232C4A /* fuzzytoonfilter.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = fuzzytoonfilter.bundle; sourceTree = "<group>"; };
 		E332E71724AFCB3A00232C4A /* face_beautification.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = face_beautification.bundle; sourceTree = "<group>"; };
@@ -241,14 +241,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E332E5F324AF342E00232C4A /* Avtar */ = {
+		E332E5F324AF342E00232C4A /* Avatar */ = {
 			isa = PBXGroup;
 			children = (
+				E332E71424AFCB3A00232C4A /* controller.bundle */,
 				E37A8738248A22EB006D900C /* fakeman.bundle */,
 				E37A873F248A4D5B006D900C /* controller_config.bundle */,
 				E3D2317A249DB9F900C656AB /* anim_idle.bundle */,
 			);
-			path = Avtar;
+			path = Avatar;
 			sourceTree = "<group>";
 		};
 		E332E5F424AF345A00232C4A /* Other */ = {
@@ -310,7 +311,6 @@
 				E332E71124AFCB3A00232C4A /* tongue.bundle */,
 				E332E71224AFCB3A00232C4A /* fxaa.bundle */,
 				E332E71324AFCB3A00232C4A /* face_makeup.bundle */,
-				E332E71424AFCB3A00232C4A /* controller.bundle */,
 				E332E71524AFCB3A00232C4A /* body_slim.bundle */,
 				E332E71624AFCB3A00232C4A /* fuzzytoonfilter.bundle */,
 				E332E71724AFCB3A00232C4A /* face_beautification.bundle */,
@@ -372,7 +372,7 @@
 			isa = PBXGroup;
 			children = (
 				E332E5F424AF345A00232C4A /* Other */,
-				E332E5F324AF342E00232C4A /* Avtar */,
+				E332E5F324AF342E00232C4A /* Avatar */,
 				E39CF922249896F4003A6C14 /* PoseTrack */,
 			);
 			path = bundles;
@@ -853,7 +853,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -889,7 +889,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

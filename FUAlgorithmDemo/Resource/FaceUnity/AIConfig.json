@@ -1,7 +1,7 @@
 {
     "data": [{
         "sectionTitel": "人脸",
-        "moudleType": 0,
+        "moduleType": 0,
         "sectionImageName": "demo_sidebar_icon_face",
         "aiMenu": [
         {
@@ -39,7 +39,7 @@
         }]
     },{
         "sectionTitel": "人体",
-        "moudleType": 1,
+        "moduleType": 1,
         "sectionImageName": "demo_sidebar_icon_body",
         "aiMenu": [
         {
@@ -66,7 +66,7 @@
     },
     {
         "sectionTitel": "手势",
-        "moudleType": 2,
+        "moduleType": 2,
         "sectionImageName": "demo_sidebar_icon_gesture",
         "aiMenu": [{
             "state": 0,
@@ -79,7 +79,7 @@
     },
     {
         "sectionTitel": "分割",
-        "moudleType": 3,
+        "moduleType": 3,
         "sectionImageName": "demo_sidebar_icon_segmentation",
         "aiMenu": [{
             "state": 0,
@@ -110,7 +110,7 @@
     },
     {
         "sectionTitel": "动作",
-        "moudleType": 4,
+        "moduleType": 4,
         "sectionImageName": "demo_sidebar_icon_action",
         "aiMenu": [{
             "state": 0,

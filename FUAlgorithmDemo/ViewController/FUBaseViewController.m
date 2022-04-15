@@ -520,7 +520,7 @@
         if ([self isMemberOfClass:[FUPhotoViewController class]]) {
             NSMutableArray *configs = [[NSMutableArray alloc] init];
             for (FUAISectionModel *model in datas) {
-                if(model.moudleType == FUMoudleTypeBody){
+                if(model.moduleType == FUModuleTypeBody){
                     // 只需要人体关键点，不需要骨骼
                     NSArray *tempArray = [NSArray arrayWithObjects:model.aiMenu[0], nil];
                     model.aiMenu = tempArray;
