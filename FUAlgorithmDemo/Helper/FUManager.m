@@ -221,11 +221,13 @@ static FUManager *shareManager = NULL;
                 [self.scene addAvatar:self.avatar];
                 self.scene.AIConfig.bodyTrackMode = FUBodyTrackModeFull;
                 self.avatar.position = FUPositionMake(0, 53.14, -537.94);
+                self.avatar.humanProcessorType = 0;
                 [self.avatar setEnableHumanAnimDriver:YES];
             }];
         } else {
             self.scene.AIConfig.bodyTrackMode = FUBodyTrackModeFull;
             self.avatar.position = FUPositionMake(0, 53.14, -537.94);
+            self.avatar.humanProcessorType = 0;
             [self.avatar setEnableHumanAnimDriver:YES];
         }
     } else {
@@ -340,12 +342,8 @@ static FUManager *shareManager = NULL;
         _avatar = [[FUAvatar alloc] init];
         _avatar.rotate = 0;
         // animations
-        NSArray *bindItemNames = @[@"anim_eight",@"anim_fist",@"anim_greet",@"anim_gun",@"anim_heart",@"anim_hold",@"anim_korheart",@"anim_merge",@"anim_ok",@"anim_one", @"anim_palm",@"anim_rock",@"anim_six",@"anim_thumb",@"anim_two",@"anim_idle",@"fxaa"];
-        for (NSString *strName in bindItemNames) {
-            NSString *path = [[NSBundle mainBundle] pathForResource:strName ofType:@"bundle"];
-            FUAnimation *component = [[FUAnimation alloc] initWithPath:path name:strName];
-            [_avatar addAnimation:component];
-        }
+        FUAnimation *animation = [FUAnimation animationWithPath:[[NSBundle mainBundle] pathForResource:@"anim_idle" ofType:@"bundle"] name:@"anim_idle"];
+        [_avatar addAnimation:animation];
         // components
         NSString *bodyComponentPath = [[NSBundle mainBundle] pathForResource:@"fakeman" ofType:@"bundle"];
         [_avatar addComponent:[[FUItem alloc] initWithPath:bodyComponentPath name:@"fakeman"]];

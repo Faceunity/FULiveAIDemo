@@ -54,7 +54,7 @@
     FUAISectionModel *mode = [[FUAISectionModel alloc] init];
     mode.sectionTitel = self.sectionTitel;
     mode.sectionImageName = self.sectionImageName;
-    mode.moudleType = self.moudleType;
+    mode.moduleType = self.moduleType;
     NSMutableArray *tempArray = [NSMutableArray array];
     for (FUAIConfigCellModel *modle in self.aiMenu) {
         [tempArray addObject:[modle copy]];

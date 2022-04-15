@@ -16,12 +16,12 @@ typedef NS_ENUM(NSUInteger, FUAICellState) {
     FUAICellStateDisable = 2,
 };
 
-typedef NS_ENUM(NSUInteger, FUMoudleType) {
-    FUMoudleTypeFace    = 0,
-    FUMoudleTypeBody    = 1,//人体
-    FUMoudleTypeGesture = 2,//手势
-    FUMoudleTypeSegmentation     = 3,//分割
-    FUMoudleTypeAction  = 4,//动作
+typedef NS_ENUM(NSUInteger, FUModuleType) {
+    FUModuleTypeFace    = 0,
+    FUModuleTypeBody    = 1,//人体
+    FUModuleTypeGesture = 2,//手势
+    FUModuleTypeSegmentation     = 3,//分割
+    FUModuleTypeAction  = 4,//动作
 };
 
 typedef NS_ENUM(NSUInteger, FUNamaAIType) {
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSUInteger, FUNamaAIType) {
 @property (nonatomic, copy) NSString* sectionTitel;
 @property (nonatomic, copy) NSString* sectionImageName;
 
-@property (assign, nonatomic) FUMoudleType moudleType;
+@property (assign, nonatomic) FUModuleType moduleType;
 @property (nonatomic, strong) NSArray <FUAIConfigCellModel *>* aiMenu;
 
 

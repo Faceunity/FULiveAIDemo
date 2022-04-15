@@ -160,7 +160,7 @@ static NSString *footViewID = @"footView";
     BOOL isFaceHaveSel = NO;
     BOOL isOtherHaveSel = NO;
     for (FUAISectionModel *config in self.configDataSource) {
-        if (config.moudleType == FUMoudleTypeFace) {
+        if (config.moduleType == FUModuleTypeFace) {
             for(int i = 0;i < config.aiMenu.count;i ++){
                 FUAIConfigCellModel *model = config.aiMenu[i];
                 if (model.state == FUAICellStateSel) {//  人脸还有选中
