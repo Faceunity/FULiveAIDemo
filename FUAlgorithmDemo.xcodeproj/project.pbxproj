@@ -51,35 +51,17 @@
 		E3732C76247CC21E00D756B5 /* FUPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3732C75247CC21E00D756B5 /* FUPhotoViewController.m */; };
 		E37A8739248A22EB006D900C /* fakeman.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E37A8738248A22EB006D900C /* fakeman.bundle */; };
 		E37A8740248A4D5B006D900C /* controller_config.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E37A873F248A4D5B006D900C /* controller_config.bundle */; };
+		E37E554A2874456C002952A1 /* ai_human_processor_gpu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E37E55492874456C002952A1 /* ai_human_processor_gpu.bundle */; };
 		E38168A4266479AF00CEF534 /* FURenderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38168A2266479AA00CEF534 /* FURenderKit.framework */; };
 		E38168A5266479AF00CEF534 /* FURenderKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E38168A2266479AA00CEF534 /* FURenderKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E39972AD26536546009BBAC9 /* FUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E39972AC26536546009BBAC9 /* FUConfigManager.m */; };
-		E39CF933249896F4003A6C14 /* anim_six.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF923249896F4003A6C14 /* anim_six.bundle */; };
-		E39CF934249896F4003A6C14 /* anim_gun.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF924249896F4003A6C14 /* anim_gun.bundle */; };
-		E39CF935249896F4003A6C14 /* anim_korheart.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF925249896F4003A6C14 /* anim_korheart.bundle */; };
-		E39CF936249896F4003A6C14 /* anim_heart.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF926249896F4003A6C14 /* anim_heart.bundle */; };
-		E39CF937249896F4003A6C14 /* anim_thumb.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF927249896F4003A6C14 /* anim_thumb.bundle */; };
-		E39CF938249896F4003A6C14 /* anim_greet.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF928249896F4003A6C14 /* anim_greet.bundle */; };
-		E39CF939249896F4003A6C14 /* anim_ok.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF929249896F4003A6C14 /* anim_ok.bundle */; };
-		E39CF93A249896F4003A6C14 /* anim_unknown.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF92A249896F4003A6C14 /* anim_unknown.bundle */; };
-		E39CF93B249896F4003A6C14 /* anim_fist.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF92B249896F4003A6C14 /* anim_fist.bundle */; };
-		E39CF93C249896F4003A6C14 /* anim_rock.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF92C249896F4003A6C14 /* anim_rock.bundle */; };
-		E39CF93D249896F4003A6C14 /* anim_two.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF92D249896F4003A6C14 /* anim_two.bundle */; };
-		E39CF93E249896F4003A6C14 /* anim_eight.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF92E249896F4003A6C14 /* anim_eight.bundle */; };
-		E39CF93F249896F4003A6C14 /* anim_merge.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF92F249896F4003A6C14 /* anim_merge.bundle */; };
-		E39CF940249896F4003A6C14 /* anim_one.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF930249896F4003A6C14 /* anim_one.bundle */; };
-		E39CF941249896F4003A6C14 /* anim_palm.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF931249896F4003A6C14 /* anim_palm.bundle */; };
-		E39CF942249896F4003A6C14 /* anim_hold.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E39CF932249896F4003A6C14 /* anim_hold.bundle */; };
 		E3AD31B124752D4E00B45264 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E3AD31B024752D4E00B45264 /* AppDelegate.m */; };
 		E3AD31BA24752D4E00B45264 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3AD31B824752D4E00B45264 /* Main.storyboard */; };
 		E3AD31BC24752D6100B45264 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3AD31BB24752D6100B45264 /* Assets.xcassets */; };
 		E3AD31BF24752D6100B45264 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3AD31BD24752D6100B45264 /* LaunchScreen.storyboard */; };
 		E3AD31C224752D6100B45264 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E3AD31C124752D6100B45264 /* main.m */; };
 		E3CE42A3265639E7005C5513 /* controller_cpp.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3CE42A2265639E7005C5513 /* controller_cpp.bundle */; };
-		E3CE42A626563A0E005C5513 /* fxaa_flipY.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3CE42A526563A0E005C5513 /* fxaa_flipY.bundle */; };
 		E3CE42D22657A885005C5513 /* aitype.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3CE42D02657A885005C5513 /* aitype.bundle */; };
-		E3CE42D42657A8A3005C5513 /* portal_particle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3CE42D32657A8A3005C5513 /* portal_particle.bundle */; };
-		E3CE42D62657A8DA005C5513 /* flower_particle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3CE42D52657A8DA005C5513 /* flower_particle.bundle */; };
 		E3D2317B249DB9F900C656AB /* anim_idle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3D2317A249DB9F900C656AB /* anim_idle.bundle */; };
 		E3D2317D249DBAF800C656AB /* handgesture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3D2317C249DBAF800C656AB /* handgesture.bundle */; };
 		E7F62A18C4B264C67FEC51E5 /* libPods-FUAlgorithmDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 64BE6B7E624B006AF6D1D903 /* libPods-FUAlgorithmDemo.a */; };
@@ -170,26 +152,11 @@
 		E3732C75247CC21E00D756B5 /* FUPhotoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUPhotoViewController.m; sourceTree = "<group>"; };
 		E37A8738248A22EB006D900C /* fakeman.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fakeman.bundle; sourceTree = "<group>"; };
 		E37A873F248A4D5B006D900C /* controller_config.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = controller_config.bundle; sourceTree = "<group>"; };
+		E37E55492874456C002952A1 /* ai_human_processor_gpu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_human_processor_gpu.bundle; sourceTree = "<group>"; };
 		E38168A2266479AA00CEF534 /* FURenderKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FURenderKit.framework; sourceTree = "<group>"; };
 		E39972AB26536546009BBAC9 /* FUConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUConfigManager.h; sourceTree = "<group>"; };
 		E39972AC26536546009BBAC9 /* FUConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUConfigManager.m; sourceTree = "<group>"; };
 		E39972C22654B700009BBAC9 /* FUMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUMacros.h; sourceTree = "<group>"; };
-		E39CF923249896F4003A6C14 /* anim_six.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_six.bundle; sourceTree = "<group>"; };
-		E39CF924249896F4003A6C14 /* anim_gun.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_gun.bundle; sourceTree = "<group>"; };
-		E39CF925249896F4003A6C14 /* anim_korheart.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_korheart.bundle; sourceTree = "<group>"; };
-		E39CF926249896F4003A6C14 /* anim_heart.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_heart.bundle; sourceTree = "<group>"; };
-		E39CF927249896F4003A6C14 /* anim_thumb.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_thumb.bundle; sourceTree = "<group>"; };
-		E39CF928249896F4003A6C14 /* anim_greet.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_greet.bundle; sourceTree = "<group>"; };
-		E39CF929249896F4003A6C14 /* anim_ok.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_ok.bundle; sourceTree = "<group>"; };
-		E39CF92A249896F4003A6C14 /* anim_unknown.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_unknown.bundle; sourceTree = "<group>"; };
-		E39CF92B249896F4003A6C14 /* anim_fist.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_fist.bundle; sourceTree = "<group>"; };
-		E39CF92C249896F4003A6C14 /* anim_rock.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_rock.bundle; sourceTree = "<group>"; };
-		E39CF92D249896F4003A6C14 /* anim_two.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_two.bundle; sourceTree = "<group>"; };
-		E39CF92E249896F4003A6C14 /* anim_eight.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_eight.bundle; sourceTree = "<group>"; };
-		E39CF92F249896F4003A6C14 /* anim_merge.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_merge.bundle; sourceTree = "<group>"; };
-		E39CF930249896F4003A6C14 /* anim_one.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_one.bundle; sourceTree = "<group>"; };
-		E39CF931249896F4003A6C14 /* anim_palm.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_palm.bundle; sourceTree = "<group>"; };
-		E39CF932249896F4003A6C14 /* anim_hold.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_hold.bundle; sourceTree = "<group>"; };
 		E3AD31AC24752D4E00B45264 /* FULiveAIDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FULiveAIDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3AD31AF24752D4E00B45264 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E3AD31B024752D4E00B45264 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -200,10 +167,7 @@
 		E3AD31C124752D6100B45264 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		E3B85CE8247FC4A0008FA3AB /* CoreML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreML.framework; path = System/Library/Frameworks/CoreML.framework; sourceTree = SDKROOT; };
 		E3CE42A2265639E7005C5513 /* controller_cpp.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = controller_cpp.bundle; sourceTree = "<group>"; };
-		E3CE42A526563A0E005C5513 /* fxaa_flipY.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fxaa_flipY.bundle; sourceTree = "<group>"; };
 		E3CE42D02657A885005C5513 /* aitype.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = aitype.bundle; sourceTree = "<group>"; };
-		E3CE42D32657A8A3005C5513 /* portal_particle.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = portal_particle.bundle; sourceTree = "<group>"; };
-		E3CE42D52657A8DA005C5513 /* flower_particle.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = flower_particle.bundle; sourceTree = "<group>"; };
 		E3D2317A249DB9F900C656AB /* anim_idle.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = anim_idle.bundle; sourceTree = "<group>"; };
 		E3D2317C249DBAF800C656AB /* handgesture.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = handgesture.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -292,6 +256,7 @@
 		E332E70B24AFCB3A00232C4A /* model */ = {
 			isa = PBXGroup;
 			children = (
+				E37E55492874456C002952A1 /* ai_human_processor_gpu.bundle */,
 				E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */,
 				E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */,
 				E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */,
@@ -303,10 +268,7 @@
 		E332E71024AFCB3A00232C4A /* graphics */ = {
 			isa = PBXGroup;
 			children = (
-				E3CE42D52657A8DA005C5513 /* flower_particle.bundle */,
-				E3CE42D32657A8A3005C5513 /* portal_particle.bundle */,
 				E3CE42D02657A885005C5513 /* aitype.bundle */,
-				E3CE42A526563A0E005C5513 /* fxaa_flipY.bundle */,
 				E3CE42A2265639E7005C5513 /* controller_cpp.bundle */,
 				E332E71124AFCB3A00232C4A /* tongue.bundle */,
 				E332E71224AFCB3A00232C4A /* fxaa.bundle */,
@@ -373,7 +335,6 @@
 			children = (
 				E332E5F424AF345A00232C4A /* Other */,
 				E332E5F324AF342E00232C4A /* Avatar */,
-				E39CF922249896F4003A6C14 /* PoseTrack */,
 			);
 			path = bundles;
 			sourceTree = "<group>";
@@ -450,29 +411,6 @@
 				E39972C22654B700009BBAC9 /* FUMacros.h */,
 			);
 			path = Macros;
-			sourceTree = "<group>";
-		};
-		E39CF922249896F4003A6C14 /* PoseTrack */ = {
-			isa = PBXGroup;
-			children = (
-				E39CF923249896F4003A6C14 /* anim_six.bundle */,
-				E39CF924249896F4003A6C14 /* anim_gun.bundle */,
-				E39CF925249896F4003A6C14 /* anim_korheart.bundle */,
-				E39CF926249896F4003A6C14 /* anim_heart.bundle */,
-				E39CF927249896F4003A6C14 /* anim_thumb.bundle */,
-				E39CF928249896F4003A6C14 /* anim_greet.bundle */,
-				E39CF929249896F4003A6C14 /* anim_ok.bundle */,
-				E39CF92A249896F4003A6C14 /* anim_unknown.bundle */,
-				E39CF92B249896F4003A6C14 /* anim_fist.bundle */,
-				E39CF92C249896F4003A6C14 /* anim_rock.bundle */,
-				E39CF92D249896F4003A6C14 /* anim_two.bundle */,
-				E39CF92E249896F4003A6C14 /* anim_eight.bundle */,
-				E39CF92F249896F4003A6C14 /* anim_merge.bundle */,
-				E39CF930249896F4003A6C14 /* anim_one.bundle */,
-				E39CF931249896F4003A6C14 /* anim_palm.bundle */,
-				E39CF932249896F4003A6C14 /* anim_hold.bundle */,
-			);
-			path = PoseTrack;
 			sourceTree = "<group>";
 		};
 		E3AD31A324752D4E00B45264 = {
@@ -571,54 +509,36 @@
 			buildActionMask = 2147483647;
 			files = (
 				E363071E24E0E53200A16812 /* set_tongue.bundle in Resources */,
+				E37E554A2874456C002952A1 /* ai_human_processor_gpu.bundle in Resources */,
 				E341083024A3765A00410722 /* hair_normal_algorithm.bundle in Resources */,
 				E3D2317D249DBAF800C656AB /* handgesture.bundle in Resources */,
 				E3CE42A3265639E7005C5513 /* controller_cpp.bundle in Resources */,
 				E332E6A024AF5CCB00232C4A /* bodyLandmarks_selife.bundle in Resources */,
-				E39CF940249896F4003A6C14 /* anim_one.bundle in Resources */,
 				E3127C69249352EE0096306C /* empty_aitpye_2d.bundle in Resources */,
 				E332E71E24AFCB3A00232C4A /* face_makeup.bundle in Resources */,
-				E39CF937249896F4003A6C14 /* anim_thumb.bundle in Resources */,
 				E332E71B24AFCB3A00232C4A /* ai_human_processor.bundle in Resources */,
 				E3AD31BF24752D6100B45264 /* LaunchScreen.storyboard in Resources */,
 				E3AD31BC24752D6100B45264 /* Assets.xcassets in Resources */,
 				E3732C70247CA94B00D756B5 /* bodyRect.bundle in Resources */,
-				E39CF938249896F4003A6C14 /* anim_greet.bundle in Resources */,
 				E37A8740248A4D5B006D900C /* controller_config.bundle in Resources */,
 				E332E71A24AFCB3A00232C4A /* ai_face_processor_lite.bundle in Resources */,
-				E39CF934249896F4003A6C14 /* anim_gun.bundle in Resources */,
-				E39CF93A249896F4003A6C14 /* anim_unknown.bundle in Resources */,
 				E3127C6F24936E760096306C /* default_bg.bundle in Resources */,
 				E3D2317B249DB9F900C656AB /* anim_idle.bundle in Resources */,
 				E332E71924AFCB3A00232C4A /* ai_face_processor.bundle in Resources */,
-				E3CE42D42657A8A3005C5513 /* portal_particle.bundle in Resources */,
 				E332E71C24AFCB3A00232C4A /* tongue.bundle in Resources */,
-				E39CF93F249896F4003A6C14 /* anim_merge.bundle in Resources */,
 				E3AD31BA24752D4E00B45264 /* Main.storyboard in Resources */,
-				E39CF942249896F4003A6C14 /* anim_hold.bundle in Resources */,
 				E313888924F8A14A00A3AFDF /* ai_hand_processor.bundle in Resources */,
 				E37A8739248A22EB006D900C /* fakeman.bundle in Resources */,
-				E39CF939249896F4003A6C14 /* anim_ok.bundle in Resources */,
-				E3CE42A626563A0E005C5513 /* fxaa_flipY.bundle in Resources */,
-				E39CF93C249896F4003A6C14 /* anim_rock.bundle in Resources */,
-				E39CF935249896F4003A6C14 /* anim_korheart.bundle in Resources */,
-				E39CF93B249896F4003A6C14 /* anim_fist.bundle in Resources */,
 				E332E71F24AFCB3A00232C4A /* controller.bundle in Resources */,
 				E3CE42D22657A885005C5513 /* aitype.bundle in Resources */,
-				E39CF941249896F4003A6C14 /* anim_palm.bundle in Resources */,
 				E306CB472477A10900BECA3F /* AIConfig.json in Resources */,
-				E39CF933249896F4003A6C14 /* anim_six.bundle in Resources */,
-				E3CE42D62657A8DA005C5513 /* flower_particle.bundle in Resources */,
 				E332E72024AFCB3A00232C4A /* body_slim.bundle in Resources */,
 				E332E71D24AFCB3A00232C4A /* fxaa.bundle in Resources */,
-				E39CF936249896F4003A6C14 /* anim_heart.bundle in Resources */,
-				E39CF93E249896F4003A6C14 /* anim_eight.bundle in Resources */,
 				E304BCE924D903990020A724 /* landmarks.bundle in Resources */,
 				E332E6A124AF5CCB00232C4A /* bodyLandmarks_dance.bundle in Resources */,
 				E35DC6BD24762679005B4EED /* human_mask.bundle in Resources */,
 				E35DC6BE24762679005B4EED /* head_mask.bundle in Resources */,
 				E332E72124AFCB3A00232C4A /* fuzzytoonfilter.bundle in Resources */,
-				E39CF93D249896F4003A6C14 /* anim_two.bundle in Resources */,
 				E332E72224AFCB3A00232C4A /* face_beautification.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -853,7 +773,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -889,7 +809,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 35A6KD62ZJ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (

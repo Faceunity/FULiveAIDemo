@@ -43,15 +43,13 @@ static NSTimeInterval oldTime = 0;
     
     [self setupStotSubView];
     
+    // 需要音频输入输出
+    [FURenderKit shareRenderKit].internalCameraSetting.needsAudioTrack = YES;
     [[FURenderKit shareRenderKit] startInternalCamera];
     // 摄像头默认设置为前置
-    if (![FURenderKit shareRenderKit].captureCamera.isFrontCamera) {
-        [[FURenderKit shareRenderKit].captureCamera changeCameraInputDeviceisFront:YES];
-    }
     [FURenderKit shareRenderKit].glDisplayView = self.renderView;
     [FURenderKit shareRenderKit].delegate = self;
     [FUAIKit shareKit].faceProcessorDetectMode = FUFaceProcessorDetectModeVideo;
-    
     
 }
 
