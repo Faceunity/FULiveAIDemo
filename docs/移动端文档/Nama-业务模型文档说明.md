@@ -1,6 +1,6 @@
 ----
 
-更新时间: 2022-04-15
+更新时间: 2022-07-21
 
 创建时间: 2020-01-22
 
@@ -159,7 +159,7 @@ ____
 | intensityChin        | double | 下巴调整程度范围0.0-1.0，0.5-0.0是变小，0.5-1.0是变大 默认0.5    | intensity_chin       |
 | intensityForehead    | double | 额头调整程度范围0.0-1.0，0.5-0.0是变小，0.5-1.0是变大 默认0.5    | intensity_forehead   |
 | intensityNose        | double | 瘦鼻程度范围0.0-1.0 1.0程度最强 默认0.0                    | intensity_nose       |
-| intensityMouth       | double | 嘴巴调整程度范围0.0-1.0，0.5-0.0是变小，0.5-1.0是变大 默认0.5    | intensity_mouth      |
+| intensityMouth       | double | 嘴型调整程度范围0.0-1.0，0.5-0.0是变大，0.5-1.0是变小 默认0.5    | intensity_mouth      |
 | intensityCanthus     | double | 开眼角程度范围0.0~1.0 1.0程度最强 默认0.0                    | intensity_canthus    |
 | intensityEyeSpace    | double | 眼距调节范围0.0~1.0，0.5-0.0是变大，0.5-1.0是变小 默认0.5       | intensity_eye_space  |
 | intensityEyeRotate   | double | 眼睛角度调节范围0.0~1.0，0.5-0.0逆时针旋转，0.5-1.0顺时针旋转 默认0.5 | intensity_eye_rotate |
@@ -276,7 +276,7 @@ ____
     * 设置部分美颜属性的mode，不同mode会有主观上会有不同效果
     * 必须在设置美颜各个属性值之前调用该接口
     **/
-    - (void)setBeautyMode:(FUBeautyPropertyMode)mode forKey:(NSString *)key;
+    - (void)addPropertyMode:(FUBeautyPropertyMode)mode forKey:(NSString *)key;
     
     ````
     * 支持的key和mode说明
@@ -309,7 +309,7 @@ ____
 | eyeEnlargingV2       | double | 大眼 取值范围 0.0-1.0,  0.0为无效果，1.0为最大效果，默认值0.0  |
 | intensityForeheadV2  | double | 额头 取值范围 0.0-1.0,  0.5-0是变小，0.5-1是变大，默认值0.5   |
 | intensityNoseV2      | double | 瘦鼻 取值范围 0.0-1.0,  0.0为无效果，1.0为最大效果，默认值0.0  |
-| intensityMouthV2     | double | 嘴型 取值范围 0.0-1.0,  0.5-0.0是变小，0.5-1.0是变大，默认值0.5  |
+| intensityMouthV2     | double | 嘴型 取值范围 0.0-1.0,  0.5-0.0是变大，0.5-1.0是变小，默认值0.5  |
 
 ----
 ·   
@@ -602,7 +602,7 @@ ___
 | keyColor     | FUColor | 设置绿幕取色, 颜色值按照十六进制大小设置 ex: RGBA (255.0, 255.0, 255.0, 1.0) | key_color        |
 | chromaThres  | double  | 默认值为0.518,取值范围0.0-1.0，相似度：色度最大容差，色度最大容差值越大，更多幕景被抠除 | chroma_thres     |
 | chromaThrest | double  |  默认值为0.22,取值范围0.0-1.0，平滑：色度最小限差，值越大，更多幕景被扣除  | chroma_thres_T   |
-| alphal       | double  |  默认值为0.0,取值范围0.0-1.0，透明度：图像前后景透明度过度，值越大，两者边缘处透明过度更平滑  | alpha_L          |
+| alphal       | double  |  默认值为0.0,取值范围0.0-1.0，祛色度：图像前后景祛色度过度，值越大，两者边缘处透明过度更平滑  | alpha_L          |
 | center       | CGPoint | 当前图片偏移量                                               | start_x、start_y |
 | scale        | float   | 图片宽高放大值                                               | end_x、end_y     |
 | rotationMode | int     | 当前设备方向0、1、2、3                                       | rotation_mode    |
