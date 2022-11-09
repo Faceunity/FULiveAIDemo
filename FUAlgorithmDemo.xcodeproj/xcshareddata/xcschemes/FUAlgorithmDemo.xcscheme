@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E3AD31AB24752D4E00B45264"
-               BuildableName = "FULiveAIDemo.app"
+               BuildableName = "FUAIDemo.app"
                BlueprintName = "FUAlgorithmDemo"
                ReferencedContainer = "container:FUAlgorithmDemo.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E3AD31AB24752D4E00B45264"
-            BuildableName = "FULiveAIDemo.app"
+            BuildableName = "FUAIDemo.app"
             BlueprintName = "FUAlgorithmDemo"
             ReferencedContainer = "container:FUAlgorithmDemo.xcodeproj">
          </BuildableReference>
@@ -63,7 +63,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E3AD31AB24752D4E00B45264"
-            BuildableName = "FULiveAIDemo.app"
+            BuildableName = "FUAIDemo.app"
             BlueprintName = "FUAlgorithmDemo"
             ReferencedContainer = "container:FUAlgorithmDemo.xcodeproj">
          </BuildableReference>
