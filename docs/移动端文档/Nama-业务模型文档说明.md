@@ -1,6 +1,6 @@
 ----
 
-更新时间: 2022-07-21
+更新时间: 2022-11-09
 
 创建时间: 2020-01-22
 
@@ -132,6 +132,7 @@ ____
 | colorLevel                    | double | 美白 取值范围 0.0-1.0，0.0为无效果，1.0为最大效果，默认值0.0  | color_level                      |
 | redLevel                      | double | 红润 取值范围 0.0-1.0，0.0为无效果，1.0为最大效果，默认值0.0  | red_level                        |
 | sharpen                       | double | 锐化 锐化程度，取值范围0.0-1.0，默认0.0                      | sharpen                          |
+| faceThreed                    | double | 五官立体 取值范围 0.0-1.0, 0.0为无效果, 1.0为最大效果, 默认值0.0 | face_threed                          |
 | eyeBright                     | double | 亮眼 0.0-1.0,  0.0为无效果，1.0为最大效果，默认值0.0 亮眼为高级美颜功能，需要相应证书权限才能使用 | eye_bright                       |
 | toothWhiten                   | double | 美牙 取值范围 0.0-1.0,  0.0为无效果，1.0为最大效果，默认值0.0 美牙为高级美颜功能，需要相应证书权限才能使用 | tooth_whiten                     |
 | removePouchStrength           | double | 去黑眼圈 范围0.0~1.0,  0.0为无效果，1.0最强，默认0.0  去黑眼圈为高级美颜功能，需要相应证书权限才能使用 | remove_pouch_strength            |
@@ -160,13 +161,19 @@ ____
 | intensityForehead    | double | 额头调整程度范围0.0-1.0，0.5-0.0是变小，0.5-1.0是变大 默认0.5    | intensity_forehead   |
 | intensityNose        | double | 瘦鼻程度范围0.0-1.0 1.0程度最强 默认0.0                    | intensity_nose       |
 | intensityMouth       | double | 嘴型调整程度范围0.0-1.0，0.5-0.0是变大，0.5-1.0是变小 默认0.5    | intensity_mouth      |
+| intensityLipThick       | double | 嘴唇厚度 取值范围 0.0-1.0, 默认值0.5, 0.5-0是变薄, 0.5-1是变厚, 默认值0.5    | intensity_lip_thick      |
+| intensityEyeHeight       | double | 眼睛位置 取值范围 0.0-1.0, 默认值0.5, 0.5-0是变低, 0.5-1是变高, 默认值0.5    | intensity_eye_height      |
 | intensityCanthus     | double | 开眼角程度范围0.0~1.0 1.0程度最强 默认0.0                    | intensity_canthus    |
+| intensityEyeLid       | double | 眼睑下至 取值范围 0.0-1.0, 0.0为无效果, 1.0为最大效果, 默认值0.0   | intensity_eye_lid      |
 | intensityEyeSpace    | double | 眼距调节范围0.0~1.0，0.5-0.0是变大，0.5-1.0是变小 默认0.5       | intensity_eye_space  |
 | intensityEyeRotate   | double | 眼睛角度调节范围0.0~1.0，0.5-0.0逆时针旋转，0.5-1.0顺时针旋转 默认0.5 | intensity_eye_rotate |
 | intensityLongNose    | double | 鼻子长度调节范围0.0~1.0，0.5-0.0是变长，0.5-1.0是变短 默认0.5   | intensity_long_nose  |
 | intensityPhiltrum    | double | 人中调节范围0.0~1.0，0.5-0.0是变短，0.5-1.0是变长， 默认0.5       | intensity_philtrum   |
 | intensitySmile       | double | 微笑嘴角程度范围0.0~1.0 1.0程度最强 默认0.0                  | intensity_smile      |
-| intensity_eye_circle | double | 圆眼程度范围0.0~1.0 1.0程度最强                              | intensity_eye_circle |
+| intensityEyeCircle | double | 圆眼程度范围0.0~1.0 1.0程度最强                              | intensity_eye_circle |
+| intensityBrowHeight | double | 眉毛上下 取值范围 0.0-1.0, 0.5-0是向上, 0.5-1是向下, 默认值0.5    | intensity_brow_height |
+| intensityBrowSpace | double | 眉间距 取值范围 0.0-1.0, 默认值0.5, 0.5-0是变小, 0.5-1是变大, 默认值0.5  | intensity_brow_space |
+| intensityBrowThick | double | 眉毛粗细 取值范围 0.0-1.0, 默认值0.5, 0.5-0是变细, 0.5-1是变粗, 默认值0.5  | intensity_brow_thick |
 
 ____
 
@@ -283,15 +290,17 @@ ____
     
      | key      |   属性   |  支持的mode                                                        |
      | ------------- | -------- | ------------------------------------------------------------ |
-     | color_level    |   美白  | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.2.0)        |
-     | remove_pouch_strength     |   去黑眼圈    | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.2.0，高性能设备推荐)    |
-     | remove_nasolabial_folds_strength     |    去法令纹   | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.2.0，高性能设备推荐)        |
-     | cheek_narrow    |  窄脸   | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.0.0)     |
-     | cheek_small  |  小脸   | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.0.0)    |
-     | eye_enlarging    | 大眼  | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.0.0)，FUBeautyPropertyMode3(v8.2.0，高性能设备推荐)        |
-     | intensity_forehead    |   额头   | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.0.0)     |
-     | intensity_nose  |   瘦鼻   | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.0.0)    |
-     | intensity_mouth    |   嘴型   | FUBeautyPropertyMode1，FUBeautyPropertyMode2(v8.0.0)，FUBeautyPropertyMode3(v8.2.0，高性能设备推荐)       |
+     | color_level    |   美白  | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.2.0)        |
+     | remove_pouch_strength     |   去黑眼圈    | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.2.0, 高性能设备推荐)    |
+     | remove_nasolabial_folds_strength     |    去法令纹   | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.2.0, 高性能设备推荐)        |
+     | cheek_thinning    |  瘦脸   | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.3.0)     |
+     | cheek_narrow    |  窄脸   | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.0.0)     |
+     | cheek_small  |  小脸   | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.0.0)    |
+     | eye_enlarging    | 大眼  | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.0.0), FUBeautyPropertyMode3(v8.2.0, 高性能设备推荐)        |
+     | intensity_chin    | 下巴  | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.4.0)   |
+     | intensity_forehead    |   额头   | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.0.0)     |
+     | intensity_nose  |   瘦鼻   | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.0.0)    |
+     | intensity_mouth    |   嘴型   | FUBeautyPropertyMode1, FUBeautyPropertyMode2(v8.0.0), FUBeautyPropertyMode3(v8.2.0, 高性能设备推荐)       |
     
 
 ----
@@ -324,6 +333,7 @@ ___
 | ------------- | ---- | ------------------------------------------------------------ | --------------- |
 | isMakeUpOn    | BOOL  | 美妆开关，1开 0关                                            | is_makeup_on    |
 | isClearMakeup | BOOL  | 在解绑妆容时是否清空除口红以外的妆容，0表示不清空，1表示清空，口红可由强度进行设置 | is_clear_makeup |
+| makeupSegmentation    | BOOL  | 美妆分割，1开 0关，建议在高端机型中使用       | machine_level    |
 | lipType       | int  | 口红类型 0雾面 2润泽Ⅰ 3珠光 6高性能（不支持双色）7润泽Ⅱ            | lip_type        |
 | isLipHighlightOn       | BOOL  | 是否开启口红高光 1开 0关             | makeup_lip_highlight_enable        |
 | isTwoColor    | int  | 口红双色开关，0为关闭，1为开启，如果想使用咬唇，开启双色开关，并且将makeup_lip_color2的值都设置为0 | is_two_color    |
@@ -565,20 +575,6 @@ ___
 
 ```objective-c
 /**
- * 根据传入的图进和点位进行取色，获取到的颜色需要生效直接设置 self.keyColor
- */
-+ (UIColor *)pixelColorWithmage:(UIImage *)originImage point:(CGPoint)point;
-```
-
-```objective-c
-/**
- * 根据传入的CVPixelBufferRef和点位进行取色
- */
-+ (UIColor *)pixelColorWithPixelBuffer:(CVPixelBufferRef)buffer point:(CGPoint)point;
-```
-
-```objective-c
-/**
  * 开始视频播放
  */
 - (void)startVideoDecode;
@@ -599,16 +595,15 @@ ___
 | backgroundImage     | UIImage | 设置背景图片 |         |
 | safeAreaImage     | UIImage | 设置安全区域图片 |         |
 | videoPath     | NSString | 设置背景视频 |         |
-| keyColor     | FUColor | 设置绿幕取色, 颜色值按照十六进制大小设置 ex: RGBA (255.0, 255.0, 255.0, 1.0) | key_color        |
-| chromaThres  | double  | 默认值为0.518,取值范围0.0-1.0，相似度：色度最大容差，色度最大容差值越大，更多幕景被抠除 | chroma_thres     |
-| chromaThrest | double  |  默认值为0.22,取值范围0.0-1.0，平滑：色度最小限差，值越大，更多幕景被扣除  | chroma_thres_T   |
-| alphal       | double  |  默认值为0.0,取值范围0.0-1.0，祛色度：图像前后景祛色度过度，值越大，两者边缘处透明过度更平滑  | alpha_L          |
+| keyColor     | FUColor | 设置绿幕关键颜色, 默认值为[0,255,0]，取值范围[0-255,0-255,0-255] | key_color        |
+| chromaThres  | double  | 取值范围0.0-1.0，相似度：色度最大容差，色度最大容差值越大，更多幕景被抠除 | chroma_thres     |
+| chromaThrest | double  | 取值范围0.0-1.0，平滑度：色度最小限差，值越大，更多幕景被扣除  | chroma_thres_T   |
+| alphal       | double  | 取值范围0.0-1.0，祛色度：图像前后景祛色度过度，值越大，两者边缘处透明过度更平滑  | alpha_L          |
 | center       | CGPoint | 当前图片偏移量                                               | start_x、start_y |
 | scale        | float   | 图片宽高放大值                                               | end_x、end_y     |
 | rotationMode | int     | 当前设备方向0、1、2、3                                       | rotation_mode    |
-| isBgra       | int     |                                                              | is_bgra          |
 | cutouting    | BOOL    | 当前是否正在进行抠图,抠图就停止绿慕渲染                      |                  |
-| pause    | BOOL    | 是否停止渲染                     |                  |
+| pause    | BOOL    | 背景视频播放是否暂停                     |                  |
 
 ***
 
@@ -705,7 +700,7 @@ ___
 | lineColor | FUColor  | 轮廓分割线颜色 | lineColor |
 | backgroundImage     | UIImage | 设置背景视频 |         |
 | videoPath     | NSURL 或者 NSString | 设置背景视频 |         |
-| pause    | BOOL    | 是否停止渲染                     |                  |
+| pause    | BOOL    | 背景视频播放是否暂停                      |                  |
 
 * 接口说明
 
@@ -783,7 +778,7 @@ ___
 
 | 属性名称 | 类型   | 说明                                   | key   |
 | -------- | ------ | -------------------------------------- | ----- |
-| style    | double | 范围 0.0 - 7.0，对应不同的动漫滤镜效果 | style |
+| style    | FUComicFilterStyle | 范围 -1 - 7，对应不同的动漫滤镜效果 | style |
 
 * style 值介绍
 
