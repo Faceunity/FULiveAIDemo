@@ -33,7 +33,6 @@
 		E3405796247551A2003AAE2C /* FUCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E3405795247551A2003AAE2C /* FUCircleProgressView.m */; };
 		E341083024A3765A00410722 /* hair_normal_algorithm.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E341082F24A3765900410722 /* hair_normal_algorithm.bundle */; };
 		E345990226AECBE400565E1B /* FUVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E345990126AECBE300565E1B /* FUVideoViewController.m */; };
-		E345990526AECCDA00565E1B /* FUVideoReader.m in Sources */ = {isa = PBXBuildFile; fileRef = E345990426AECCDA00565E1B /* FUVideoReader.m */; };
 		E345990826AED77B00565E1B /* UIImage+FU.m in Sources */ = {isa = PBXBuildFile; fileRef = E345990626AED77B00565E1B /* UIImage+FU.m */; };
 		E35DC6B624761FB5005B4EED /* FUManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E35DC6B424761FB5005B4EED /* FUManager.m */; };
 		E35DC6BD24762679005B4EED /* human_mask.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E35DC6BB24762678005B4EED /* human_mask.bundle */; };
@@ -122,8 +121,6 @@
 		E341082F24A3765900410722 /* hair_normal_algorithm.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = hair_normal_algorithm.bundle; sourceTree = "<group>"; };
 		E345990026AECBE300565E1B /* FUVideoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUVideoViewController.h; sourceTree = "<group>"; };
 		E345990126AECBE300565E1B /* FUVideoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUVideoViewController.m; sourceTree = "<group>"; };
-		E345990326AECCDA00565E1B /* FUVideoReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FUVideoReader.h; sourceTree = "<group>"; };
-		E345990426AECCDA00565E1B /* FUVideoReader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUVideoReader.m; sourceTree = "<group>"; };
 		E345990626AED77B00565E1B /* UIImage+FU.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FU.m"; sourceTree = "<group>"; };
 		E345990726AED77B00565E1B /* UIImage+FU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+FU.h"; sourceTree = "<group>"; };
 		E35DC6B424761FB5005B4EED /* FUManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FUManager.m; sourceTree = "<group>"; };
@@ -315,8 +312,6 @@
 				E363072024E10E8B00A16812 /* FUIndexHandle.m */,
 				E39972AB26536546009BBAC9 /* FUConfigManager.h */,
 				E39972AC26536546009BBAC9 /* FUConfigManager.m */,
-				E345990326AECCDA00565E1B /* FUVideoReader.h */,
-				E345990426AECCDA00565E1B /* FUVideoReader.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -618,7 +613,6 @@
 				E340578724754BFC003AAE2C /* FUHeadButtonView.m in Sources */,
 				E3AD31B124752D4E00B45264 /* AppDelegate.m in Sources */,
 				E304BCEC24D932B60020A724 /* FUTongueView.m in Sources */,
-				E345990526AECCDA00565E1B /* FUVideoReader.m in Sources */,
 				E304BCE724D8FD970020A724 /* FUExpresionView.m in Sources */,
 				E3AD31C224752D6100B45264 /* main.m in Sources */,
 				E35DC6CE24766C05005B4EED /* FUHeadReusableView.m in Sources */,
