@@ -7,10 +7,10 @@
 //
 
 #import "FUVideoViewController.h"
-#import "FUVideoReader.h"
 
 #import <Masonry.h>
 #import <SVProgressHUD.h>
+#import <FURenderKit/FUVideoReader.h>
 
 static inline NSString * kFUVideoDestinationPath() {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"finalVideo.mp4"];
@@ -60,10 +60,12 @@ static inline NSString * kFUVideoDestinationPath() {
         make.size.mas_offset(CGSizeMake(80, 80));
     }];
     
-    self.videoReader = [[FUVideoReader alloc] initWithVideoURL:self.videoURL];
+    self.videoReader = [[FUVideoReader alloc] initWithURL:self.videoURL];
+    //self.videoReader = [[FUVideoReader alloc] initWithVideoURL:self.videoURL];
     self.videoReader.delegate = self;
+    [self.videoReader start];
     
-    [self playAction];
+//    [self playAction];
 }
 
 #pragma mark - Private methods
@@ -84,14 +86,10 @@ static inline NSString * kFUVideoDestinationPath() {
 
 /// 读取视频
 - (void)startVideo {
-    if (self.videoReader) {
-        [self.videoReader setVideoURL:self.videoURL];
-    }else {
-        self.videoReader = [[FUVideoReader alloc] initWithVideoURL:self.videoURL];
-        self.videoReader.delegate = self ;
-    }
-    [self.videoReader startReadWithDestinationPath:kFUVideoDestinationPath()];
+    self.videoReader = [[FUVideoReader alloc] initWithURL:self.videoURL];
+    self.videoReader.delegate = self;
     self.renderView.origintation = (int)self.videoReader.videoOrientation;
+    [self.videoReader start];
 }
 
 #pragma mark - Event response
@@ -121,27 +119,29 @@ static inline NSString * kFUVideoDestinationPath() {
 
 - (void)headButtonViewBackAction:(UIButton *)btn {
     [super headButtonViewBackAction:btn];
-    [self.videoReader stopReading];
-    [self.videoReader destory];
+    [self.videoReader stop];
+//    [self.videoReader stopReading];
+//    [self.videoReader destory];
 }
 
 #pragma mark - FUVideoReaderDelegate
 
-- (CVPixelBufferRef)videoReaderDidReadVideoBuffer:(CVPixelBufferRef)pixelBuffer {
+- (void)videoReaderDidOutputVideoSampleBuffer:(CMSampleBufferRef)videoSampleBuffer {
+    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(videoSampleBuffer);
     FURenderInput *input = [[FURenderInput alloc] init];
     input.pixelBuffer = pixelBuffer;
     input.renderConfig.imageOrientation = 0;
     switch (self.videoReader.videoOrientation) {
-        case FUVideoReaderOrientationPortrait:
+        case FUVideoOrientationPortrait:
             input.renderConfig.imageOrientation = FUImageOrientationUP;
             break;
-        case FUVideoReaderOrientationLandscapeRight:
+        case FUVideoOrientationLandscapeRight:
             input.renderConfig.imageOrientation = FUImageOrientationLeft;
             break;
-        case FUVideoReaderOrientationUpsideDown:
+        case FUVideoOrientationUpsideDown:
             input.renderConfig.imageOrientation = FUImageOrientationDown;
             break;
-        case FUVideoReaderOrientationLandscapeLeft:
+        case FUVideoOrientationLandscapeLeft:
             input.renderConfig.imageOrientation = FUImageOrientationRight;
             break;
         default:
@@ -150,11 +150,39 @@ static inline NSString * kFUVideoDestinationPath() {
     }
     FURenderOutput *output = [[FURenderKit shareRenderKit] renderWithInput:input];
     [self.renderView displayPixelBuffer:output.pixelBuffer];
-    return output.pixelBuffer;
+    CMSampleBufferInvalidate(videoSampleBuffer);
+    CFRelease(videoSampleBuffer);
 }
 
-- (void)videoReaderDidFinishReadSuccess:(BOOL)success {
-    [self.videoReader startReadForLastFrame];
+//- (CVPixelBufferRef)videoReaderDidReadVideoBuffer:(CVPixelBufferRef)pixelBuffer {
+//    FURenderInput *input = [[FURenderInput alloc] init];
+//    input.pixelBuffer = pixelBuffer;
+//    input.renderConfig.imageOrientation = 0;
+//    switch (self.videoReader.videoOrientation) {
+//        case FUVideoOrientationPortrait:
+//            input.renderConfig.imageOrientation = FUImageOrientationUP;
+//            break;
+//        case FUVideoOrientationLandscapeRight:
+//            input.renderConfig.imageOrientation = FUImageOrientationLeft;
+//            break;
+//        case FUVideoOrientationUpsideDown:
+//            input.renderConfig.imageOrientation = FUImageOrientationDown;
+//            break;
+//        case FUVideoOrientationLandscapeLeft:
+//            input.renderConfig.imageOrientation = FUImageOrientationRight;
+//            break;
+//        default:
+//            input.renderConfig.imageOrientation = FUImageOrientationUP;
+//            break;
+//    }
+//    FURenderOutput *output = [[FURenderKit shareRenderKit] renderWithInput:input];
+//    [self.renderView displayPixelBuffer:output.pixelBuffer];
+//    return output.pixelBuffer;
+//}
+
+- (void)videoReaderDidFinishReading {
+    [self.videoReader stop];
+    //[self.videoReader startReadForLastFrame];
     dispatch_async(dispatch_get_main_queue(), ^{
         self.playButton.hidden = NO;
         self.saveVideoButton.hidden = NO;
