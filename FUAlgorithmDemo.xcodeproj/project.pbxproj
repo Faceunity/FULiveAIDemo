@@ -17,7 +17,6 @@
 		E332E6A024AF5CCB00232C4A /* bodyLandmarks_selife.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */; };
 		E332E6A124AF5CCB00232C4A /* bodyLandmarks_dance.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */; };
 		E332E71924AFCB3A00232C4A /* ai_face_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */; };
-		E332E71A24AFCB3A00232C4A /* ai_face_processor_lite.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */; };
 		E332E71B24AFCB3A00232C4A /* ai_human_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */; };
 		E332E71C24AFCB3A00232C4A /* tongue.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E71124AFCB3A00232C4A /* tongue.bundle */; };
 		E332E71D24AFCB3A00232C4A /* fxaa.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E332E71224AFCB3A00232C4A /* fxaa.bundle */; };
@@ -50,7 +49,6 @@
 		E3732C76247CC21E00D756B5 /* FUPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3732C75247CC21E00D756B5 /* FUPhotoViewController.m */; };
 		E37A8739248A22EB006D900C /* fakeman.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E37A8738248A22EB006D900C /* fakeman.bundle */; };
 		E37A8740248A4D5B006D900C /* controller_config.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E37A873F248A4D5B006D900C /* controller_config.bundle */; };
-		E37E554A2874456C002952A1 /* ai_human_processor_gpu.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E37E55492874456C002952A1 /* ai_human_processor_gpu.bundle */; };
 		E38437D3291BB281002BEB34 /* FURenderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38437D1291BB27F002BEB34 /* FURenderKit.framework */; };
 		E38437D4291BB282002BEB34 /* FURenderKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E38437D1291BB27F002BEB34 /* FURenderKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E39972AD26536546009BBAC9 /* FUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E39972AC26536546009BBAC9 /* FUConfigManager.m */; };
@@ -97,7 +95,6 @@
 		E332E69E24AF5CCB00232C4A /* bodyLandmarks_selife.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = bodyLandmarks_selife.bundle; sourceTree = "<group>"; };
 		E332E69F24AF5CCB00232C4A /* bodyLandmarks_dance.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = bodyLandmarks_dance.bundle; sourceTree = "<group>"; };
 		E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_face_processor.bundle; sourceTree = "<group>"; };
-		E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_face_processor_lite.bundle; sourceTree = "<group>"; };
 		E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ai_human_processor.bundle; sourceTree = "<group>"; };
 		E332E71124AFCB3A00232C4A /* tongue.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = tongue.bundle; sourceTree = "<group>"; };
 		E332E71224AFCB3A00232C4A /* fxaa.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = fxaa.bundle; sourceTree = "<group>"; };
@@ -138,6 +135,7 @@
 		E363071D24E0E53200A16812 /* set_tongue.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = set_tongue.bundle; sourceTree = "<group>"; };
 		E363071F24E10E8B00A16812 /* FUIndexHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUIndexHandle.h; sourceTree = "<group>"; };
 		E363072024E10E8B00A16812 /* FUIndexHandle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUIndexHandle.m; sourceTree = "<group>"; };
+		E372160F29CD4ABF00BF2199 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		E3732C4D2477A35600D756B5 /* FUAICollectionModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUAICollectionModel.h; sourceTree = "<group>"; };
 		E3732C4E2477A35600D756B5 /* FUAICollectionModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUAICollectionModel.m; sourceTree = "<group>"; };
 		E3732C6C247BA71600D756B5 /* FUGestureView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUGestureView.h; sourceTree = "<group>"; };
@@ -149,7 +147,6 @@
 		E3732C75247CC21E00D756B5 /* FUPhotoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUPhotoViewController.m; sourceTree = "<group>"; };
 		E37A8738248A22EB006D900C /* fakeman.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fakeman.bundle; sourceTree = "<group>"; };
 		E37A873F248A4D5B006D900C /* controller_config.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = controller_config.bundle; sourceTree = "<group>"; };
-		E37E55492874456C002952A1 /* ai_human_processor_gpu.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_human_processor_gpu.bundle; sourceTree = "<group>"; };
 		E38437D1291BB27F002BEB34 /* FURenderKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FURenderKit.framework; sourceTree = "<group>"; };
 		E39972AB26536546009BBAC9 /* FUConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUConfigManager.h; sourceTree = "<group>"; };
 		E39972AC26536546009BBAC9 /* FUConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUConfigManager.m; sourceTree = "<group>"; };
@@ -253,10 +250,8 @@
 		E332E70B24AFCB3A00232C4A /* model */ = {
 			isa = PBXGroup;
 			children = (
-				E37E55492874456C002952A1 /* ai_human_processor_gpu.bundle */,
 				E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */,
 				E332E70D24AFCB3A00232C4A /* ai_face_processor.bundle */,
-				E332E70E24AFCB3A00232C4A /* ai_face_processor_lite.bundle */,
 				E332E70F24AFCB3A00232C4A /* ai_human_processor.bundle */,
 			);
 			path = model;
@@ -378,6 +373,7 @@
 				E3AD31C124752D6100B45264 /* main.m */,
 				E3AD31AF24752D4E00B45264 /* AppDelegate.h */,
 				E3AD31B024752D4E00B45264 /* AppDelegate.m */,
+				E372160F29CD4ABF00BF2199 /* PrefixHeader.pch */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -504,7 +500,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E363071E24E0E53200A16812 /* set_tongue.bundle in Resources */,
-				E37E554A2874456C002952A1 /* ai_human_processor_gpu.bundle in Resources */,
 				E341083024A3765A00410722 /* hair_normal_algorithm.bundle in Resources */,
 				E3D2317D249DBAF800C656AB /* handgesture.bundle in Resources */,
 				E3CE42A3265639E7005C5513 /* controller_cpp.bundle in Resources */,
@@ -516,7 +511,6 @@
 				E3AD31BC24752D6100B45264 /* Assets.xcassets in Resources */,
 				E3732C70247CA94B00D756B5 /* bodyRect.bundle in Resources */,
 				E37A8740248A4D5B006D900C /* controller_config.bundle in Resources */,
-				E332E71A24AFCB3A00232C4A /* ai_face_processor_lite.bundle in Resources */,
 				E3127C6F24936E760096306C /* default_bg.bundle in Resources */,
 				E3D2317B249DB9F900C656AB /* anim_idle.bundle in Resources */,
 				E332E71924AFCB3A00232C4A /* ai_face_processor.bundle in Resources */,
@@ -775,6 +769,7 @@
 					"\"$(SRCROOT)/FUAlgorithmDemo/Lib\"",
 					"$(PROJECT_DIR)/FUAlgorithmDemo/Lib",
 				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/FUAlgorithmDemo/Application/PrefixHeader.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -812,6 +807,7 @@
 					"\"$(SRCROOT)/FUAlgorithmDemo/Lib\"",
 					"$(PROJECT_DIR)/FUAlgorithmDemo/Lib",
 				);
+				GCC_PREFIX_HEADER = "$(SRCROOT)/FUAlgorithmDemo/Application/PrefixHeader.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",

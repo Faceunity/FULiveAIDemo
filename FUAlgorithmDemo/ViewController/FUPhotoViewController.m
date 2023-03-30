@@ -15,12 +15,12 @@
 #import <SVProgressHUD.h>
 #import <Masonry.h>
 
-@interface FUPhotoViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>{
-        dispatch_queue_t renderQueue;
-}
+@interface FUPhotoViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
 /// 定时器
 @property (nonatomic, strong) CADisplayLink *displayLink;
+
+@property (nonatomic, strong) NSOperationQueue *renderOperationQueue;
 /// 保存图片按钮
 @property (nonatomic, strong) UIButton *savePhotoButton;
 
@@ -28,7 +28,9 @@
 
 @end
 
-@implementation FUPhotoViewController
+@implementation FUPhotoViewController {
+    FUImageBuffer currentImageBuffer;
+}
 
 #pragma mark - Life cycle
 
@@ -36,8 +38,6 @@
     [super viewDidLoad];
     
     [FUAIKit shareKit].faceProcessorDetectMode = FUFaceProcessorDetectModeImage;
-    
-    renderQueue = dispatch_queue_create("com.face.render", DISPATCH_QUEUE_SERIAL);
     
     self.displayLink.paused = NO;
     
@@ -61,59 +61,64 @@
     
 }
 
+- (void)dealloc {
+    if (&currentImageBuffer != NULL) {
+        [UIImage freeImageBuffer:&currentImageBuffer];
+    }
+}
+
 #pragma mark - Process image
 
 - (void)displayLinkAction{
     if (!self.photoImage) {
         return;
     }
-    dispatch_async(renderQueue, ^{
+    [self.renderOperationQueue addOperationWithBlock:^{
+        [FUConfigManager resetHumanProcessor];
         @autoreleasepool {//防止大图片，内存峰值过高
-            [FUConfigManager resetHumanProcessor];
-            FUImageBuffer imageBuffer = [self.photoImage getImageBuffer];
+            self->currentImageBuffer = [self.photoImage getImageBuffer];
             FURenderInput *input = [[FURenderInput alloc] init];
-            input.renderConfig.imageOrientation = 0;
             switch (self.photoImage.imageOrientation) {
                 case UIImageOrientationUp:
+                case UIImageOrientationUpMirrored:
                     input.renderConfig.imageOrientation = FUImageOrientationUP;
                     break;
                 case UIImageOrientationLeft:
+                case UIImageOrientationLeftMirrored:
                     input.renderConfig.imageOrientation = FUImageOrientationRight;
                     break;
                 case UIImageOrientationDown:
+                case UIImageOrientationDownMirrored:
                     input.renderConfig.imageOrientation = FUImageOrientationDown;
                     break;
                 case UIImageOrientationRight:
+                case UIImageOrientationRightMirrored:
                     input.renderConfig.imageOrientation = FUImageOrientationLeft;
                     break;
-                default:
-                    input.renderConfig.imageOrientation = FUImageOrientationUP;
-                    break;
             }
-            input.imageBuffer = imageBuffer;
+            input.imageBuffer = self->currentImageBuffer;
             FURenderOutput *output =  [[FURenderKit shareRenderKit] renderWithInput:input];
-            
+            self->currentImageBuffer = output.imageBuffer;
             [self refreshOutputVideo];
-               
-            [self.renderView displayImageData:imageBuffer.buffer0 withSize:imageBuffer.size];
-            
+            [self.renderView displayImageData:self->currentImageBuffer.buffer0 withSize:self->currentImageBuffer.size];
             if (self.savePhoto) {
-                imageBuffer = output.imageBuffer;
-                UIImage *newImage = [UIImage imageWithRGBAImageBuffer:&imageBuffer autoFreeBuffer:NO];
+                UIImage *newImage = [UIImage imageWithRGBAImageBuffer:&self->currentImageBuffer autoFreeBuffer:NO];
                 self.savePhoto = NO;
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
                     UIImageWriteToSavedPhotosAlbum(newImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
                 });
             }
-            [UIImage freeImageBuffer:&imageBuffer];
+            [UIImage freeImageBuffer:&self->currentImageBuffer];
         }
-    });
+    }];
 }
 
 -(void)headButtonViewBackAction:(UIButton *)btn{
     [super headButtonViewBackAction:btn];
+    _displayLink.paused = YES;
     [_displayLink invalidate];
     _displayLink = nil;
+    [self.renderOperationQueue cancelAllOperations];
 }
 
 #pragma mark - Event response
@@ -143,6 +148,15 @@
     }
     return _displayLink;
 }
+
+- (NSOperationQueue *)renderOperationQueue {
+    if (!_renderOperationQueue) {
+        _renderOperationQueue = [[NSOperationQueue alloc] init];
+        _renderOperationQueue.maxConcurrentOperationCount = 1;
+    }
+    return _renderOperationQueue;
+}
+
 
 - (UIButton *)savePhotoButton {
     if (!_savePhotoButton) {
