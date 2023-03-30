@@ -10,6 +10,7 @@
 #import "FUShotViewController.h"
 #import "FUPhotoViewController.h"
 #import "FUVideoViewController.h"
+#import "UIImage+FU.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
@@ -126,37 +127,23 @@
 
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
-    
     // 关闭相册
-    [picker dismissViewControllerAnimated:NO completion:^{
-        NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-        if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
-            UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
-            // 图片转正
-            if (image.imageOrientation != UIImageOrientationUp && image.imageOrientation != UIImageOrientationUpMirrored) {
-                
-                UIGraphicsBeginImageContext(CGSizeMake(image.size.width*0.5, image.size.height*0.5));
-                
-                [image drawInRect:CGRectMake(0, 0, image.size.width*0.5, image.size.height*0.5)];
-                
-                image = UIGraphicsGetImageFromCurrentImageContext();
-                
-                UIGraphicsEndImageContext();
-            }
-            
-            NSData *imageData0 = UIImageJPEGRepresentation(image, 1.0);
-            
-            FUPhotoViewController *vc = [[FUPhotoViewController alloc] init];
-            vc.photoImage = [UIImage imageWithData:imageData0];
-            [self.navigationController pushViewController:vc animated:YES];
-        } else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
-            // 选择视频
-            FUVideoViewController *videoController = [[FUVideoViewController alloc] init];
-            videoController.videoURL = info[UIImagePickerControllerMediaURL];
-            [self.navigationController pushViewController:videoController animated:YES];
-        }
-    }];
-    
+    [picker dismissViewControllerAnimated:NO completion:nil];
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        // 图片处理
+        image = [image fu_processedImage];
+        image = [UIImage imageWithData:UIImageJPEGRepresentation(image, 1)];
+        FUPhotoViewController *vc = [[FUPhotoViewController alloc] init];
+        vc.photoImage = image;
+        [self.navigationController pushViewController:vc animated:YES];
+    } else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
+        // 选择视频
+        FUVideoViewController *videoController = [[FUVideoViewController alloc] init];
+        videoController.videoURL = info[UIImagePickerControllerMediaURL];
+        [self.navigationController pushViewController:videoController animated:YES];
+    }
 }
 
 

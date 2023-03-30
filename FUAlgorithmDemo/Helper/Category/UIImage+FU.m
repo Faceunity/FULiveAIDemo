@@ -19,4 +19,27 @@
     return resultImage;
 }
 
+- (UIImage *)fu_resetImageOrientationToUp {
+    UIGraphicsBeginImageContext(CGSizeMake(self.size.width, self.size.height));
+    [self drawInRect:CGRectMake(0, 0, self.size.width, self.size.height)];
+    UIImage *resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return resultImage;
+}
+
+- (UIImage *)fu_processedImage {
+    CGFloat imagePixel = self.size.width * self.size.height;
+    UIImage *resultImage = self;
+    // 超过限制像素需要压缩
+    if (imagePixel > FUPicturePixelMaxSize) {
+        CGFloat ratio = FUPicturePixelMaxSize / imagePixel * 1.0;
+        resultImage = [resultImage fu_compress:ratio];
+    }
+    // 图片转正
+    if (resultImage.imageOrientation != UIImageOrientationUp && resultImage.imageOrientation != UIImageOrientationUpMirrored) {
+        resultImage = [resultImage fu_resetImageOrientationToUp];
+    }
+    return resultImage;
+}
+
 @end
