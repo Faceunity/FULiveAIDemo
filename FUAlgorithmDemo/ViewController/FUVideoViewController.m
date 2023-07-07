@@ -10,9 +10,9 @@
 
 #import <Masonry.h>
 #import <SVProgressHUD.h>
-#import <FURenderKit/FUVideoReader.h>
+#import <FURenderKit/FUVideoProcessor.h>
 
-static inline NSString * kFUVideoDestinationPath() {
+static inline NSString * kFUVideoDestinationPath(void) {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"finalVideo.mp4"];
 }
 
@@ -23,9 +23,11 @@ static inline NSString * kFUVideoDestinationPath() {
 /// 重新播放按钮
 @property (nonatomic, strong) UIButton *playButton;
 
-@property (nonatomic, strong) FUVideoReader *videoReader;
+@property (nonatomic, strong) FUVideoProcessor *videoProcessor;
 
-@property (nonatomic, strong) AVPlayer *avPlayer;
+//@property (nonatomic, strong) FUVideoReader *videoReader;
+
+//@property (nonatomic, strong) AVPlayer *avPlayer;
 
 @end
 
@@ -60,36 +62,54 @@ static inline NSString * kFUVideoDestinationPath() {
         make.size.mas_offset(CGSizeMake(80, 80));
     }];
     
-    self.videoReader = [[FUVideoReader alloc] initWithURL:self.videoURL];
-    //self.videoReader = [[FUVideoReader alloc] initWithVideoURL:self.videoURL];
-    self.videoReader.delegate = self;
-    [self.videoReader start];
-    
 //    [self playAction];
+}
+
+- (void)dealloc {
+    NSLog(@"dealloc");
 }
 
 #pragma mark - Private methods
 
 /// 播放音频
-- (void)startAudio {
-    if (_avPlayer) {
-        [_avPlayer pause];
-        _avPlayer = nil ;
-    }
-    _avPlayer = [[AVPlayer alloc] init];
-    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:self.videoURL];
-    [_avPlayer replaceCurrentItemWithPlayerItem:item];
-    _avPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
-    [_avPlayer play];
-}
+//- (void)startAudio {
+//    if (_avPlayer) {
+//        [_avPlayer pause];
+//        _avPlayer = nil ;
+//    }
+//    _avPlayer = [[AVPlayer alloc] init];
+//    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:self.videoURL];
+//    [_avPlayer replaceCurrentItemWithPlayerItem:item];
+//    _avPlayer.actionAtItemEnd = AVPlayerActionAtItemEndNone;
+//    [_avPlayer play];
+//}
 
 
 /// 读取视频
 - (void)startVideo {
-    self.videoReader = [[FUVideoReader alloc] initWithURL:self.videoURL];
-    self.videoReader.delegate = self;
-    self.renderView.origintation = (int)self.videoReader.videoOrientation;
-    [self.videoReader start];
+    self.videoProcessor = [[FUVideoProcessor alloc] initWithReadingURL:self.videoURL  writingURL:[NSURL fileURLWithPath:kFUVideoDestinationPath()]];
+    @FUWeakify(self)
+    self.videoProcessor.processingVideoBufferHandler = ^CVPixelBufferRef _Nonnull(CVPixelBufferRef  _Nonnull videoPixelBuffer, CGFloat time) {
+        @FUStrongify(self)
+        videoPixelBuffer = [self processVideoPixelBuffer:videoPixelBuffer];
+        [self.renderView displayPixelBuffer:videoPixelBuffer];
+        return videoPixelBuffer;
+    };
+
+    self.videoProcessor.processingFinishedHandler = ^{
+        @FUStrongify(self)
+        [self videoReaderDidFinishReading];
+    };
+
+    [self.videoProcessor startProcessing];
+    
+//    FUVideoReaderSettings *settings = [[FUVideoReaderSettings alloc] init];
+//    settings.readingAutomatically = YES;
+//    settings.videoOutputFormat = kCVPixelFormatType_32BGRA;
+//    self.videoReader = [[FUVideoReader alloc] initWithURL:self.videoURL settings:settings];
+//    self.videoReader.delegate = self;
+    self.renderView.origintation = (int)self.videoProcessor.reader.videoOrientation;
+//    [self.videoReader start];
 }
 
 #pragma mark - Event response
@@ -99,7 +119,7 @@ static inline NSString * kFUVideoDestinationPath() {
     self.saveVideoButton.hidden = YES;
     self.playButton.selected = YES;
     
-    [self startAudio];
+//    [self startAudio];
     [self startVideo];
 }
 
@@ -119,40 +139,64 @@ static inline NSString * kFUVideoDestinationPath() {
 
 - (void)headButtonViewBackAction:(UIButton *)btn {
     [super headButtonViewBackAction:btn];
-    [self.videoReader stop];
-//    [self.videoReader stopReading];
-//    [self.videoReader destory];
+    [self.videoProcessor cancelProcessing];
+//    [self.videoReader stop];
+}
+
+- (CVPixelBufferRef)processVideoPixelBuffer:(CVPixelBufferRef)videoPixelBuffer {
+    @autoreleasepool {
+        FURenderInput *input = [[FURenderInput alloc] init];
+        input.pixelBuffer = videoPixelBuffer;
+        input.renderConfig.imageOrientation = FUImageOrientationUP;
+        switch (self.videoProcessor.reader.videoOrientation) {
+            case FUVideoOrientationPortrait:
+                input.renderConfig.imageOrientation = FUImageOrientationUP;
+                break;
+            case FUVideoOrientationLandscapeRight:
+                input.renderConfig.imageOrientation = FUImageOrientationLeft;
+                break;
+            case FUVideoOrientationUpsideDown:
+                input.renderConfig.imageOrientation = FUImageOrientationDown;
+                break;
+            case FUVideoOrientationLandscapeLeft:
+                input.renderConfig.imageOrientation = FUImageOrientationRight;
+                break;
+        }
+        FURenderOutput *output = [[FURenderKit shareRenderKit] renderWithInput:input];
+        videoPixelBuffer = output.pixelBuffer;
+    }
+    return videoPixelBuffer;
 }
 
 #pragma mark - FUVideoReaderDelegate
 
-- (void)videoReaderDidOutputVideoSampleBuffer:(CMSampleBufferRef)videoSampleBuffer {
-    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(videoSampleBuffer);
-    FURenderInput *input = [[FURenderInput alloc] init];
-    input.pixelBuffer = pixelBuffer;
-    input.renderConfig.imageOrientation = 0;
-    switch (self.videoReader.videoOrientation) {
-        case FUVideoOrientationPortrait:
-            input.renderConfig.imageOrientation = FUImageOrientationUP;
-            break;
-        case FUVideoOrientationLandscapeRight:
-            input.renderConfig.imageOrientation = FUImageOrientationLeft;
-            break;
-        case FUVideoOrientationUpsideDown:
-            input.renderConfig.imageOrientation = FUImageOrientationDown;
-            break;
-        case FUVideoOrientationLandscapeLeft:
-            input.renderConfig.imageOrientation = FUImageOrientationRight;
-            break;
-        default:
-            input.renderConfig.imageOrientation = FUImageOrientationUP;
-            break;
-    }
-    FURenderOutput *output = [[FURenderKit shareRenderKit] renderWithInput:input];
-    [self.renderView displayPixelBuffer:output.pixelBuffer];
-    CMSampleBufferInvalidate(videoSampleBuffer);
-    CFRelease(videoSampleBuffer);
-}
+//- (void)videoReaderDidOutputVideoSampleBuffer:(CMSampleBufferRef)videoSampleBuffer {
+//    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(videoSampleBuffer);
+//    FURenderInput *input = [[FURenderInput alloc] init];
+//    input.pixelBuffer = pixelBuffer;
+//    input.renderConfig.imageOrientation = 0;
+//    switch (self.videoReader.videoOrientation) {
+//        case FUVideoOrientationPortrait:
+//            input.renderConfig.imageOrientation = FUImageOrientationUP;
+//            break;
+//        case FUVideoOrientationLandscapeRight:
+//            input.renderConfig.imageOrientation = FUImageOrientationLeft;
+//            break;
+//        case FUVideoOrientationUpsideDown:
+//            input.renderConfig.imageOrientation = FUImageOrientationDown;
+//            break;
+//        case FUVideoOrientationLandscapeLeft:
+//            input.renderConfig.imageOrientation = FUImageOrientationRight;
+//            break;
+//        default:
+//            input.renderConfig.imageOrientation = FUImageOrientationUP;
+//            break;
+//    }
+//    FURenderOutput *output = [[FURenderKit shareRenderKit] renderWithInput:input];
+//    [self.renderView displayPixelBuffer:output.pixelBuffer];
+//    CMSampleBufferInvalidate(videoSampleBuffer);
+//    CFRelease(videoSampleBuffer);
+//}
 
 //- (CVPixelBufferRef)videoReaderDidReadVideoBuffer:(CVPixelBufferRef)pixelBuffer {
 //    FURenderInput *input = [[FURenderInput alloc] init];
@@ -181,7 +225,8 @@ static inline NSString * kFUVideoDestinationPath() {
 //}
 
 - (void)videoReaderDidFinishReading {
-    [self.videoReader stop];
+    [self.videoProcessor cancelProcessing];
+//    [self.avPlayer pause];
     //[self.videoReader startReadForLastFrame];
     dispatch_async(dispatch_get_main_queue(), ^{
         self.playButton.hidden = NO;
@@ -196,7 +241,7 @@ static inline NSString * kFUVideoDestinationPath() {
         _playButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_playButton setBackgroundImage:[UIImage imageNamed:@"play_icon"] forState:UIControlStateNormal];
         [_playButton setBackgroundImage:[UIImage imageNamed:@"replay_icon"] forState:UIControlStateSelected];
-        _playButton.hidden = YES;
+//        _playButton.hidden = YES;
         [_playButton addTarget:self action:@selector(playAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _playButton;
