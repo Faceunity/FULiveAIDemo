@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#define FUPicturePixelMaxSize ([FURenderKit devicePerformanceLevel] == FUDevicePerformanceLevelHigh ? 12746752 : 5760000)
+#define FUPicturePixelMaxSize ([FURenderKit devicePerformanceLevel] >= FUDevicePerformanceLevelHigh ? 12746752 : 5760000)
 
 NS_ASSUME_NONNULL_BEGIN
 

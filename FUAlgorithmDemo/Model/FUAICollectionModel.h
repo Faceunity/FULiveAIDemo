@@ -35,7 +35,8 @@ typedef NS_ENUM(NSUInteger, FUNamaAIType) {
     FUNamaAITypePortraitSegmentation,
     FUNamaAITypeHairSplit,
     FUNamaAITypeHeadSplit,
-    FUNamaAITypeActionRecognition
+    FUNamaAITypeActionRecognition,
+    FUNamaAITypeARMesh
 };
 
 

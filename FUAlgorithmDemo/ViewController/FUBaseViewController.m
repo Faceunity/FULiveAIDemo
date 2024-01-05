@@ -282,6 +282,10 @@
                     [FUManager shareManager].runningEmotionRecognition = configModel.state == FUAICellStateSel;
                 }
                     break;
+                case FUNamaAITypeARMesh:{
+                    [FUManager shareManager].runningARMesh = configModel.state == FUAICellStateSel;
+                }
+                    break;
                 case FUNamaAITypeBodyKeypoint:{
                     if (configModel.state == FUAICellStateDisable) {
                         [FUManager shareManager].runningWholeBodyKeypoint = NO;

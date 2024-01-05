@@ -53,6 +53,7 @@ static FUManager *shareManager = NULL;
     _runningTongueTracking = NO;
     _runningExpressionRecognition = NO;
     _runningEmotionRecognition = NO;
+    _runningARMesh = NO;
     _runningWholeBodyKeypoint = NO;
     _runningHalfBodyKeypoint = NO;
     _runningGestureRecognition = NO;
@@ -158,6 +159,24 @@ static FUManager *shareManager = NULL;
     NSString *path = [[NSBundle mainBundle] pathForResource:@"handgesture" ofType:@"bundle"];
     if (runningGestureRecognition) {
         FUSticker *item = [[FUFacialFeatures alloc] initWithPath:path name:@"set_tongue"];
+        [[FURenderKit shareRenderKit].stickerContainer addSticker:item completion:nil];
+    } else {
+        [[FURenderKit shareRenderKit].stickerContainer removeStickerForPath:path completion:nil];
+    }
+}
+
+- (void)setRunningARMesh:(BOOL)runningARMesh {
+    if (_runningARMesh == runningARMesh) {
+        return;
+    }
+    _runningARMesh = runningARMesh;
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"armeshv2" ofType:@"bundle"];
+    if (runningARMesh) {
+//        FUFacialFeatures *item = [[FUFacialFeatures alloc] initWithPath:path name:@"armeshv2"];
+//        item.landmarksType = FUAITYPE_FACELANDMARKS239;
+//        [[FURenderKit shareRenderKit].stickerContainer addSticker:item completion:nil];
+        
+        FUSticker *item = [FUSticker itemWithPath:path name:@"armeshv2"];
         [[FURenderKit shareRenderKit].stickerContainer addSticker:item completion:nil];
     } else {
         [[FURenderKit shareRenderKit].stickerContainer removeStickerForPath:path completion:nil];
