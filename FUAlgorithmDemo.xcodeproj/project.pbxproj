@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		E304BCE924D903990020A724 /* landmarks.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E304BCE824D903990020A724 /* landmarks.bundle */; };
 		E304BCEC24D932B60020A724 /* FUTongueView.m in Sources */ = {isa = PBXBuildFile; fileRef = E304BCEB24D932B60020A724 /* FUTongueView.m */; };
 		E306CB472477A10900BECA3F /* AIConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = E306CB462477A10900BECA3F /* AIConfig.json */; };
+		E311EA912B2AE27B0024BF08 /* armeshv2.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E311EA902B2AE27B0024BF08 /* armeshv2.bundle */; };
 		E3127C69249352EE0096306C /* empty_aitpye_2d.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3127C68249352EE0096306C /* empty_aitpye_2d.bundle */; };
 		E3127C6F24936E760096306C /* default_bg.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E3127C6E24936E760096306C /* default_bg.bundle */; };
 		E313888924F8A14A00A3AFDF /* ai_hand_processor.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */; };
@@ -31,6 +32,8 @@
 		E340578D24754C28003AAE2C /* FUPhotoButton.m in Sources */ = {isa = PBXBuildFile; fileRef = E340578B24754C28003AAE2C /* FUPhotoButton.m */; };
 		E3405796247551A2003AAE2C /* FUCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = E3405795247551A2003AAE2C /* FUCircleProgressView.m */; };
 		E341083024A3765A00410722 /* hair_normal_algorithm.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E341082F24A3765900410722 /* hair_normal_algorithm.bundle */; };
+		E341BE762B3291C10080F5AA /* FURenderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E341BE742B3291BE0080F5AA /* FURenderKit.framework */; };
+		E341BE772B3291C10080F5AA /* FURenderKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E341BE742B3291BE0080F5AA /* FURenderKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E345990226AECBE400565E1B /* FUVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E345990126AECBE300565E1B /* FUVideoViewController.m */; };
 		E345990826AED77B00565E1B /* UIImage+FU.m in Sources */ = {isa = PBXBuildFile; fileRef = E345990626AED77B00565E1B /* UIImage+FU.m */; };
 		E35DC6B624761FB5005B4EED /* FUManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E35DC6B424761FB5005B4EED /* FUManager.m */; };
@@ -49,8 +52,6 @@
 		E3732C76247CC21E00D756B5 /* FUPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3732C75247CC21E00D756B5 /* FUPhotoViewController.m */; };
 		E37A8739248A22EB006D900C /* fakeman.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E37A8738248A22EB006D900C /* fakeman.bundle */; };
 		E37A8740248A4D5B006D900C /* controller_config.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E37A873F248A4D5B006D900C /* controller_config.bundle */; };
-		E38437D3291BB281002BEB34 /* FURenderKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E38437D1291BB27F002BEB34 /* FURenderKit.framework */; };
-		E38437D4291BB282002BEB34 /* FURenderKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = E38437D1291BB27F002BEB34 /* FURenderKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		E39972AD26536546009BBAC9 /* FUConfigManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E39972AC26536546009BBAC9 /* FUConfigManager.m */; };
 		E3AD31B124752D4E00B45264 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E3AD31B024752D4E00B45264 /* AppDelegate.m */; };
 		E3AD31BA24752D4E00B45264 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E3AD31B824752D4E00B45264 /* Main.storyboard */; };
@@ -71,7 +72,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E38437D4291BB282002BEB34 /* FURenderKit.framework in Embed Frameworks */,
+				E341BE772B3291C10080F5AA /* FURenderKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -89,6 +90,7 @@
 		E304BCEA24D932B60020A724 /* FUTongueView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUTongueView.h; sourceTree = "<group>"; };
 		E304BCEB24D932B60020A724 /* FUTongueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUTongueView.m; sourceTree = "<group>"; };
 		E306CB462477A10900BECA3F /* AIConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = AIConfig.json; sourceTree = "<group>"; };
+		E311EA902B2AE27B0024BF08 /* armeshv2.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = armeshv2.bundle; sourceTree = "<group>"; };
 		E3127C68249352EE0096306C /* empty_aitpye_2d.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = empty_aitpye_2d.bundle; sourceTree = "<group>"; };
 		E3127C6E24936E760096306C /* default_bg.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = default_bg.bundle; sourceTree = "<group>"; };
 		E313888824F8A14A00A3AFDF /* ai_hand_processor.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = ai_hand_processor.bundle; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 		E3405797247551DF003AAE2C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		E3405799247551EC003AAE2C /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		E341082F24A3765900410722 /* hair_normal_algorithm.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = hair_normal_algorithm.bundle; sourceTree = "<group>"; };
+		E341BE742B3291BE0080F5AA /* FURenderKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FURenderKit.framework; sourceTree = "<group>"; };
 		E345990026AECBE300565E1B /* FUVideoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUVideoViewController.h; sourceTree = "<group>"; };
 		E345990126AECBE300565E1B /* FUVideoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUVideoViewController.m; sourceTree = "<group>"; };
 		E345990626AED77B00565E1B /* UIImage+FU.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+FU.m"; sourceTree = "<group>"; };
@@ -147,7 +150,6 @@
 		E3732C75247CC21E00D756B5 /* FUPhotoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUPhotoViewController.m; sourceTree = "<group>"; };
 		E37A8738248A22EB006D900C /* fakeman.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = fakeman.bundle; sourceTree = "<group>"; };
 		E37A873F248A4D5B006D900C /* controller_config.bundle */ = {isa = PBXFileReference; lastKnownFileType = file; path = controller_config.bundle; sourceTree = "<group>"; };
-		E38437D1291BB27F002BEB34 /* FURenderKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FURenderKit.framework; sourceTree = "<group>"; };
 		E39972AB26536546009BBAC9 /* FUConfigManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUConfigManager.h; sourceTree = "<group>"; };
 		E39972AC26536546009BBAC9 /* FUConfigManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUConfigManager.m; sourceTree = "<group>"; };
 		E39972C22654B700009BBAC9 /* FUMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUMacros.h; sourceTree = "<group>"; };
@@ -171,7 +173,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E38437D3291BB281002BEB34 /* FURenderKit.framework in Frameworks */,
+				E341BE762B3291C10080F5AA /* FURenderKit.framework in Frameworks */,
 				E7F62A18C4B264C67FEC51E5 /* libPods-FUAlgorithmDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -231,7 +233,7 @@
 		E332E5F524AF35CE00232C4A /* Lib */ = {
 			isa = PBXGroup;
 			children = (
-				E38437D1291BB27F002BEB34 /* FURenderKit.framework */,
+				E341BE742B3291BE0080F5AA /* FURenderKit.framework */,
 				41A3CBE4262D712300297444 /* authpack.h */,
 				E332E70A24AFCB3A00232C4A /* Resources */,
 			);
@@ -260,6 +262,7 @@
 		E332E71024AFCB3A00232C4A /* graphics */ = {
 			isa = PBXGroup;
 			children = (
+				E311EA902B2AE27B0024BF08 /* armeshv2.bundle */,
 				E3CE42D02657A885005C5513 /* aitype.bundle */,
 				E3CE42A2265639E7005C5513 /* controller_cpp.bundle */,
 				E332E71124AFCB3A00232C4A /* tongue.bundle */,
@@ -518,6 +521,7 @@
 				E3AD31BA24752D4E00B45264 /* Main.storyboard in Resources */,
 				E313888924F8A14A00A3AFDF /* ai_hand_processor.bundle in Resources */,
 				E37A8739248A22EB006D900C /* fakeman.bundle in Resources */,
+				E311EA912B2AE27B0024BF08 /* armeshv2.bundle in Resources */,
 				E332E71F24AFCB3A00232C4A /* controller.bundle in Resources */,
 				E3CE42D22657A885005C5513 /* aitype.bundle in Resources */,
 				E306CB472477A10900BECA3F /* AIConfig.json in Resources */,

@@ -4,39 +4,48 @@
         "moduleType": 0,
         "sectionImageName": "demo_sidebar_icon_face",
         "aiMenu": [
-        {
-            "state": 1,
-            "aiMenuTitel": "人脸特征点",
-            "aiType":0,
-            "bundleNames":["landmarks"],
-            "parms":{"landmarks_type":1},
-            "mToasts":["未检测到人脸"],
-            "moduleCodes":[1,4096]
-        },
-        {
-            "state": 0,
-            "aiMenuTitel": "舌头检测",
-            "aiType":1,
-            "bundleNames":["set_tongue"],
-            "mToasts":["未检测到人脸"],
-            "moduleCodes":[1,8192]
-        },
-        {
-            "state": 0,
-            "aiMenuTitel": "表情识别",
-            "aiType":2,
-            "bundleNames":[],
-            "mToasts":["未检测到人脸"],
-            "moduleCodes":[0,2048]
-        },
-        {
-            "state": 0,
-            "aiMenuTitel": "情绪识别",
-            "aiType":3,
-            "bundleNames":[],
-            "mToasts":["未检测到人脸"],
-            "moduleCodes":[0,2048]
-        }]
+            {
+                "state": 1,
+                "aiMenuTitel": "人脸特征点",
+                "aiType":0,
+                "bundleNames":["landmarks"],
+                "parms":{"landmarks_type":1},
+                "mToasts":["未检测到人脸"],
+                "moduleCodes":[1,4096]
+            },
+            {
+                "state": 0,
+                "aiMenuTitel": "舌头检测",
+                "aiType":1,
+                "bundleNames":["set_tongue"],
+                "mToasts":["未检测到人脸"],
+                "moduleCodes":[1,8192]
+            },
+            {
+                "state": 0,
+                "aiMenuTitel": "表情识别",
+                "aiType":2,
+                "bundleNames":[],
+                "mToasts":["未检测到人脸"],
+                "moduleCodes":[0,2048]
+            },
+            {
+                "state": 0,
+                "aiMenuTitel": "情绪识别",
+                "aiType":3,
+                "bundleNames":[],
+                "mToasts":["未检测到人脸"],
+                "moduleCodes":[0,2048]
+            },
+            {
+                "state": 0,
+                "aiMenuTitel": "ARMesh",
+                "aiType":11,
+                "bundleNames":[],
+                "mToasts":["未检测到人脸"],
+                "moduleCodes":[0,96]
+            },
+        ]
     },{
         "sectionTitel": "人体",
         "moduleType": 1,

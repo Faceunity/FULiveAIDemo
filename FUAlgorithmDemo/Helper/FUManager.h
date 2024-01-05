@@ -24,6 +24,9 @@
 /// 是否运行情绪识别
 @property (nonatomic, assign, getter=isRunningEmotionRecognition) BOOL runningEmotionRecognition;
 
+/// 是否运行ARMesh
+@property (nonatomic, assign, getter=isRunningARMesh) BOOL runningARMesh;
+
 /// 是否运行全身人体关键点
 @property (nonatomic, assign, getter=isRunningWholeBodyKeypoint) BOOL runningWholeBodyKeypoint;
 

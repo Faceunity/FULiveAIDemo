@@ -31,7 +31,7 @@
         
         // 加载身体 AI 模型
         NSString *bodyAIPath = [[NSBundle mainBundle] pathForResource:@"ai_human_processor" ofType:@"bundle"];
-        if ([FURenderKit devicePerformanceLevel] == FUDevicePerformanceLevelHigh) {
+        if ([FURenderKit devicePerformanceLevel] >= FUDevicePerformanceLevelHigh) {
             [FUAIKit loadAIHumanModelWithDataPath:bodyAIPath segmentationMode:FUHumanSegmentationModeGPUCommon];
         } else {
             [FUAIKit loadAIHumanModelWithDataPath:bodyAIPath segmentationMode:FUHumanSegmentationModeCPUCommon];
@@ -51,10 +51,10 @@
         [FUAIKit shareKit].maxTrackFaces = 8;
         
         // 设置人脸算法质量
-        [FUAIKit shareKit].faceProcessorFaceLandmarkQuality = [FURenderKit devicePerformanceLevel] == FUDevicePerformanceLevelHigh ? FUFaceProcessorFaceLandmarkQualityHigh : FUFaceProcessorFaceLandmarkQualityMedium;
+        [FUAIKit shareKit].faceProcessorFaceLandmarkQuality = [FURenderKit devicePerformanceLevel] >= FUDevicePerformanceLevelHigh ? FUFaceProcessorFaceLandmarkQualityHigh : FUFaceProcessorFaceLandmarkQualityMedium;
         
         // 设置小脸检测是否打开
-        [FUAIKit shareKit].faceProcessorDetectSmallFace = [FURenderKit devicePerformanceLevel] == FUDevicePerformanceLevelHigh;
+        [FUAIKit shareKit].faceProcessorDetectSmallFace = [FURenderKit devicePerformanceLevel] >= FUDevicePerformanceLevelHigh;
     });
 }
 

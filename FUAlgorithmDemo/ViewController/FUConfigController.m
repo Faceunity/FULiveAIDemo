@@ -112,26 +112,27 @@ static NSString *footViewID = @"footView";
         case FUNamaAITypeTongue:
         case FUNamaAITypeExpressionRecognition:
         case FUNamaAITypeEmotionRecognition:
-            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeBodyKeypoint),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeBodyKeypoint),@(FUNamaAITypeHairSplit),@(FUNamaAITypeHeadSplit),@(FUNamaAITypePortraitSegmentation),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeGestureRecognition),@(FUNamaAITypeEmotionRecognition)];
+        case FUNamaAITypeARMesh:
+            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeBodyKeypoint), @(FUNamaAITypeARMesh),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeBodyKeypoint),@(FUNamaAITypeHairSplit),@(FUNamaAITypeHeadSplit),@(FUNamaAITypePortraitSegmentation),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeGestureRecognition),@(FUNamaAITypeEmotionRecognition)];
             break;
             
             case FUNamaAITypeBodyKeypoint:
             case FUNamaAITypeActionRecognition:
-            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeBodyKeypoint),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeEmotionRecognition)];
+            return @[@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeARMesh),@(FUNamaAITypeBodyKeypoint),@(FUNamaAITypeActionRecognition),@(FUNamaAITypeEmotionRecognition)];
             break;
             
         case FUNamaAITypeBodySkeleton:
             return @[@(aitype)];
             break;
         default:
-            return  @[@(aitype),@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeEmotionRecognition)];
+            return  @[@(aitype),@(FUNamaAITypeKeypoint),@(FUNamaAITypeTongue),@(FUNamaAITypeExpressionRecognition),@(FUNamaAITypeEmotionRecognition),@(FUNamaAITypeARMesh)];
             break;
     }
 }
 
 /// CellModel选中是，其他选中状态修改
 -(void)changeOtherStateWithSelCellModel:(FUAIConfigCellModel *)cellModle{
-    if (cellModle.aiType == FUNamaAITypeKeypoint || cellModle.aiType == FUNamaAITypeTongue ||cellModle.aiType == FUNamaAITypeExpressionRecognition || cellModle.aiType == FUNamaAITypeEmotionRecognition) {//特征点默认随之选中
+    if (cellModle.aiType == FUNamaAITypeKeypoint || cellModle.aiType == FUNamaAITypeTongue ||cellModle.aiType == FUNamaAITypeExpressionRecognition || cellModle.aiType == FUNamaAITypeEmotionRecognition || cellModle.aiType == FUNamaAITypeARMesh) {//特征点默认随之选中
         FUAISectionModel *sectionModel = self.configDataSource[0];
         sectionModel.aiMenu[0].state = FUAICellStateSel;
     }
