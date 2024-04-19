@@ -116,13 +116,15 @@
 
 
 - (void)showImagePickerWithMediaType:(NSString *)mediaType {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-    picker.allowsEditing = NO;
-    picker.mediaTypes = @[mediaType] ;
-    picker.modalPresentationStyle = UIModalPresentationFullScreen;
-    [self presentViewController:picker animated:YES completion:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+        picker.allowsEditing = NO;
+        picker.mediaTypes = @[mediaType];
+        picker.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:picker animated:YES completion:nil];
+    });
 }
 
 

@@ -9,6 +9,8 @@
 #import "FUConfigManager.h"
 #import "authpack.h"
 
+//#import <FURenderKit/FUAIKit.h>
+
 @implementation FUConfigManager
 
 + (void)initializeSDK {
@@ -25,6 +27,17 @@
     [FURenderKit setLogLevel:FU_LOG_LEVEL_DEBUG];
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        FUDevicePerformanceLevel level = [FURenderKit devicePerformanceLevel];
+        FUFaceAlgorithmConfig config = FUFaceAlgorithmConfigEnableAll;
+        if (level < FUDevicePerformanceLevelHigh) {
+            // 关闭所有效果
+            config = FUFaceAlgorithmConfigDisableAll;
+        } else if (level < FUDevicePerformanceLevelVeryHigh) {
+            config = FUFaceAlgorithmConfigDisableSkinSegAndDelSpot;
+        } else if (level < FUDevicePerformanceLevelExcellent) {
+            config = FUFaceAlgorithmConfigDisableSkinSeg;
+        }
+        [FUAIKit setFaceAlgorithmConfig:config];
         // 加载人脸 AI 模型
         NSString *faceAIPath = [[NSBundle mainBundle] pathForResource:@"ai_face_processor" ofType:@"bundle"];
         [FUAIKit loadAIModeWithAIType:FUAITYPE_FACEPROCESSOR dataPath:faceAIPath];
@@ -51,10 +64,10 @@
         [FUAIKit shareKit].maxTrackFaces = 8;
         
         // 设置人脸算法质量
-        [FUAIKit shareKit].faceProcessorFaceLandmarkQuality = [FURenderKit devicePerformanceLevel] >= FUDevicePerformanceLevelHigh ? FUFaceProcessorFaceLandmarkQualityHigh : FUFaceProcessorFaceLandmarkQualityMedium;
+        [FUAIKit shareKit].faceProcessorFaceLandmarkQuality = level >= FUDevicePerformanceLevelHigh ? FUFaceProcessorFaceLandmarkQualityHigh : FUFaceProcessorFaceLandmarkQualityMedium;
         
         // 设置小脸检测是否打开
-        [FUAIKit shareKit].faceProcessorDetectSmallFace = [FURenderKit devicePerformanceLevel] >= FUDevicePerformanceLevelHigh;
+        [FUAIKit shareKit].faceProcessorDetectSmallFace = level >= FUDevicePerformanceLevelHigh;
     });
 }
 
