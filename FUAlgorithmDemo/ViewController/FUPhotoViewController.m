@@ -28,9 +28,7 @@
 
 @end
 
-@implementation FUPhotoViewController {
-    FUImageBuffer currentImageBuffer;
-}
+@implementation FUPhotoViewController
 
 #pragma mark - Life cycle
 
@@ -62,9 +60,7 @@
 }
 
 - (void)dealloc {
-    if (&currentImageBuffer != NULL) {
-        [UIImage freeImageBuffer:&currentImageBuffer];
-    }
+    NSLog(@"FUPhotoViewController dealloc");
 }
 
 #pragma mark - Process image
@@ -76,7 +72,7 @@
     [self.renderOperationQueue addOperationWithBlock:^{
         [FUConfigManager resetHumanProcessor];
         @autoreleasepool {//防止大图片，内存峰值过高
-            self->currentImageBuffer = [self.photoImage getImageBuffer];
+            CVPixelBufferRef buffer = [FUImageHelper pixelBufferFromImage:self.photoImage];
             FURenderInput *input = [[FURenderInput alloc] init];
             switch (self.photoImage.imageOrientation) {
                 case UIImageOrientationUp:
@@ -96,19 +92,18 @@
                     input.renderConfig.imageOrientation = FUImageOrientationLeft;
                     break;
             }
-            input.imageBuffer = self->currentImageBuffer;
-            FURenderOutput *output =  [[FURenderKit shareRenderKit] renderWithInput:input];
-            self->currentImageBuffer = output.imageBuffer;
+            input.pixelBuffer = buffer;
+            FURenderOutput *output = [[FURenderKit shareRenderKit] renderWithInput:input];
             [self refreshOutputVideo];
-            [self.renderView displayImageData:self->currentImageBuffer.buffer0 withSize:self->currentImageBuffer.size];
+            [self.renderView displayPixelBuffer:output.pixelBuffer];
             if (self.savePhoto) {
-                UIImage *newImage = [UIImage imageWithRGBAImageBuffer:&self->currentImageBuffer autoFreeBuffer:NO];
-                self.savePhoto = NO;
-                dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                    UIImageWriteToSavedPhotosAlbum(newImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+                UIImage *captureImage = [FUImageHelper imageFromPixelBuffer:output.pixelBuffer];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIImageWriteToSavedPhotosAlbum(captureImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
                 });
+                self.savePhoto = NO;
             }
-            [UIImage freeImageBuffer:&self->currentImageBuffer];
+            CVPixelBufferRelease(buffer);
         }
     }];
 }
