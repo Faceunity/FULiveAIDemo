@@ -30,8 +30,7 @@
         FUDevicePerformanceLevel level = [FURenderKit devicePerformanceLevel];
         FUFaceAlgorithmConfig config = FUFaceAlgorithmConfigEnableAll;
         if (level < FUDevicePerformanceLevelHigh) {
-            // 关闭所有效果
-            config = FUFaceAlgorithmConfigDisableAll;
+            config = FUFaceAlgorithmConfigDisableFaceOccuAndSkinSegAndDelSpot;
         } else if (level < FUDevicePerformanceLevelVeryHigh) {
             config = FUFaceAlgorithmConfigDisableSkinSegAndDelSpot;
         } else if (level < FUDevicePerformanceLevelExcellent) {

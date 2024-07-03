@@ -108,7 +108,7 @@ static inline NSString * kFUVideoDestinationPath(void) {
 //    settings.videoOutputFormat = kCVPixelFormatType_32BGRA;
 //    self.videoReader = [[FUVideoReader alloc] initWithURL:self.videoURL settings:settings];
 //    self.videoReader.delegate = self;
-    self.renderView.origintation = (int)self.videoProcessor.reader.videoOrientation;
+    self.renderView.orientation = (int)self.videoProcessor.reader.videoOrientation;
 //    [self.videoReader start];
 }
 
