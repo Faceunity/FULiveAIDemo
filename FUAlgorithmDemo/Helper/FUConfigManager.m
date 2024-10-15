@@ -64,6 +64,8 @@
         
         // 设置人脸算法质量
         [FUAIKit shareKit].faceProcessorFaceLandmarkQuality = level >= FUDevicePerformanceLevelHigh ? FUFaceProcessorFaceLandmarkQualityHigh : FUFaceProcessorFaceLandmarkQualityMedium;
+        // 设置是遮挡是否使用高精度模型（人脸算法质量为High时才生效）
+        [FUAIKit shareKit].faceProcessorSetFaceLandmarkHpOccu = NO ;
         
         // 设置小脸检测是否打开
         [FUAIKit shareKit].faceProcessorDetectSmallFace = level >= FUDevicePerformanceLevelHigh;
