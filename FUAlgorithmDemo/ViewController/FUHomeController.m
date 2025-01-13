@@ -11,6 +11,7 @@
 #import "FUPhotoViewController.h"
 #import "FUVideoViewController.h"
 #import "UIImage+FU.h"
+#import "FUUtility.h"
 
 #import <MobileCoreServices/MobileCoreServices.h>
 
@@ -116,15 +117,20 @@
 
 
 - (void)showImagePickerWithMediaType:(NSString *)mediaType {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-        picker.delegate = self;
-        picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        picker.allowsEditing = NO;
-        picker.mediaTypes = @[mediaType];
-        picker.modalPresentationStyle = UIModalPresentationFullScreen;
-        [self presentViewController:picker animated:YES completion:nil];
-    });
+    __weak typeof(self)wself = self;
+    [FUUtility requestPhotoLibraryAuthorization:^(PHAuthorizationStatus status) {
+        if (status == PHAuthorizationStatusAuthorized) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                picker.delegate = wself;
+                picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+                picker.allowsEditing = NO;
+                picker.mediaTypes = @[mediaType];
+                picker.modalPresentationStyle = UIModalPresentationFullScreen;
+                [wself presentViewController:picker animated:YES completion:nil];
+            });
+        }
+    }];
 }
 
 
