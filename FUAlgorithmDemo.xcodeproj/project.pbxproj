@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A45A6152D1E7DB500AA7A3B /* FUUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A45A6142D1E7DB500AA7A3B /* FUUtility.m */; };
 		E304BCE724D8FD970020A724 /* FUExpresionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E304BCE624D8FD970020A724 /* FUExpresionView.m */; };
 		E304BCE924D903990020A724 /* landmarks.bundle in Resources */ = {isa = PBXBuildFile; fileRef = E304BCE824D903990020A724 /* landmarks.bundle */; };
 		E304BCEC24D932B60020A724 /* FUTongueView.m in Sources */ = {isa = PBXBuildFile; fileRef = E304BCEB24D932B60020A724 /* FUTongueView.m */; };
@@ -80,6 +81,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0A45A6132D1E7DB500AA7A3B /* FUUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FUUtility.h; sourceTree = "<group>"; };
+		0A45A6142D1E7DB500AA7A3B /* FUUtility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FUUtility.m; sourceTree = "<group>"; };
 		2B408A44EDB64A685ADAB6D6 /* Pods-FUAlgorithmDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FUAlgorithmDemo.debug.xcconfig"; path = "Target Support Files/Pods-FUAlgorithmDemo/Pods-FUAlgorithmDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		41A3CBE4262D712300297444 /* authpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = authpack.h; sourceTree = "<group>"; };
 		520CB2386BFCC785A20FC705 /* Pods-FUAlgorithmDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FUAlgorithmDemo.release.xcconfig"; path = "Target Support Files/Pods-FUAlgorithmDemo/Pods-FUAlgorithmDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -305,6 +308,8 @@
 			children = (
 				E345990A26AED7B000565E1B /* Category */,
 				E35DC6B524761FB5005B4EED /* FUManager.h */,
+				0A45A6132D1E7DB500AA7A3B /* FUUtility.h */,
+				0A45A6142D1E7DB500AA7A3B /* FUUtility.m */,
 				E35DC6B424761FB5005B4EED /* FUManager.m */,
 				E363071F24E10E8B00A16812 /* FUIndexHandle.h */,
 				E363072024E10E8B00A16812 /* FUIndexHandle.m */,
@@ -602,6 +607,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A45A6152D1E7DB500AA7A3B /* FUUtility.m in Sources */,
 				E340572424754AF2003AAE2C /* FUBaseViewController.m in Sources */,
 				E3732C76247CC21E00D756B5 /* FUPhotoViewController.m in Sources */,
 				E35DC6B624761FB5005B4EED /* FUManager.m in Sources */,
